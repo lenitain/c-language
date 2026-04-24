@@ -38,7 +38,8 @@ def clean_content(content):
     lines = content.split('\n')
     cleaned_lines = []
     for line in lines:
-        line = line.strip()
+        line = re.sub(r'^(\d+)\s*$', '', line)
+        line = line.rstrip()
         if line:
             cleaned_lines.append(line)
     return '\n'.join(cleaned_lines)
@@ -159,11 +160,11 @@ def generate_html(section):
         }}
         .content p {{
             margin-bottom: 14px;
-            color: #444;
+            color: #d9d0c8;
         }}
         .content pre {{
-            background: #1e1e1e;
-            color: #d4d4d4;
+            background: #1a211f;
+            color: #d9d0c8;
             padding: 20px;
             border-radius: 8px;
             overflow-x: auto;
@@ -171,36 +172,53 @@ def generate_html(section):
             font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
             font-size: 14px;
             line-height: 1.6;
+            border: 1px solid #3a4543;
         }}
         .content pre code {{
             background: transparent;
             color: inherit;
             padding: 0;
         }}
-        .content .kw {{ color: #569cd6; font-weight: 500; }}
-        .content .fn {{ color: #dcdcaa; }}
-        .content .str {{ color: #ce9178; }}
-        .content .cm {{ color: #6a9955; font-style: italic; }}
+        .content .kw {{ color: #7fb8a4; font-weight: 500; }}
+        .content .fn {{ color: #e0c289; }}
+        .content .str {{ color: #e58f57; }}
+        .content .cm {{ color: #788c69; font-style: italic; }}
         .content h2 {{
             font-size: 20px;
-            color: #00599A;
+            color: #8aad7f;
             margin: 28px 0 14px 0;
-            border-bottom: 2px solid #eee;
+            border-bottom: 2px solid #3a4543;
             padding-bottom: 10px;
         }}
         .content h3 {{
             font-size: 17px;
-            color: #333;
+            color: #d4cac0;
             margin: 22px 0 10px 0;
         }}
         ul, ol {{ margin: 12px 0 12px 24px; }}
         li {{ margin-bottom: 8px; }}
         .note {{
-            background: #e8f4fd;
-            border-left: 4px solid #00599A;
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
             padding: 14px 18px;
             margin: 18px 0;
             border-radius: 0 8px 8px 0;
+        }}
+        body {{
+            background: #1e2624;
+        }}
+        .content {{
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }}
+        .section-header {{
+            border-left-color: #8aad7f;
+        }}
+        .section-number {{
+            color: #8aad7f;
+        }}
+        .section-title {{
+            color: #d9d0c8;
         }}
     </style>
 </head>
@@ -243,6 +261,8 @@ def generate_html(section):
     return html
 
 def main():
+    import os
+    os.makedirs('/home/pilot/.cloned/d1ee2/sections', exist_ok=True)
     sections = parse_tutorial('/home/pilot/.cloned/d1ee2/c_tutorial.txt')
 
     for section in sections:
