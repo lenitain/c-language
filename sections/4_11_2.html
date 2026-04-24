@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4.11.2 宏替换 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #444;
+        }
+        .content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #569cd6; font-weight: 500; }
+        .content .fn { color: #dcdcaa; }
+        .content .str { color: #ce9178; }
+        .content .cm { color: #6a9955; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #00599A;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #333;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #00599A;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 4 章</div>
+        <h1 class="section-title">4.11.2 宏替换</h1>
+    </div>
+    <div class="content">
+<p>宏定义的形式如下：</p>
+<pre><code>#define 名字 替换文本</code></pre>
+<p>这是一种最简单的宏替换——后续所有出现名字记号的地方都将被替换为替换文本。</p>
+<pre><code>#define 指令中的名字与变量名的命名方式相同，替换文本可以是任意字符串。通常情况下，
+#define 指令占一行，替换文本是#define 指令行尾部的所有剩余部分内容，但也可以把一</code></pre>
+<p>个较长的宏定义分成若干行，这时需要在待续的行末尾加上一个反斜杠符\。#define 指令</p>
+<p>定义的名字的作用域从其定义点开始，到被编译的源文件的末尾处结束。宏定义中也可以使</p>
+<p>用前面出现的宏定义。替换只对记号进行，对括在引号中的字符串不起作用。例如，如果 YES</p>
+<p>是一个通过#define 指令定义过的名字，</p>
+<p>则在 printf("YES")或 YESMAN 中将不执行替换。</p>
+<p>替换文本可以是任意的，例如：</p>
+<pre><code>#define forever <span class="kw">for</span> (;;)
+<span class="cm">/* infinite loop */</span></code></pre>
+<p>该语句为无限循环定义了一个新名字 forever。</p>
+<p>宏定义也可以带参数，这样可以对不同的宏调用使用不同的替换文本。例如，下列宏定</p>
+<p>义定义了一个宏 max：</p>
+<pre><code>#define max(A, B) ((A) &gt; (B) ? (A) : (B))</code></pre>
+<p>使用宏 max 看起来很像是函数词用，但宏调用直接将替换文本插入到代码中。形式参数（在</p>
+<p>此为 A 或 B）的每次出现都将被替换成对应的实际参数。因此，语句：</p>
+<pre><code>x = max(p+q, r+s);</code></pre>
+<p>将被替换为下列形式：</p>
+<pre><code>x = ((p+q) &gt; (r+s) ? (p+q) : (r+s));</code></pre>
+<p>如果对各种类型的参数的处理是一致的，则可以将同一个宏定义应用于任何数据类型，</p>
+<p>而无需针对不同的数据类型需要定义不同的 max 函数。</p>
+<p>仔细考虑一下 max 的展开式，就会发现它存在一些缺陷。其中，作为参数的表达式要重</p>
+<p>复计算两次，如果表达式存在副作用（比如含有自增运算符或输入／输出）</p>
+<p>，则会出现不正确</p>
+<p>的情况。例如：</p>
+<pre><code>max(i++, j++) <span class="cm">/* WRONG */</span></code></pre>
+<p>它将对每个参数执行两次自增操作。同时还必须注意，要适当使用圆括号以保证计算次序的</p>
+<p>正确性。考虑下列宏定义：</p>
+<pre><code>#define square(x) x * x <span class="cm">/* WRONG */</span></code></pre>
+<p>当用 squrare(z+1)调用该宏定义时会出现什么情况呢？</p>
+<p>但是，宏还是很有价值的。&lt;stdio.h&gt;头文件中有一个很实用的例子：getchar 与</p>
+<p>putchar 函数在实际中常常被定义为宏，这样可以避免处理字符时调用函数所需的运行时开</p>
+<p>销。&lt;ctype.h&gt;头文件中定义的函数也常常是通过宏实现的。</p>
+<p>可以通过#undef 指令取消名字的宏定义，这样做可以保证后续的调用是函数调用，而不</p>
+<p>是宏调用：</p>
+<p>#undef getchar</p>
+<pre><code><span class="kw">int</span> <span class="fn">getchar</span>(<span class="kw">void</span>) { ... }</code></pre>
+<p>形式参数不能用带引号的字符串替换。但是，如果在替换文本中，参数名以#作为前缀则</p>
+<p>结果将被扩展为由实际参数替换该参数的带引号的字符串。例如，可以将它与字符串连接运</p>
+<p>算结合起来编写一个调试打印宏：</p>
+<pre><code>#define dprint(expr)
+<span class="fn">printf</span>(#expr <span class="str">" = %g\n"</span>, expr)</code></pre>
+<p>使用语句</p>
+<pre><code>dprint(x/y)</code></pre>
+<p>调用该宏时，该宏将被扩展为：</p>
+<pre><code><span class="fn">printf</span>(<span class="str">"x/y"</span> <span class="str">" = &amp;g\n"</span>, x/y);</code></pre>
+<p>其中的字符串被连接起来了，这样，该宏调用的效果等价于</p>
+<pre><code><span class="fn">printf</span>(<span class="str">"x/y = &amp;g\n"</span>, x/y);</code></pre>
+<p>在实际参数中，每个双引号"将被替换为\"，反斜杠\将被替换为\\，因此替换后的字符串是</p>
+<p>合法的字符串常量。</p>
+<p>预处理器运算符##为宏扩展提供了一种连接实际参数的手段。如果替换文本中的参数与</p>
+<p>##相邻，则该参数将被实际参数替换，##与前后的空白符将被删除，并对替换后的结果重新</p>
+<p>扫描。例如，下面定义的宏 paste 用于连接两个参数</p>
+<pre><code>#define paste(front, back) front ## back</code></pre>
+<p>因此，宏调用 paste(name, 1)的结果将建立记号 name1。</p>
+<p>##的嵌套使用规则比较难以掌握，详细细节请参阅附录 A。</p>
+<p>练习 4-14</p>
+<p>你有所帮助。</p>
+<p>）</p>
+<p>定义宏 swap(t, x, y）以交换 t 类型的两个参数。</p>
+<p>（使用程序块结构会对</p>
+<p>4.11.3.</p>
+<p>条件包含</p>
+<p>还可以使用条件语句对预处理本身进行控制，这种条件语句的值是在预处理执行的过程</p>
+<p>中进行计算。这种方式为在编译过程中根据计算所得的条件值选择性地包含不同代码提供了</p>
+<p>一种手段。</p>
+<pre><code>#<span class="kw">if</span> 语句对其中的常量整型表达式（其中不能包含 <span class="kw">sizeof</span>、类型转换运算符或 <span class="kw">enum</span> 常</code></pre>
+<p>量）进行求值，若该表达式的值不等于 0，则包含其后的各行，直到遇到#endif、#elif 或</p>
+<pre><code>#<span class="kw">else</span> 语句为止（预处理器语句#elif 类似于 <span class="kw">else</span> <span class="kw">if</span>）。在#<span class="kw">if</span> 语句中可以使用表达式</code></pre>
+<p>defined(名字)，该表达式的值遵循下列规则：当名字已经定义时，其值为 1；否则，其值</p>
+<p>为 0。</p>
+<p>例如，为了保证 hdr.h 文件的内容只被包含一次，可以将该文件的内容包含在下列形式</p>
+<p>的条件语句中：</p>
+<pre><code>#<span class="kw">if</span> !defined(HDR)
+#define HDR
+<span class="cm">/* hdr.h 文件的内容放在这里 */</span>
+#endif</code></pre>
+<p>第一次包含头文件 hdr.h 时，将定义名字 HDR；此后再次包含该头文件时，会发现该名字已</p>
+<p>经定义，这样将直接跳转到#endif 处。类似的方式也可以用来避免多次重复包含同一文件。</p>
+<p>如果多个头文件能够一致地使用这种方式，那么，每个头文件都可以将它所依赖的任何头文</p>
+<p>件包含进来，用户不必考虑和处理头文件之间的各种依赖关系。</p>
+<p>下面的这段预处理代码首先测试系统变量 SYSTEM，然后根据该变量的值确定包含哪个版</p>
+<p>本的头文件：</p>
+<pre><code>#<span class="kw">if</span> SYSTEM == SYSV
+#define HDR <span class="str">"sysv.h"</span></code></pre>
+<p>#elif SYSTEM == BSD</p>
+<pre><code>#define HDR <span class="str">"bsd.h"</span></code></pre>
+<p>#elif SYSTEM == MSDOS</p>
+<pre><code>#define HDR <span class="str">"msdos.h"</span>
+#<span class="kw">else</span>
+#define HDR <span class="str">"<span class="kw">default</span>.h"</span>
+#endif
+#include HDR</code></pre>
+<p>C 语言专门定义了两个预处理语句#ifdef 与#ifndef，它们用来测试某个名字是否已经</p>
+<p>定义。上面有关#if 的第一个例子可以改写为下列形式：</p>
+<pre><code>#ifndef HDR
+#define EDR
+<span class="cm">/* hdr.h 文件的内容放在这里 */</span>
+#endif</code></pre>
+<p>第5章 指针与数组</p>
+<p>指针是一种保存变量地址的变量。在 C 语言中，指针的使用非常广泛，原因之一是，指</p>
+<p>针常常是表达某个计算的惟一途径，另一个原因是，同其它方法比较起来，使用指针通常可</p>
+<p>以生成更高效、更紧凑的代码。指针与数组之间的关系十分密切，我们将在本章中讨论它们</p>
+<p>之间的关系，并探讨如何利用这种关系。</p>
+<p>指针和 goto 语句一样，会导致程序难以理解。如果使用者粗心，指针很容易就指向了错</p>
+<p>误的地方。但是，如果谨慎地使用指针，便可以利用它写出简单、清晰的程序。在本章中我</p>
+<p>们将尽力说明这一点。</p>
+<p>ANSI C 的一个最重要的变化是，它明确地制定了操纵指针的规则。事实上，这些规则已</p>
+<p>经被很多优秀的程序设计人员和编译器所采纳。此外，ANSI C 使用类型 void *（指向 void</p>
+<p>的指针）代替 char *作为通用指针的类型。</p>
+    </div>
+</body>
+</html>

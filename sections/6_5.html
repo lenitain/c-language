@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6.5 自引用结构 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #444;
+        }
+        .content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #569cd6; font-weight: 500; }
+        .content .fn { color: #dcdcaa; }
+        .content .str { color: #ce9178; }
+        .content .cm { color: #6a9955; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #00599A;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #333;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #00599A;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 6 章</div>
+        <h1 class="section-title">6.5 自引用结构</h1>
+    </div>
+    <div class="content">
+<p>假定我们需要处理一个更一般化的问题：统计输入中所有单词的出现次数。因为预先不</p>
+<p>知道出现的单词列表，所以无法方便地排序，并使用折半查找；也不能分别对输入中的每个</p>
+<p>单词都执行一次线性查找，看它在前面是否已经出现，这样做，程序的执行将花费太长的时</p>
+<p>间。</p>
+<p>（更准确地说，程序的执行时间是与输入单词数目的二次方成比例的。）我们该如何组织</p>
+<p>这些数据，才能够有效地处理一系列任意的单词呢？</p>
+<p>一种解决方法是，在读取输入中任意单词的同时，就将它放置到正确的位置，从而始终</p>
+<p>保证所有单词是按顺序排列的。虽然这可以不用通过在线性数组中移动单词来实现，但它仍</p>
+<p>然会导致程序执行的时间过长。我们可以使用一种称为二叉树的数据结构来取而代之。</p>
+<p>每个不同的单词在树中都是一个节点，每个节点包含：</p>
+<p>•</p>
+<p>•</p>
+<p>•</p>
+<p>•</p>
+<p>一个指向该单词内容的指针</p>
+<p>一个统计出现次数的计数值</p>
+<p>一个指向左子树的指针</p>
+<p>一个指向右子树的指针</p>
+<p>任何节点最多拥有两个子树，也可能只有一个子树或一个都没有。</p>
+<p>对节点的所有操作要保证，任何节点的左子树只包含按字典序小于该节点中单词的那些</p>
+<p>单词，右子树只包含按字典序大于该节点中单词的那些单词。图 6-3 是按序插入句子“now is the</p>
+<p>time for all good men to come to the aid of their party”中各单词后生成的树。</p>
+<p>图 6-3</p>
+<p>要查找一个新单词是否已经在树中，可以从根节点开始，比较新单词与该节点中的单词。若</p>
+<p>匹配，则得到肯定的答案。若新单词小于该节点中的单词，则在左子树中继续查找，否则在</p>
+<p>右子树中查找。如在搜寻方向上无子树，则说明新单词不在树中，并且，当前的空位置就是</p>
+<p>存放新加入单词的正确位置。因为从任意节点出发的查找都要按照同样的方式查找它的一个</p>
+<p>子树，所以该过程是递归的。相应地，在插入和打印操作中使用递归过程也是很自然的事情。</p>
+<p>我们再来看节点的描述问题。最方便的表示方法是表示为包括 4 个成员的结构：</p>
+<pre><code><span class="kw">struct</span> tnode {</code></pre>
+<p>char *word;</p>
+<pre><code><span class="kw">int</span> count;
+<span class="cm">/* the tree node: */</span>
+<span class="cm">/* points to the text */</span>
+<span class="cm">/* number of occurrences */</span>
+<span class="kw">struct</span> tnode *left; <span class="cm">/* left child */</span>
+<span class="kw">struct</span> tnode *right; <span class="cm">/* right child */</span>
+};</code></pre>
+<p>这种对节点的递归的声明方式看上去好像是不确定的，但它的确是正确的。一个包含其自身</p>
+<p>实例的结构是非法的，但是，下列声明是合法的：</p>
+<pre><code><span class="kw">struct</span> tnode *left;</code></pre>
+<p>它将 left 声明为指向 tnode 的指针，而不是 tnode 实例本身。</p>
+<p>我们偶尔也会使用自引用结构的一种变体：两个结构相互引用。具体的使用方法如下：</p>
+<pre><code><span class="kw">struct</span> t {</code></pre>
+<p>...</p>
+<pre><code><span class="kw">struct</span> s *p;
+};
+<span class="kw">struct</span> s {</code></pre>
+<p>...</p>
+<pre><code><span class="kw">struct</span> t *q;
+};
+<span class="cm">/* p points to an s */</span>
+<span class="cm">/* q points to a t */</span></code></pre>
+<p>如下所示，整个程序的代码非常短小。当然，它需要我们前面编写的一些程序的支持，</p>
+<p>比如 getword 等。主函数通过 getword 读入单词，并通过 addtree 函数将它们插入到树</p>
+<p>中。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;ctype.h&gt;
+#include &lt;string.h&gt;
+#define MAXWORD 100
+<span class="kw">struct</span> tnode *addtree(<span class="kw">struct</span> tnode *, <span class="kw">char</span> *);
+<span class="kw">void</span> treeprint(<span class="kw">struct</span> tnode *);
+<span class="kw">int</span> getword(<span class="kw">char</span> *, <span class="kw">int</span>);
+<span class="cm">/* word frequency count */</span>
+<span class="fn">main</span>()
+{
+<span class="kw">struct</span> tnode *root;
+<span class="kw">char</span> word[MAXWORD];
+root = NULL;
+<span class="kw">while</span> (getword(word, MAXWORD) != EOF)
+<span class="kw">if</span> (isalpha(word[0]))
+root = addtree(root, word);
+treeprint(root);
+<span class="kw">return</span> 0;
+}</code></pre>
+<p>函数 addtree 是递归的。主函数 main 以参数的方式传递给该函数的一个单词将作为树</p>
+<p>的最顶层（即树的根）</p>
+<p>。在每一步中，新单词与节点中存储的单词进行比较，随后，通过递归</p>
+<p>调用 addtree 而转向左子树或右子树。该单词最终将与树中的某节点匹配（这种情况下计数</p>
+<p>值加 1），或遇到一个空指针（表明必须创建一个节点并加入到树中）。若生成了新节点，则</p>
+<p>addtree 返回一个指向新节点的指针，该指针保存在父节点中。</p>
+<pre><code><span class="kw">struct</span> tnode *talloc(<span class="kw">void</span>);</code></pre>
+<p>char *strdup(char *);</p>
+<pre><code><span class="cm">/* addtree: add a node with w, at or below p */</span>
+<span class="kw">struct</span> treenode *addtree(<span class="kw">struct</span> tnode *p, <span class="kw">char</span> *w)
+{
+<span class="kw">int</span> cond;
+<span class="kw">if</span> (p == NULL) {
+<span class="cm">/* a new word has arrived */</span>
+p = talloc();
+<span class="cm">/* make a new node */</span></code></pre>
+<p>p-&gt;word = strdup(w);</p>
+<p>p-&gt;count = 1;</p>
+<p>p-&gt;left = p-&gt;right = NULL;</p>
+<pre><code>} <span class="kw">else</span> <span class="kw">if</span> ((cond = <span class="fn">strcmp</span>(w, p-&gt;word)) == 0)</code></pre>
+<p>p-&gt;count++;</p>
+<pre><code><span class="cm">/* repeated word */</span></code></pre>
+<p>else if (cond &lt; 0) /* less than into left subtree */</p>
+<p>p-&gt;left = addtree(p-&gt;left, w);</p>
+<p>else</p>
+<pre><code><span class="cm">/* greater than into right subtree */</span></code></pre>
+<p>p-&gt;right = addtree(p-&gt;right, w);</p>
+<pre><code><span class="kw">return</span> p;
+}</code></pre>
+<p>新节点的存储空间由子程序 talloc 获得。talloc 函数返回一个指针，指向能容纳一个</p>
+<p>树节点的空闲空间。函数 strdup 将新单词复制到某个隐藏位置（稍后将讨论这些子程序）</p>
+<p>。</p>
+<p>计数值将被初始化，两个子树被置为空（NULL）。增加新节点时，这部分代码只在树叶部分执</p>
+<p>行。该程序忽略了对 strdup 和 talloc 返回值的出错检查（这显然是不完善的）</p>
+<p>。</p>
+<p>treeprint 函数按顺序打印树。在每个节点，它先打印左子树（小于该单词的所有单词），</p>
+<p>然后是该单词本身，最后是右子树（大于该单词的所有单词）</p>
+<p>。如果你对递归操作有些疑惑的</p>
+<p>话，不妨在上面的树中模拟 treeprint 的执行过程。</p>
+<pre><code><span class="cm">/* treeprint: in-order print of tree p */</span>
+<span class="kw">void</span> treeprint(<span class="kw">struct</span> tnode *p)
+{
+<span class="kw">if</span> (p != NULL) {
+treeprint(p-&gt;left);
+<span class="fn">printf</span>(<span class="str">"%4d %s\n"</span>, p-&gt;count, p-&gt;word);
+treeprint(p-&gt;right);
+}
+}</code></pre>
+<p>这里有一点值得注意：如果单词不是按照随机的顺序到达的，树将变得不平衡，这种情</p>
+<p>况下，程序的运行时间将大大增加。最坏的情况下，若单词已经排好序，则程序模拟线性查</p>
+<p>找的开销将非常大。某些广义二叉树不受这种最坏情况的影响，在此我们不讨论。</p>
+<p>在结束该例子之前，我们简单讨论一下有关存储分配程序的问题。尽管存储分配程序需</p>
+<p>要为不同的对象分配存储空间，但显然，程序中只会有一个存储分配程序。但是，假定用一</p>
+<p>个分配程序来处理多种类型的请求，比如指向 char 类型的指针和指向 struct tnode 类型</p>
+<p>的指针，则会出现两个问题。第一，它如何在大多数实际机器上满足各种类型对象的对齐要</p>
+<p>求（例如，整型通常必须分配在偶数地址上）</p>
+<p>，第二，使用什么样的声明能处理分配程序必须</p>
+<p>能返回不同类型的指针的问题？</p>
+<p>对齐要求一般比较容易满足，只需要确保分配程序始终返回满足所有对齐限制要求的指</p>
+<p>针就可以了，其代价是牺牲一些存储空间。第 5 章介绍的 alloc 函数不保证任何特定类型的</p>
+<p>对齐，所以，我们使用标准库函数 malloc，它能够满足对齐要求。第 8 章将介绍实现 malloc</p>
+<p>函数的一种方法。</p>
+<p>对于任何执行严格类型检查的语言来说，像 malloc 这样的函数的类型声明总是很令人</p>
+<p>头疼的问题。在 C 语言中，一种合适的方法是将 malloc 的返回值声明为一个指向 void 类</p>
+<p>型的指针，然后再显式地将该指针强制转换为所需类型。malloc 及相关函数声明在标准头文</p>
+<p>件&lt;stdlib.h&gt;中。因此，可以把 talloc 函数写成下列形式：</p>
+<pre><code>#include &lt;stdlib.h&gt;
+<span class="cm">/* talloc: make a tnode */</span>
+<span class="kw">struct</span> tnode *talloc(<span class="kw">void</span>)
+{
+<span class="kw">return</span> (<span class="kw">struct</span> tnode *) <span class="fn">malloc</span>(<span class="kw">sizeof</span>(<span class="kw">struct</span> tnode));
+}</code></pre>
+<p>strdup 函数只是把通过其参数传入的字符串复制到某个安全的位置。它是通过调用</p>
+<p>malloc 函数实现的：</p>
+<p>char *strdup(char *s)</p>
+<pre><code>{</code></pre>
+<p>char *p;</p>
+<pre><code><span class="cm">/* make a duplicate of s */</span>
+p = (<span class="kw">char</span> *) <span class="fn">malloc</span>(<span class="fn">strlen</span>(s)+1); <span class="cm">/* +1 <span class="kw">for</span> '\0' */</span>
+<span class="kw">if</span> (p != NULL)
+<span class="fn">strcpy</span>(p, s);
+<span class="kw">return</span> p;
+}</code></pre>
+<p>在没有可用空间时，malloc 函数返回 NULL，同时，strdup 函数也将返回 NULL，strdup</p>
+<p>函数的调用者负责出错处理。</p>
+<p>调用 malloc 函数得到的存储空间可以通过调用 free 函数释放以重用。详细信息请参</p>
+<p>见第 7 章和第 8 章。</p>
+<p>练习 6-2</p>
+<p>编写一个程序，用以读入一个 C 语言程序，并按字母表顺序分组打印变量名，</p>
+<p>要求每一组内各变量名的前 6 个字符相同，其余字符不同。字符串和注释中的单词不予考虑。</p>
+<p>请将 6 作为一个可在命令行中设定的参数。</p>
+<p>练习 6-3</p>
+<p>编写一个交叉引用程序，打印文档中所有单词的列表，并且每个单词还有一</p>
+<p>个列表，记录出现过该单词的行号。对 the、and 等非实义单词不予考虑。</p>
+<p>练习 6-4</p>
+<p>编写一个程序，根据单词的出现频率按降序打印输入的各个不同单词，并在</p>
+<p>每个单词的前面标上它的出现次数。</p>
+    </div>
+</body>
+</html>

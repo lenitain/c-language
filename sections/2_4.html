@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.4 声明 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #444;
+        }
+        .content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #569cd6; font-weight: 500; }
+        .content .fn { color: #dcdcaa; }
+        .content .str { color: #ce9178; }
+        .content .cm { color: #6a9955; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #00599A;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #333;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #00599A;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 2 章</div>
+        <h1 class="section-title">2.4 声明</h1>
+    </div>
+    <div class="content">
+<p>所有变量都必须先声明后使用，尽管某些变量可以通过上下文隐式地声明。一个声明指</p>
+<p>定一种变量类型，后面所带的变量表可以包含一个或多个该类型的变量。例如：</p>
+<pre><code><span class="kw">int</span> lower, upper, step;
+<span class="kw">char</span> c, 1ine[1000];</code></pre>
+<p>一个声明语句中的多个变量可以拆开在多个声明语句中声明。上面的两个声明语句也可以等</p>
+<p>价地写成下列形式：</p>
+<pre><code><span class="kw">int</span> lower;
+<span class="kw">int</span> upper;
+<span class="kw">int</span> step;
+<span class="kw">char</span> c;</code></pre>
+<p>cbar line[1000];</p>
+<p>按照这种形式书写代码需要占用较多的空间，但便于向各声明语句中添加注释，也便于以后</p>
+<p>修改。</p>
+<p>还可以在声明的同时对变量进行初始化。在声明中，如果变量名的后面紧跟一个等号以</p>
+<p>及一个表达式，该表达式就充当对变量进行初始化的初始化表达式。例如：</p>
+<pre><code><span class="kw">char</span> esc = '\\';
+<span class="kw">int</span> i = 0;
+<span class="kw">int</span> limit = MAXLINE + 1;
+<span class="kw">float</span> eps = 1.0e-5;</code></pre>
+<p>如果变量不是自动变量，则只能进行一次初始化操作，从概念上讲，应该是在程序开始</p>
+<p>执行之前进行，并且初始化表达式必须为常量表达式。每次进入函数或程序块时，显式初始</p>
+<p>化的自动变量都将被初始化一次，其初始化表达式可以是任何表达式。默认情况下，外部变</p>
+<p>量与静态变量将被初始化为 0。未经显式初始化的自动变量的值为未定义值（即无效值）。</p>
+<p>任何变量的声明都可以使用 const 限定符限定。该限定符指定变量的值不能被修改。对</p>
+<p>数组而言，const 限定符指定数组所有元素的值都不能被修改：</p>
+<p>const double e = 2.71828182845905;</p>
+<p>const char msg[] = "warning: ";</p>
+<p>const 限定符也可配合数组参数使用，它表明函数不能修改数组元素的值：</p>
+<pre><code><span class="kw">int</span> <span class="fn">strlen</span>(<span class="kw">const</span> <span class="kw">char</span>[]);</code></pre>
+<p>如果试图修改 const 限定符限定的值，其结果取决于具体的实现。</p>
+    </div>
+</body>
+</html>

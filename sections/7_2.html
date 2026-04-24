@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>7.2 格式化输出——printf 函数 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #444;
+        }
+        .content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #569cd6; font-weight: 500; }
+        .content .fn { color: #dcdcaa; }
+        .content .str { color: #ce9178; }
+        .content .cm { color: #6a9955; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #00599A;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #333;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #00599A;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 7 章</div>
+        <h1 class="section-title">7.2 格式化输出——printf 函数</h1>
+    </div>
+    <div class="content">
+<p>输出函数 printf 将内部数值转换为字符的形式。前面的有关章节中已经使用过该函数。</p>
+<p>下面只讲述该函数最典型的用法，附录 B 中给出了该函数完整的描述。</p>
+<pre><code><span class="kw">int</span> <span class="fn">printf</span>(<span class="kw">char</span> *format, arg1, arg2, ...);</code></pre>
+<p>函数 printf 在输出格式 format 的控制下，将其参数进行转换与格式化，并在标准输出设</p>
+<p>备上打印出来。它的返回值为打印的字符数。</p>
+<p>格式字符串包含两种类型的对象：普通字符和转换说明。在输出时，普通字符将原样不</p>
+<p>动地复制到输出流中，而转换说明并不直接输出到输出流中，而是用于控制 printf 中参数</p>
+<p>的转换和打印，每个转换说明都由一个百分号字符（即%）开始，并以一个转换字符结束。在</p>
+<p>字符%和转换字符中间可能依次包含下列组成部分：</p>
+<p>•</p>
+<p>•</p>
+<p>负号，用于指定被转换的参数按照左对齐的形式输出。</p>
+<p>数，用于指定最小字段宽度。转换后的参数将打印不小于最小字段宽度的字段。如</p>
+<p>果有必要，字段左边（如果使用左对齐的方式，则为右边）多余的字符位置用空格</p>
+<p>填充以保证最小字段宽。</p>
+<p>•</p>
+<p>•</p>
+<p>小数点，用于将字段宽度和精度分开。</p>
+<p>数，用于指定精度，即指定字符串中要打印的最大字符数、浮点数小数点后的位数、</p>
+<p>整型最少输出的数字数目。</p>
+<p>字母 h 或 l，字母 h 表不将整数作为 short 类型打印，字母 l 表示将整数作为 long</p>
+<p>类型打印。</p>
+<p>•</p>
+<p>表 7-1 列出了所有的转换字符，如果%后面的字符不是一个转换说明，则该行为是未定义</p>
+<p>的。</p>
+<p>表 7-1 printf 函数基本的转换说明</p>
+<p>字符</p>
+<p>参数类型：输出形式</p>
+<p>d, i</p>
+<p>int 类型；十进制数</p>
+<p>o</p>
+<p>int 类型；无符号八进制数（没有前导 0）</p>
+<p>x, X</p>
+<p>int 类型；无符号十六进制数（没有前导 0x 或 0X）</p>
+<p>，10～15 分别用 abcdef 或 ABCDEF 表示</p>
+<p>u</p>
+<p>int 类型；无符号十进制数</p>
+<p>c</p>
+<p>int 类型；单个字符</p>
+<p>s</p>
+<p>char *类型；顺序打印字符串中的字符，直到遇到'\0'或已打印了由精度指定的字符数为止</p>
+<p>f</p>
+<p>double 类型；十进制小数[-]m.dddddd，其中 d 的个数由精度指定（默认值为 6）</p>
+<p>e, E</p>
+<p>double 类型；[-]m.dddddd e ±xx 或[-]m.dddddd E ±xx，其中 d 的个数由精度指定（默认值为 6）</p>
+<p>g, G</p>
+<p>double 类型；如果指数小于-4 或大于等于精度，则用%e 或%E 格式输出，否则用%f 格式输出。尾部的 0 和</p>
+<p>小数点不打印</p>
+<p>p</p>
+<p>void *类型；指针（取决于具体实现）</p>
+<p>%</p>
+<p>不转换参数；打印一个百分号%</p>
+<p>在转换说明中，宽度或精度可以用星号*表示，这时，宽度或精度的值通过转换下一参数</p>
+<p>（必须为 int 类型）来计算。例如，为了从字符串 s 中打印最多 max 个字符，可以使用下列</p>
+<p>语句：</p>
+<pre><code><span class="fn">printf</span>(<span class="str">"%.*s"</span>, max, s);</code></pre>
+<p>前面的章节中已经介绍过大部分的格式转换，但没有介绍与字符串相关的精度。下表说</p>
+<p>明了在打印字符串"hello, world"（12 个字符）时根据不同的转换说明产生的不同结果。</p>
+<p>我们在每个字段的左边和右边加上冒号，这样可以清晰地表示出字段的宽度。</p>
+<p>:%s:</p>
+<p>:%10s:</p>
+<p>:%.10s:</p>
+<p>:%-10s:</p>
+<p>:%.15s:</p>
+<p>:%-15s:</p>
+<p>:%15.10s:</p>
+<p>:%-15.10s:</p>
+<p>:hello, world:</p>
+<p>:hello, world:</p>
+<p>:hello, wor:</p>
+<p>:hello, world:</p>
+<p>:hello, world:</p>
+<p>:hello, world :</p>
+<p>:</p>
+<p>hello, wor:</p>
+<p>:hello, wor</p>
+<p>:</p>
+<p>注意：函数 printf 使用第一个参数判断后面参数的个数及类型。如果参数的个数不够</p>
+<p>或者类型错误，则将得到错误的结果。请注意下面两个函数调用之间的区别：</p>
+<pre><code><span class="fn">printf</span>(s);
+<span class="cm">/* FAILS <span class="kw">if</span> s contains % */</span>
+<span class="fn">printf</span>(<span class="str">"%s"</span>, s); <span class="cm">/* SAFE */</span></code></pre>
+<p>函数 sprintf 执行的转换和函数 printf 相同，但它将输出保存到一个字符串中：</p>
+<pre><code><span class="kw">int</span> sprintf(<span class="kw">char</span> *string, <span class="kw">char</span> *format, arg1, arg2, ...);</code></pre>
+<p>sprintf 函数和 printf 函数一样，按照 format 格式格式化参数序列 arg1、arg2、…，</p>
+<p>但它将输出结果存放到 string 中，而不是输出到标准输出中。当然，string 必须足够大以</p>
+<p>存放输出结果。</p>
+<p>练习 7-2</p>
+<p>编写一个程序，以合理的方式打印任何输入。该程序至少能够根据用户的习</p>
+<p>惯以八进制或十六进制打印非图形字符，并截断长文本行。</p>
+    </div>
+</body>
+</html>

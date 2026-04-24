@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.3 指针与数组 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #444;
+        }
+        .content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #569cd6; font-weight: 500; }
+        .content .fn { color: #dcdcaa; }
+        .content .str { color: #ce9178; }
+        .content .cm { color: #6a9955; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #00599A;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #333;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #00599A;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 5 章</div>
+        <h1 class="section-title">5.3 指针与数组</h1>
+    </div>
+    <div class="content">
+<p>在 C 语言中，指针和数组之间的关系十分密切，因此，在接下来的部分中，我们将同时</p>
+<p>讨论指针与数组。通过数组下标所能完成的任何操作都可以通过指针来实现。一般来说，用</p>
+<p>指针编写的程序比用数组下标编写的程序执行速度快，但另一方面，用指针实现的程序理解</p>
+<p>起来稍微困难一些。</p>
+<p>声明</p>
+<pre><code><span class="kw">int</span> a[10];</code></pre>
+<p>定义了一个长度为 10 的数组 a。换句话说，它定义了一个由 10 个对象组成的集合，这 10 个</p>
+<p>对象存储在相邻的内存区域中，名字分别为 a[0]、a[1]、…、a[9]（参见图 5-3）。</p>
+<p>图 5-3</p>
+<p>a[i]表示该数组的第 i 个元素。如果 pa 的声明为</p>
+<p>int *pa;</p>
+<p>则说明它是一个指向整型对象的指针，那么，赋值语句</p>
+<pre><code>pa = &amp;a[0];</code></pre>
+<p>则可以将指针 pa 指向数组 a 的第 0 个元素，也就是说，pa 的值为数组元素 a[0]的地址（参</p>
+<p>见图 5-4）</p>
+<p>。</p>
+<p>图 5-4</p>
+<p>这样，赋值语句</p>
+<pre><code>x = *pa;</code></pre>
+<p>将把数组元素 a[0]中的内容复制到变量 x 中。</p>
+<p>如果 pa 指向数组中的某个特定元素，那么，根据指针运算的定义，pa+1 将指向下一个</p>
+<p>元素，pa+i 将指向 pa 所指向数组元素之后的第 i 个元素，而 pa-i 将指向 pa 所指向数组</p>
+<p>元素之前的第 i 个元素。因此，如果指针 pa 指向 a[0]，那么*(pa+1)引用的是数组元素</p>
+<p>a[1]的内容，pa+i 是数组元素 a[i]的地址，*(pa+i)引用的是数组元素 a[i]的内容（参</p>
+<p>见图 5-5）</p>
+<p>。</p>
+<p>图 5-5</p>
+<p>无论数组 a 中元素的类型或数组长度是什么，上面的结论都成立。</p>
+<p>“指针加 1”就意味着，</p>
+<p>pa+1 指向 pa 所指向的对象的下一个对象。相应地，pa+i 指向 pa 所指向的对象之后的第 i</p>
+<p>个对象。</p>
+<p>下标和指针运算之间具有密切的对应关系。根据定义，数组类型的变量或表达式的值是</p>
+<p>该数组第 0 个元素的地址。执行赋值语句</p>
+<pre><code>pa = &amp;a[0]；</code></pre>
+<p>后，pa 和 a 具有相同的值。因为数组名所代表的就是该数组最开始的一个元素的地址，所以，</p>
+<p>赋值语句 pa=&amp;a[0]也可以写成下列形式：</p>
+<pre><code>pa = a;</code></pre>
+<p>对数组元素 a[i]的引用也可以写成*(a+i)这种形式。对第一次接触这种写法的人来说，</p>
+<p>可能会觉得很奇怪。在计算数组元素 a[i]的值时，C 语言实际上先将其转换为*(a+i)的形</p>
+<p>式，然后再进行求值，因此在程序中这两种形式是等价的。如果对这两种等价的表示形式分</p>
+<p>别施加地址运算符&amp;，便可以得出这样的结论：&amp;a[i]和 a+i 的含义也是相同的。a+i 是 a</p>
+<p>之后第 i 个元素的地址。相应地，如果 pa 是个指针，那么，在表达式中也可以在它的后面加</p>
+<p>下标。pa[i]与*(pa+i)是等价的。简而言之，一个通过数组和下标实现的表达式可等价地</p>
+<p>通过指针和偏移量实现。</p>
+<p>但是，我们必须记住，数组名和指针之间有一个不同之处，指针是一个变量，因此，在 C</p>
+<p>语言中，语句 pa=a 和 pa++都是合法的。但数组名不是变量，因此，类似于 a=pa 和 a++形</p>
+<p>式的语句是非法的。</p>
+<p>当把数组名传递给一个函数时，实际上传递的是该数组第一个元索的地址。在被调用函</p>
+<p>数中，该参数是一个局部变量，因此，数组名参数必须是一个指针，也就是一个存储地址值</p>
+<p>的变量。我们可以利用该特性编写 strlen 函数的另一个版本，该函数用于计算一个字符串</p>
+<p>的长度。</p>
+<pre><code><span class="cm">/* <span class="fn">strlen</span>: <span class="kw">return</span> length of string s */</span>
+<span class="kw">int</span> <span class="fn">strlen</span>(<span class="kw">char</span> *s)
+{
+<span class="kw">int</span> n;
+<span class="kw">for</span> (n = 0; *s != '\0', s++)</code></pre>
+<p>n++;</p>
+<pre><code><span class="kw">return</span> n;
+}</code></pre>
+<p>因为 s 是一个指针，所以对其执行自增运算是合法的。执行 s++运算不会影响到 strlen 函</p>
+<p>数的调用者中的字符串，它仅对该指针在 strlen 函数中的私有副本进行自增运算。因此，</p>
+<p>类似于下面这样的函数调用：</p>
+<p>strlen("hello, world"); /* string constant */</p>
+<pre><code><span class="fn">strlen</span>(array);
+<span class="cm">/* <span class="kw">char</span> array[100]; */</span>
+<span class="fn">strlen</span>(ptr);
+<span class="cm">/* <span class="kw">char</span> *ptr; */</span></code></pre>
+<p>都可以正确地执行。</p>
+<p>在函数定义中，形式参数</p>
+<pre><code><span class="kw">char</span> s[];</code></pre>
+<p>和</p>
+<p>char *s;</p>
+<p>是等价的。我们通常更习惯于使用后一种形式，因为它比前者更直观地表明了该参数是一个</p>
+<p>指针。如果将数组名传递给函数，函数可以根据情况判定是按照数组处理还是按照指针处理，</p>
+<p>随后根据相应的方式操作该参数。为了直观且恰当地描述函数，在函数中甚至可以同时使用</p>
+<p>数组和指针这两种表示方法。</p>
+<p>也可以将指向子数组起始位置的指针传递给函数，这样，就将数组的一部分传递给了函</p>
+<p>数。例如，如果 a 是一个数组，那么下面两个函数调用</p>
+<p>f(&amp;a[2])</p>
+<p>与</p>
+<pre><code>f(a+2)</code></pre>
+<p>都将把起始于 a[2]的子数组的地址传递给函数 f。在函数 f 中，参数的声明形式可以为</p>
+<pre><code>f(<span class="kw">int</span> arr[]) { ... }</code></pre>
+<p>或</p>
+<pre><code>f(<span class="kw">int</span> *arr) { ... }</code></pre>
+<p>对于函数 f 来说，它并不关心所引用的是否只是一个更大数组的部分元素。</p>
+<p>如果确信相应的元素存在，也可以通过下标访问数组第一个元素之前的元素。类似于</p>
+<p>p[-1]、p[-2]这样的表达式在语法上都是合法的，它们分别引用位于 p[0]之前的两个元素。</p>
+<p>当然，引用数组边界之外的对象是非法的。</p>
+    </div>
+</body>
+</html>

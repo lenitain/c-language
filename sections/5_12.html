@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.12 复杂声明 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #444;
+        }
+        .content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #569cd6; font-weight: 500; }
+        .content .fn { color: #dcdcaa; }
+        .content .str { color: #ce9178; }
+        .content .cm { color: #6a9955; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #00599A;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #333;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #00599A;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 5 章</div>
+        <h1 class="section-title">5.12 复杂声明</h1>
+    </div>
+    <div class="content">
+<p>C 语言常常因为声明的语法问题而受到人们的批评，特别是涉及到函数指针的语法。C 语</p>
+<p>言的语法力图使声明和使用相一致。对于简单的情况，C 语言的做法是很有效的，但是，如果</p>
+<p>情况比较复杂，则容易让人混淆，原因在于，C 语言的声明不能从左至右阅读，而且使用了太</p>
+<p>多的圆括号。我们来看下面所示的两个声明：</p>
+<p>int *f();</p>
+<pre><code><span class="cm">/* f: function returning pointer to <span class="kw">int</span> */</span></code></pre>
+<p>以及</p>
+<p>Linux公社(LinuxIDC.com)</p>
+<pre><code><span class="kw">int</span> (*pf)();
+<span class="cm">/* pf: pointer to function returning <span class="kw">int</span> */</span></code></pre>
+<p>它们之间的含义差别说明：*是一个前缀运算符，其优先级低于()，所以，声明中必须使用圆</p>
+<p>括号以保正确的结合顺序。</p>
+<p>尽管实际中很少用到过于复杂的声明，但是，懂得如何理解甚至如何使用这些复杂的声</p>
+<p>明是很重要的。如何创建复杂的声明呢？一种比较好的方法是，使用 typedef 通过简单的步</p>
+<p>骤合成，这种方法我们将在 6.7 节中讨论。这里介绍另一种方法。接下来讲述的两个程序就使</p>
+<p>用这种方法：一个程序用于将正确的 C 语言声明转换为文字描述，另一个程序完成相反的转</p>
+<p>换。文字描述是从左至右阅读的。</p>
+<p>第一个程序 dcl 复杂一些。它将 C 语言的声明转换为文字描述，比如：</p>
+<p>char **argv</p>
+<p>argv: pointer to char</p>
+<pre><code><span class="kw">int</span> (*daytab)[13]</code></pre>
+<p>daytab: pointer to array[13] of int</p>
+<p>int *daytab[13]</p>
+<p>daytab: array[13] of pointer to int</p>
+<p>void *comp()</p>
+<p>comp: function returning pointer to void</p>
+<pre><code><span class="kw">void</span> (*comp)()</code></pre>
+<p>comp: pointer to function returning void</p>
+<pre><code><span class="kw">char</span> (*(*x())[])()</code></pre>
+<p>x: function returning pointer to array[] of</p>
+<p>pointer to function returning char</p>
+<pre><code><span class="kw">char</span> (*(*x[3])())[5]</code></pre>
+<p>x: array[3] of pointer to function returning</p>
+<p>pointer to array[5] of char</p>
+<p>程序 dcl 是基于声明符的语法编写的。附录 A 以及 8.5 节将对声明符的语法进行详细的</p>
+<p>描述。下面是其简化的语法形式：</p>
+<p>dcl:</p>
+<p>optional *'s direct-dcl</p>
+<p>direct-dcl name</p>
+<p>(dcl)</p>
+<p>direct-dcl()</p>
+<p>direct-dcl[optional size]</p>
+<p>简而言之，声明符 dcl 就是前面可能带有多个*的 direct-dcl。direct-dcl 可以是 name、由</p>
+<p>一对圆括号括起来的 dcl、后面跟有一对圆括号的 direct-dcl、后面跟有用方括号括起来的表示</p>
+<p>可选长度的 direct-dcl。</p>
+<p>该语法可用来对 C 语言的声明进行分析。例如，考虑下面的声明符：</p>
+<p>(*pfa[])()</p>
+<p>按照该语法分析，pfa 将被识别为一个 name，从而被认为是一个 direct-dcl。于是，pfa[]也</p>
+<p>是一个 direct-dcl。接着，*pfa[]被识别为一个 dcl，因此，判定(*pfa[])是一个 direct-dcl。</p>
+<p>再接着，(*pfa[])()被识别为一个 direct-dcl，因此也是一个 dcl。可以用图 5-12 所示的语法</p>
+<p>分析树来说明分析的过程（其中 direct-dcl 缩写为 dir-dcl）。</p>
+<p>图 5-12</p>
+<p>程序 dcl 的核心是两个函数：dcl 与 dirdcl，它们根据声明符的语法对声明进行分析。</p>
+<p>因为语法是递归定义的，所以在识别一个声明的组成部分时，这两个函数是相互递归调用的。</p>
+<p>我们称该程序是一个递归下降语法分析程序。</p>
+<pre><code><span class="cm">/* dcl: parse a declarator */</span>
+<span class="kw">void</span> dcl(<span class="kw">void</span>)
+{
+<span class="kw">int</span> ns;
+<span class="kw">for</span> (ns = 0; gettoken() == '*'; ) <span class="cm">/* count *'s */</span></code></pre>
+<p>ns++;</p>
+<p>dirdcl();</p>
+<pre><code><span class="kw">while</span> (ns-- &gt; 0)
+strcat(out, <span class="str">" pointer to"</span>);
+}
+<span class="cm">/* dirdcl: parse a direct declarator */</span>
+<span class="kw">void</span> dirdcl(<span class="kw">void</span>)
+{
+<span class="kw">int</span> type;
+<span class="kw">if</span> (tokentype == '(') {
+<span class="cm">/* ( dcl ) */</span></code></pre>
+<p>dcl();</p>
+<pre><code><span class="kw">if</span> (tokentype != ')')
+<span class="fn">printf</span>(<span class="str">"error: missing )\n"</span>);
+} <span class="kw">else</span> <span class="kw">if</span> (tokentype == NAME) <span class="cm">/* variable name */</span>
+<span class="fn">strcpy</span>(name, token);</code></pre>
+<p>else</p>
+<pre><code><span class="fn">printf</span>(<span class="str">"error: expected name or (dcl)\n"</span>);
+<span class="kw">while</span> ((type=gettoken()) == PARENS || type == BRACKETS)
+<span class="kw">if</span> (type == PARENS)
+strcat(out, <span class="str">" function returning"</span>);
+<span class="kw">else</span> {
+strcat(out, <span class="str">" array"</span>);
+strcat(out, token);
+strcat(out, <span class="str">" of"</span>);
+}
+}</code></pre>
+<p>该程序的目的旨在说明问题，并不想做得尽善尽美，所以对 dcl 有很多限制，它只能处</p>
+<p>理类似于 char 或 int 这样的简单数据类型，而无法处理函数中的参数类型或类似于 const</p>
+<p>这样的限定符。它不能处理带有不必要空格的情况。由于没有完备的出错处理，因此它也无</p>
+<p>法处理无效的声明。这些方面的改进留给读者做练习。</p>
+<p>下面是该程序的全局变量和主程序：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &lt;ctype.h&gt;
+#define MAXTOKEN 100</code></pre>
+<p>enum { NAME, PARENS, BRACKETS };</p>
+<pre><code><span class="kw">void</span> dcl(<span class="kw">void</span>);
+<span class="kw">void</span> dirdcl(<span class="kw">void</span>);
+<span class="kw">int</span> gettoken(<span class="kw">void</span>);
+<span class="kw">int</span> tokentype;
+<span class="cm">/* type of last token */</span>
+<span class="kw">char</span> token[MAXTOKEN];
+<span class="cm">/* last token string */</span>
+<span class="kw">char</span> name[MAXTOKEN];
+<span class="cm">/* identifier name */</span>
+<span class="kw">char</span> datatype[MAXTOKEN]; <span class="cm">/* data type = <span class="kw">char</span>, <span class="kw">int</span>, etc. */</span>
+<span class="kw">char</span> out[1000];
+<span class="fn">main</span>() <span class="cm">/* convert declaration to words */</span>
+{
+<span class="kw">while</span> (gettoken() != EOF) { <span class="cm">/* 1st token on line */</span>
+<span class="fn">strcpy</span>(datatype, token); <span class="cm">/* is the datatype */</span></code></pre>
+<p>out[0] = '\0';</p>
+<p>dcl();</p>
+<pre><code><span class="cm">/* parse rest of line */</span>
+<span class="kw">if</span> (tokentype != '\n')
+<span class="fn">printf</span>(<span class="str">"syntax error\n"</span>);
+<span class="fn">printf</span>(<span class="str">"%s: %s %s\n"</span>, name, out, datatype);
+}
+<span class="kw">return</span> 0;
+}</code></pre>
+<p>函数 gettoken 用来跳过空格与制表符，以查找输入中的下一个记号。“记号”（token）</p>
+<p>可以是一个名字，一对圆括号，可能包含一个数字的一对方括号，也可以是其它任何单个字</p>
+<p>符。</p>
+<pre><code><span class="kw">int</span> gettoken(<span class="kw">void</span>) <span class="cm">/* <span class="kw">return</span> next token */</span>
+{
+<span class="kw">int</span> c, getch(<span class="kw">void</span>);
+<span class="kw">void</span> ungetch(<span class="kw">int</span>);</code></pre>
+<p>char *p = token;</p>
+<pre><code><span class="kw">while</span> ((c = getch()) == ' ' || c == '\t')</code></pre>
+<p>;</p>
+<pre><code><span class="kw">if</span> (c == '(') {
+<span class="kw">if</span> ((c = getch()) == ')') {
+<span class="fn">strcpy</span>(token, <span class="str">"()"</span>);
+<span class="kw">return</span> tokentype = PARENS;
+} <span class="kw">else</span> {
+ungetch(c);
+<span class="kw">return</span> tokentype = '(';
+}
+} <span class="kw">else</span> <span class="kw">if</span> (c == '[') {
+<span class="kw">for</span> (*p++ = c; (*p++ = getch()) != ']'; )</code></pre>
+<p>;</p>
+<p>*p = '\0';</p>
+<pre><code><span class="kw">return</span> tokentype = BRACKETS;
+} <span class="kw">else</span> <span class="kw">if</span> (isalpha(c)) {
+<span class="kw">for</span> (*p++ = c; isalnum(c = getch()); )</code></pre>
+<p>*p++ = c;</p>
+<p>*p = '\0';</p>
+<pre><code>ungetch(c);
+<span class="kw">return</span> tokentype = NAME;
+} <span class="kw">else</span>
+<span class="kw">return</span> tokentype = c;
+}</code></pre>
+<p>有关函数 getch 和 ungetch 的说明，参见第 4 章。</p>
+<p>如果不在乎生成多余的圆括号，另一个方向的转换要容易一些。为了简化程序的输入，</p>
+<p>我们将“x is a function returning a pointer to an array of pointers to functions returning char”</p>
+<p>（x 是</p>
+<p>一个函数，它返回一个指针，该指针指向一个一维数组，该一维数组的元素为指针，这些指</p>
+<p>针分别指向多个函数，这些函数的返回值为 char 类型）的描述用下列形式表示：</p>
+<p>x () * [] * () char</p>
+<p>程序 undcl 将把该形式转换为：</p>
+<pre><code><span class="kw">char</span> (*(*x())[])()</code></pre>
+<p>由于对输入的语法进行了简化，</p>
+<p>所以可以重用上面定义的 gettoken 函数。</p>
+<p>undcl 和 dcl</p>
+<p>使用相同的外部变量。</p>
+<pre><code><span class="cm">/* undcl: convert word descriptions to declarations */</span>
+<span class="fn">main</span>()
+{
+<span class="kw">int</span> type;
+<span class="kw">char</span> temp[MAXTOKEN];
+<span class="kw">while</span> (gettoken() != EOF) {
+<span class="fn">strcpy</span>(out, token);
+<span class="kw">while</span> ((type = gettoken()) != '\n')
+<span class="kw">if</span> (type == PARENS || type == BRACKETS)
+strcat(out, token);</code></pre>
+<p>else if (type == '*') {</p>
+<pre><code>sprintf(temp, <span class="str">"(*%s)"</span>, out);
+<span class="fn">strcpy</span>(out, temp);
+} <span class="kw">else</span> <span class="kw">if</span> (type == NAME) {
+sprintf(temp, <span class="str">"%s %s"</span>, token, out);
+<span class="fn">strcpy</span>(out, temp);
+} <span class="kw">else</span>
+<span class="fn">printf</span>(<span class="str">"invalid input at %s\n"</span>, token);
+}
+<span class="kw">return</span> 0;
+}</code></pre>
+<p>练习 5-18</p>
+<p>练习 5-19</p>
+<p>圆括号。</p>
+<p>修改 dcl 程序，使它能够处理输入中的错误。</p>
+<p>修改 undcl 程序，使它在把文字描述转换为声明的过程中不会生成多余的</p>
+<p>练习 5-20</p>
+<p>扩展 dcl 程序的功能，使它能够处理包含其它成分的声明，例如带有函数</p>
+<p>参数类型的声明、带有类似于 const 限定符的声明等。</p>
+<p>第6章 结构</p>
+<p>结构是一个或多个变量的集合，这些变量可能为不同的类型，为了处理的方便而将这些</p>
+<p>变量组织在一个名字之下。</p>
+<p>（某些语言将结构称为“记录”</p>
+<p>，比如 Pascal 语言。</p>
+<p>）由于结构将一</p>
+<p>组相关的变量看作一个单元而不是各自独立的实体，因此结构有助于组织复杂的数据，特别</p>
+<p>是在大型的程序中。</p>
+<p>工资记录是用来描述结构的一个传统例子。每个雇员由一组属性描述，如姓名、地址、</p>
+<p>社会保险号、工资等。其中的某些属性也可以是结构，例如姓名可以分成几部分，地址甚至</p>
+<p>工资也可能出现类似的情况。C 语言中更典型的一个例子来自于图形领域：点由一对坐标定义，</p>
+<p>矩形由两个点定义，等等。</p>
+<p>ANSI 标准在结构方面最主要的变化是定义了结构的赋值操作——结构可以拷贝、赋值、</p>
+<p>传递给函数，函数也可以返回结构类型的返回值。多年以前，这一操作就已经被大多数的编</p>
+<p>译器所支持，但是，直到这一标准才对其属性进行了精确定义。在 ANSI 标准中，自动结构和</p>
+<p>数组现在也可以进行初始化。</p>
+    </div>
+</body>
+</html>

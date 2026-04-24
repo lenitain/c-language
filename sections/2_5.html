@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.5 算术运算符 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #444;
+        }
+        .content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #569cd6; font-weight: 500; }
+        .content .fn { color: #dcdcaa; }
+        .content .str { color: #ce9178; }
+        .content .cm { color: #6a9955; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #00599A;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #333;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #00599A;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 2 章</div>
+        <h1 class="section-title">2.5 算术运算符</h1>
+    </div>
+    <div class="content">
+<p>二元算术运算符包括：+、-、*、/、%（取模运算符）。整数除法会截断结果中的小数部</p>
+<p>分。表达式</p>
+<p>x % y</p>
+<p>的结果是 x 除以 y 的余数，当 x 能被 y 整除时，其值为 0。例如，如果某一年的年份能被 4</p>
+<p>整除但不能被 100 整除，那么这一年就是闰年，此外，能被 400 整除的年份也是闰年。因此，</p>
+<p>可以用下列语句判断闰年：</p>
+<pre><code><span class="kw">if</span> ((year % 4 == 0 &amp;&amp; year % 100 != 0) || year % 400 == 0)
+<span class="fn">printf</span>(<span class="str">"%d is a leap year\n"</span>, year);</code></pre>
+<p>else</p>
+<pre><code><span class="fn">printf</span>(<span class="str">"%d is not a leap year\n"</span>, year);</code></pre>
+<p>取模运算符%不能应用于 float 或 double 类型。在有负操作数的情况下，整数除法截</p>
+<p>取的方向以及取模运算结果的符号取决于具体机器的实现，这和处理上溢或下溢的情况是一</p>
+<p>样的。</p>
+<p>二元运算符+和-具有相同的优先级，它们的优先级比运算符*、/和%的优先级低，而运</p>
+<p>算符*、/和%的优先级又比一元运算符+和-的优先级低。算术运算符采用从左到右的结合规</p>
+<p>则。</p>
+<p>本章末尾的表 2-1 完整总结了所有运算符的优先级和结合律。</p>
+    </div>
+</body>
+</html>

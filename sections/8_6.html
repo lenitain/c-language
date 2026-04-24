@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8.6 实例——目录列表 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #444;
+        }
+        .content pre {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #569cd6; font-weight: 500; }
+        .content .fn { color: #dcdcaa; }
+        .content .str { color: #ce9178; }
+        .content .cm { color: #6a9955; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #00599A;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #333;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #e8f4fd;
+            border-left: 4px solid #00599A;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 8 章</div>
+        <h1 class="section-title">8.6 实例——目录列表</h1>
+    </div>
+    <div class="content">
+<p>我们常常还需要对文件系统执行另一种操作，以获得文件的有关信息，而不是读取文件</p>
+<p>的具体内容。目录列表程序便是其中的一个例子，比如 UNIX 命令 ls，它打印一个目录中的文</p>
+<p>件名以及其它一些可选信息，如文件长度、访问权限等等。MS-DOS 操作系统中的 dir 命令也</p>
+<p>有类似的功能。</p>
+<p>由于 UNIX 中的目录就是一种文件，因此，ls 只需要读此文件就可获得所有的文件名。但</p>
+<p>是，如果需要获取文件的其它信息，比如长度等，就需要使用系统调用。在其它一些系统中，</p>
+<p>甚至获取文件名也需要使用系统调用，例如在 MS-DOS 系统中即如此。无论实现方式是否同</p>
+<p>具体的系统有关，我们需要提供一种与系统无关的访问文件信息的途径。</p>
+<p>以下将通过程序 fsize 说明这一点。fsize 程序是 ls 命令的一个特殊形式，它打印命令</p>
+<p>行参数表中指定的所有文件的长度。如果其中一个文件是目录，则 fsize 程序将对此目录递</p>
+<p>归调用自身。如果命令行中没有任何参数，则 fsize 程序处理当前目录。</p>
+<p>我们首先回顾 UNIX 文件系统的结构。在 UNIX 系统中，目录就是文件，它包含了一个</p>
+<p>文件名列表和一些指示文件位置的信息。</p>
+<p>“位置”是一个指向其它表（即 i 结点表）的索引。</p>
+<p>文件的 i 结点是存放除文件名以外的所有文件信息的地方。目录项通常仅包含两个条目：文件</p>
+<p>名和 i 结点编号。</p>
+<p>遗憾的是，在不同版本的系统中，目录的格式和确切的内容是不一样的。因此，为了分</p>
+<p>离出不可移植的部分，我们把任务分成两部分。外层定义了一个称为 Dirent 的结构和 3 个</p>
+<p>函数 opendir、readdir 和 closedir，它们提供与系统无关的对目录项中的名字和 i 结点</p>
+<p>编号的访问。我们将利用此接口编写 fsize 程序，然后说明如何在与 Version 7 和 System V</p>
+<p>UNIX 系统的目录结构相同的系统上实现这些函数。其它情况留作练习。</p>
+<p>结构 Dirent 包含 i 结点编号和文件名。</p>
+<p>文件名的最大长度由 NAMZ_MAX 设定，NAME_MAX</p>
+<p>的值由系统决定。opendir 返回一个指向称为 DIR 的结构的指针，该结构与结构 FILE 类似，</p>
+<p>它将被 readdir 和 closedir 使用。所有这些信息存放在头文件 dirent.h 中。</p>
+<pre><code>#define NAME_MAX</code></pre>
+<p>14 /* longest filename component; */</p>
+<pre><code><span class="cm">/* system-dependent */</span>
+<span class="kw">typedef</span> <span class="kw">struct</span> {
+<span class="cm">/* portable directory entry */</span>
+<span class="kw">long</span> ino;
+<span class="cm">/* inode number */</span>
+<span class="kw">char</span> name[NAME_MAX+1];
+<span class="cm">/* name + '\0' terminator */</span>
+} Dirent;
+<span class="kw">typedef</span> <span class="kw">struct</span> {
+<span class="kw">int</span> fd;</code></pre>
+<p>Dirent d;</p>
+<pre><code>} DIR;
+<span class="cm">/* minimal DIR: no buffering, etc. */</span>
+<span class="cm">/* file descriptor <span class="kw">for</span> the directory */</span>
+<span class="cm">/* the directory entry */</span></code></pre>
+<p>DIR *opendir(char *dirname);</p>
+<p>Dirent *readdir(DIR *dfd);</p>
+<pre><code><span class="kw">void</span> closedir(DIR *dfd);</code></pre>
+<p>系统调用 stat 以文件名作为参数，返回文件的 i 结点中的所有信息；若出错，则返回-1。</p>
+<p>如下所示：</p>
+<p>char *name;</p>
+<pre><code><span class="kw">struct</span> stat stbuf;
+<span class="kw">int</span> stat(<span class="kw">char</span> *, <span class="kw">struct</span> stat *);
+stat(name, &amp;stbuf);</code></pre>
+<p>它用文件 name 的 i 结点信息填充结构 stbuf。头文件&lt;sys/stat.h&gt;中包含了描述 stat</p>
+<p>的返回值的结构。该结构的一个典型形式如下所示：</p>
+<pre><code><span class="kw">struct</span> stat
+{</code></pre>
+<p>dev_t</p>
+<p>ino_t</p>
+<p>short</p>
+<p>short</p>
+<p>short</p>
+<p>short</p>
+<p>dev_t</p>
+<p>off_t</p>
+<p>time_t</p>
+<p>time_t</p>
+<p>time_t</p>
+<pre><code>};
+<span class="cm">/* inode information returned by stat */</span></code></pre>
+<p>st_dev;</p>
+<p>st_ino;</p>
+<p>st_mode;</p>
+<p>st_nlink;</p>
+<p>st_uid;</p>
+<p>st_gid;</p>
+<p>st_rdev;</p>
+<p>st_size;</p>
+<p>st_atime;</p>
+<p>st_mtime;</p>
+<p>st_ctime;</p>
+<pre><code><span class="cm">/* device of inode */</span>
+<span class="cm">/* inode number */</span>
+<span class="cm">/* mode bits */</span>
+<span class="cm">/* number of links to file */</span>
+<span class="cm">/* owners user id */</span>
+<span class="cm">/* owners group id */</span>
+<span class="cm">/* <span class="kw">for</span> special files */</span>
+<span class="cm">/* file size in characters */</span>
+<span class="cm">/* time last accessed */</span>
+<span class="cm">/* time last modified */</span>
+<span class="cm">/* time originally created */</span></code></pre>
+<p>该 结 构 中 大 部 分 的 值 已 在 注 释 中 进 行 了 解 释 。 dev_t 和 ino_t 等 类 型 在 头 文 件</p>
+<pre><code>&lt;sys/types.h&gt;中定义，程序中必须包含此文件。</code></pre>
+<p>st_mode 项包含了描述文件的一系列标志，这些标志在&lt;sys/stat.h&gt;中定义。我们只</p>
+<p>需要处理文件类型的有关部分：</p>
+<pre><code>#define S_IFMT
+#define S_IFDIR
+#define S_IFCHR</code></pre>
+<p>0160000 /* type of file: */</p>
+<p>0040000 /* directory */</p>
+<p>0020000 /* character special */</p>
+<pre><code>#define S_IFBLK
+#define S_IFREG
+<span class="cm">/* ... */</span></code></pre>
+<p>0060000 /* block special */</p>
+<p>0010000 /* regular */</p>
+<p>下面我们来着手编写程序 fsize。如果由 stat 调用获得的模式说明某文件不是一个目</p>
+<p>录，就很容易获得该文件的长度，并直接输出。但是，如果文件是一个目录，则必须逐个处</p>
+<p>理目录中的文件。由于该目录可能包含子目录，因此该过程是递归的。</p>
+<p>主程序 main 处理命令行参数，并将每个参数传递给函数 fsize。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include <span class="str">"syscalls.h"</span>
+#include &lt;fcntl.h&gt;
+<span class="cm">/* flags <span class="kw">for</span> read and write */</span>
+#include &lt;sys/types.h&gt; <span class="cm">/* typedefs */</span>
+#include &lt;sys/stat.h&gt; <span class="cm">/* structure returned by stat */</span>
+#include <span class="str">"dirent.h"</span>
+<span class="kw">void</span> fsize(<span class="kw">char</span> *)
+<span class="cm">/* print file name */</span>
+<span class="fn">main</span>(<span class="kw">int</span> argc, <span class="kw">char</span> **argv)
+{
+<span class="kw">if</span> (argc == 1) <span class="cm">/* <span class="kw">default</span>: current directory */</span></code></pre>
+<p>fsize(".");</p>
+<p>else</p>
+<pre><code><span class="kw">while</span> (--argc &gt; 0)
+fsize(*++argv);
+<span class="kw">return</span> 0;
+}</code></pre>
+<p>函数 fsize 打印文件的长度。</p>
+<p>但是，如果此文件是一个目录，</p>
+<p>则 fsize 首先调用 dirwalk</p>
+<p>函数处理它所包含的所有文件。注意如何使用文件&lt;sys/stat.h&gt;中的标志名 S_IFMT 和</p>
+<p>S_IFDIR 来判定文件是不是一个目录。括号是必须的，因为&amp;运算符的优先级低于==运算符</p>
+<p>的优先级。</p>
+<pre><code><span class="kw">int</span> stat(<span class="kw">char</span> *, <span class="kw">struct</span> stat *);
+<span class="kw">void</span> dirwalk(<span class="kw">char</span> *, <span class="kw">void</span> (*fcn)(<span class="kw">char</span> *));
+<span class="cm">/* fsize: print the name of file <span class="str">"name"</span> */</span>
+<span class="kw">void</span> fsize(<span class="kw">char</span> *name)
+{
+<span class="kw">struct</span> stat stbuf;
+<span class="kw">if</span> (stat(name, &amp;stbuf) == -1) {
+fprintf(stderr, <span class="str">"fsize: can't access %s\n"</span>, name);</code></pre>
+<p>return;</p>
+<pre><code>}
+<span class="kw">if</span> ((stbuf.st_mode &amp; S_IFMT) == S_IFDIR)
+dirwalk(name, fsize);
+<span class="fn">printf</span>(<span class="str">"%8ld %s\n"</span>, stbuf.st_size, name);
+}</code></pre>
+<p>函数 dirwalk 是一个通用的函数，它对目录中的每个文件都调用函数 fcn 一次。它首</p>
+<p>先打开目录，循环遍历其中的每个文件，并对每个文件调用该函数，然后关闭目录返回。因</p>
+<p>为 fsize 函数对每个目录都要调用 dirwalk 函数，所以这两个函数是相互递归调用的。</p>
+<pre><code>#define MAX_PATH 1024
+<span class="cm">/* dirwalk: apply fcn to all files in dir */</span>
+<span class="kw">void</span> dirwalk(<span class="kw">char</span> *dir, <span class="kw">void</span> (*fcn)(<span class="kw">char</span> *))
+{
+<span class="kw">char</span> name[MAX_PATH];</code></pre>
+<p>Dirent *dp;</p>
+<p>DIR *dfd;</p>
+<pre><code><span class="kw">if</span> ((dfd = opendir(dir)) == NULL) {
+fprintf(stderr, <span class="str">"dirwalk: can't open %s\n"</span>, dir);</code></pre>
+<p>return;</p>
+<pre><code>}
+<span class="kw">while</span> ((dp = readdir(dfd)) != NULL) {
+<span class="kw">if</span> (<span class="fn">strcmp</span>(dp-&gt;name, <span class="str">"."</span>) == 0</code></pre>
+<p>|| strcmp(dp-&gt;name, ".."))</p>
+<p>continue;</p>
+<pre><code><span class="cm">/* skip self and parent */</span>
+<span class="kw">if</span> (<span class="fn">strlen</span>(dir)+<span class="fn">strlen</span>(dp-&gt;name)+2 &gt; <span class="kw">sizeof</span>(name))
+fprintf(stderr, <span class="str">"dirwalk: name %s %s too <span class="kw">long</span>\n"</span>,</code></pre>
+<p>dir, dp-&gt;name);</p>
+<pre><code><span class="kw">else</span> {
+sprintf(name, <span class="str">"%s/%s"</span>, dir, dp-&gt;name);</code></pre>
+<p>(*fcn)(name);</p>
+<pre><code>}
+}
+closedir(dfd);
+}</code></pre>
+<p>每次调用 readdir 都将返回一个指针，它指向下一个文件的信息。如果目录中已没有待处理</p>
+<p>的文件，该函数将返回 NULL。每个目录都包含自身“.”和父目录“..”的项目，在处理时</p>
+<p>必须跳过它们，否则将会导致无限循环。</p>
+<p>到现在这一步为止，代码与目录的格式无关。下一步要做的事情就是在某个具体的系统</p>
+<p>上提供一个 opendir、readdir 和 closedir 的最简单版本。以下的函数适用于 Version 7</p>
+<p>和 System V UNIX 系统，它们使用了头文件（sys/dir.h&gt;中的目录信息，如下所示：</p>
+<pre><code>#ifndef DIRSIZ
+#define DIRSIZ 14
+#endif
+<span class="kw">struct</span> direct { <span class="cm">/* directory entry */</span></code></pre>
+<p>ino_t d_ino;</p>
+<pre><code><span class="cm">/* inode number */</span>
+<span class="kw">char</span> d_name[DIRSIZ]; <span class="cm">/* <span class="kw">long</span> name does not have '\0' */</span>
+};</code></pre>
+<p>某些版本的系统支持更长的文件名和更复杂的目录结构。</p>
+<p>类型 ino_t 是使用 typedef 定义的类型，它用于描述 i 结点表的索引。在我们通常使用</p>
+<p>的系统中，此类型为 unsigned short，但是这种信息不应在程序中使用。因为不同的系统</p>
+<p>中该类型可能不同，所以使用 typedef 定义要好一些。所有的“系统”类型可以在文件</p>
+<pre><code>&lt;sys/types.h）中找到。</code></pre>
+<p>opendir 函数首先打开目录，验证此文件是一个目录（调用系统调用 fstat，它与 stat</p>
+<p>类似，但它以文件描述符作为参数）</p>
+<p>，然后分配一个目录结构，并保存信息：</p>
+<pre><code><span class="kw">int</span> fstat(<span class="kw">int</span> fd, <span class="kw">struct</span> stat *);
+<span class="cm">/* opendir: open a directory <span class="kw">for</span> readdir calls */</span></code></pre>
+<p>DIR *opendir(char *dirname)</p>
+<pre><code>{
+<span class="kw">int</span> fd;
+<span class="kw">struct</span> stat stbuf;</code></pre>
+<p>DIR *dp;</p>
+<pre><code><span class="kw">if</span> ((fd = open(dirname, O_RDONLY, 0)) == -1</code></pre>
+<p>|| fstat(fd, &amp;stbuf) == -1</p>
+<p>|| (stbuf.st_mode &amp; S_IFMT) != S_IFDIR</p>
+<p>|| (dp = (DIR *) malloc(sizeof(DIR))) == NULL)</p>
+<pre><code><span class="kw">return</span> NULL;</code></pre>
+<p>dp-&gt;fd = fd;</p>
+<pre><code><span class="kw">return</span> dp;
+}</code></pre>
+<p>closedir 函数用于关闭目录文件并释放内存空间：</p>
+<pre><code><span class="cm">/* closedir: close directory opened by opendir */</span>
+<span class="kw">void</span> closedir(DIR *dp)
+{
+<span class="kw">if</span> (dp) {
+close(dp-&gt;fd);
+<span class="fn">free</span>(dp);
+}
+}</code></pre>
+<p>最后，函数 readdir 使用 read 系统调用读取每个目录项。如果某个目录位置当前没有</p>
+<p>使用（因为删除了一个文件）</p>
+<p>，则它的 i 结点编号为 0，并跳过该位置。否则，将 i 结点编号</p>
+<p>和目录名放在一个 static 类型的结构中，并给用户返回一个指向此结构的指针。每次调用</p>
+<p>readdir 函数将覆盖前一次调用获得的信息。</p>
+<pre><code>#include &lt;sys/dir.h&gt;
+<span class="cm">/* local directory structure */</span>
+<span class="cm">/* readdir: read directory entries in sequence */</span></code></pre>
+<p>Dirent *readdir(DIR *dp)</p>
+<pre><code>{
+<span class="kw">struct</span> direct dirbuf; <span class="cm">/* local directory structure */</span></code></pre>
+<p>static Dirent d;</p>
+<pre><code><span class="cm">/* <span class="kw">return</span>: portable structure */</span>
+<span class="kw">while</span> (read(dp-&gt;fd, (<span class="kw">char</span> *) &amp;dirbuf, <span class="kw">sizeof</span>(dirbuf))</code></pre>
+<p>== sizeof(dirbuf)) {</p>
+<pre><code><span class="kw">if</span> (dirbuf.d_ino == 0) <span class="cm">/* slot not in use */</span></code></pre>
+<p>continue;</p>
+<p>d.ino = dirbuf.d_ino;</p>
+<pre><code>strncpy(d.name, dirbuf.d_name, DIRSIZ);</code></pre>
+<p>d.name[DIRSIZ] = '\0'; /* ensure termination */</p>
+<pre><code><span class="kw">return</span> &amp;d;
+}
+<span class="kw">return</span> NULL;
+}</code></pre>
+<p>尽管 fsize 程序非常特殊，但是它的确说明了一些重要的思想。首先，许多程序并不是</p>
+<p>“系统程序”</p>
+<p>，它们仅仅使用由操作系统维护的信息。对于这样的程序，很重要的一点是，信</p>
+<p>息的表示仅出现在标准头文件中，使用它们的程序只需要在文件中包含这些头文件即可，而</p>
+<p>不需要包含相应的声明。其次，有可能为与系统相关的对象创建一个与系统无关的接口。标</p>
+<p>准库中的函数就是很好的例子。</p>
+<p>练习 8-5</p>
+    </div>
+</body>
+</html>
