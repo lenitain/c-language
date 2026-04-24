@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.5.3 行计数 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 1 章</div>
+        <h1 class="section-title">1.5.3 行计数</h1>
+    </div>
+    <div class="content">
+<p>接下来的这个程序用于统计输入中的行数。我们在上面提到过，标准库保证输入文本流</p>
+<p>以行序列的形式出现，每一行均以换行符结束。因此，统计行数等价于统计换行符的个数。</p>
+<pre><code>#include &lt;stdio.h&gt;
+<span class="cm">/* count lines in input */</span>
+<span class="fn">main</span>()
+{
+<span class="kw">int</span> c, nl;
+nl = 0;
+<span class="kw">while</span> ((c = <span class="fn">getchar</span>()) != EOF)
+<span class="kw">if</span> (c == '\n')</code></pre>
+<p>++nl;</p>
+<pre><code><span class="fn">printf</span>(<span class="str">"%d\n"</span>, nl);
+}</code></pre>
+<p>在该程序中，while 循环语句的循环体是一个 if 语句，它控制自增语句++nl。if 语句</p>
+<p>先测试圆括号中的条件，如果该条件为真，则执行其后的语句（或括在花括号中的一组语句）。</p>
+<p>这里再次用缩进方式表明语句之间的控制关系。</p>
+<p>双等于号==是 C 语言中表示</p>
+<p>“等于”关系的运算符</p>
+<p>（类似于 Pascal 中的单等于号=及 Fortran</p>
+<p>中的.EQ.）</p>
+<p>。由于 C 语言将单等于号=作为赋值运算符，因此使用双等于号==表示相等的逻辑</p>
+<p>关系，以示区分。这里提醒注意，在表示“等于”逻辑关系的时候（应该用==），C 语言初学</p>
+<p>者有时会错误地写成单等于号=。在第 2 章我们将看到，即使这样误用了，其结果通常仍然是</p>
+<p>合法的表达式，因此系统不会给出警告信息。</p>
+<p>单引号中的字符表示一个整型值，该值等于此字符在机器字符集中对应的数值，我们称</p>
+<p>之为字符常量。但是，它只不过是小的整型数的另一种写法而已。例如，'A'是一个字符常量；</p>
+<p>在 ASCII 字符集中其值为 65（即字符 A 的内部表示值为 65）。当然，用'A'要比用 65 好，因</p>
+<p>为。'A'的意义更清楚，且与特定的字符集无关。</p>
+<p>字符串常量中使用的转义字符序列也是合法的字符常量，比如，'\n'代表换行符的值，</p>
+<p>在 ASCII 字符集中其值为 10。我们应当注意到，'\n'是单个字符，在表达式中它不过是一个</p>
+<p>整型数而已；而"\n"是一个仅包含一个字符的字符串常量。有关字符串与字符之间的关系，</p>
+<p>我们将在第 2 章进一步讨论。</p>
+<p>练习 1-8</p>
+<p>练习 1-9</p>
+<p>替。</p>
+<p>编写一个统计空格、制表符与换行符个数的程序。</p>
+<p>编写一个将输入复制到输出的程序，并将其中连续的多个空格用一个空格代</p>
+<p>练习 1-10</p>
+<p>编写一个将输入复制到输出的程序，并将其中的制表符替换为\t，把回退符</p>
+<p>替换为\b，把反斜杠替按为\\。这样可以将制表符和回退符以可见的方式显示出来。</p>
+    </div>
+</body>
+</html>

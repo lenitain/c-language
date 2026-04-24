@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.7 break 语句与 continue 语句 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 3 章</div>
+        <h1 class="section-title">3.7 break 语句与 continue 语句</h1>
+    </div>
+    <div class="content">
+<p>不通过循环头部或尾部的条件测试而跳出循环，有时是很方便的。break 语句可用于从</p>
+<p>for、</p>
+<p>while 与 do-while 等循环中提前退出，</p>
+<p>就如同从 switch 语句中提前退出一样。break</p>
+<p>语句能使程序从 switch 语句或最内层循环中立即跳出。</p>
+<p>下面的函数 trim 用于删除字符串尾部的空格符、制表符与换行符。当发现最右边的字符</p>
+<p>为非空格符、非制表符、非换行符时，就使用 break 语句从循环中退出。</p>
+<pre><code><span class="cm">/* trim: remove trailing blanks, tabs, newlines */</span>
+<span class="kw">int</span> trim(<span class="kw">char</span> s[])
+{
+<span class="kw">int</span> n;
+<span class="kw">for</span> (n = <span class="fn">strlen</span>(s)-1; n &gt;= 0; n--)
+<span class="kw">if</span> (s[n] != ' ' &amp;&amp; s[n] != '\t' &amp;&amp; s[n] != '\n')</code></pre>
+<p>break;</p>
+<p>s[n+1] = '\0';</p>
+<pre><code><span class="kw">return</span> n;
+}</code></pre>
+<p>strlen 函数返回字符串的长度。for 循环从字符串的末尾开始反方向扫描寻找第一个不</p>
+<p>是空格符、制表符以及换行符的字符。当找到符合条件的第一个字符，或当循环控制变量 n</p>
+<p>变为负数时（即整个字符串都被扫描完时）</p>
+<p>，循环终止执行。读者可以验证，即使字符串为空</p>
+<p>或仅包含空白符，该函数也是正确的。</p>
+<p>continue 语句与 break 语句是相关联的，但它没有 break 语句常用。continue 语</p>
+<p>句用于使 for、while 或 do-while 语句开始下一次循环的执行。在 while 与 do-while</p>
+<p>语句中，continue 语句的执行意味着立即执行测试部分；在 for 循环中，则意味着使控制</p>
+<p>转移到递增循环变量部分。continue 语句只用于循环语句，不用于 switch 语句。某个循</p>
+<p>环包含的 switch 语句中的 continue 语句，将导致进入下一次循环。</p>
+<p>例如，下面这段程序用于处理数组 a 中的非负元素。如果某个元素的值为负，则跳过不</p>
+<p>处理。</p>
+<pre><code><span class="kw">for</span> (i = 0; i &lt; n; i++)
+<span class="kw">if</span> (a[i] &lt; 0) <span class="cm">/* skip negative elements */</span></code></pre>
+<p>continue;</p>
+<p>... /* do positive elements */</p>
+<p>当循环的后面部分比较复杂时，常常会用到 continue 语句。这种情况下，如果不使用</p>
+<p>continue 语句，则可能需要把测试颠倒过来或者缩进另一层循环，这样做会使程序的嵌套</p>
+<p>更深。</p>
+<p>3.8.</p>
+<p>goto 语句与标号</p>
+<p>C 语言提供了可随意滥用的 goto 语句以及标记跳转位置的标号。从理论上讲，goto 语</p>
+<p>句是没有必要的，实践中不使用 goto 语句也可以很容易地写出代码。至此，本书中还没有使</p>
+<p>用 goto 语句。</p>
+<p>但是，在某些场合下 goto 语句还是用得着的。最常见的用法是终止程序在某些深度嵌套</p>
+<p>的结构中的处理过程，例如一次跳出两层或多层循环。这种情况下使用 break 语句是不能达</p>
+<p>到目的的，它只能从最内层循环退出到上一级的循环。下面是使用 goto 语句的一个例子：</p>
+<pre><code><span class="kw">for</span> ( ... )
+<span class="kw">for</span> ( ... ) {</code></pre>
+<p>...</p>
+<pre><code><span class="kw">if</span> (disaster)</code></pre>
+<p>goto error;</p>
+<pre><code>}</code></pre>
+<p>...</p>
+<p>error:</p>
+<pre><code><span class="cm">/* clean up the mess */</span></code></pre>
+<p>在该例子中，如果错误处理代码很重要，并且错误可能出现在多个地方，使用 goto 语句将会</p>
+<p>比较方便。</p>
+<p>标号的命名同变量命名的形式相同，标号的后面要紧跟一个冒号。标号可以位于对应的</p>
+<p>goto 语句所在函数的任何语句的前面。标号的作用域是整个函数。</p>
+<p>我们来看另外一个例子。考虑判定两个数组 a 与 b 中是否具有相同元素的问题。一种可</p>
+<p>能的解决方法是：</p>
+<pre><code><span class="kw">for</span> (i = 0; i &lt; n; i++)
+<span class="kw">for</span> (j = 0; j &lt; m; j++)
+<span class="kw">if</span> (a[i] == b[j])</code></pre>
+<p>goto found;</p>
+<pre><code><span class="cm">/* didn't find any common element */</span></code></pre>
+<p>...</p>
+<p>found:</p>
+<pre><code><span class="cm">/* got one: a[i] == b[j] */</span></code></pre>
+<p>...</p>
+<p>所有使用了 goto 语句的程序代码都能改写成不带 goto 语句的程序，但可能会增加一些</p>
+<p>额外的重复测试或变量。例如，可将上面判定是否具有相同数组元素的程序段改写成下列形</p>
+<p>式：</p>
+<pre><code>found = 0;
+<span class="kw">for</span> (i = 0; i &lt; n &amp;&amp; !found; i++)
+<span class="kw">for</span> (j = 0; j &lt; m &amp;&amp; !found; j++)
+<span class="kw">if</span> (a[i] == b[j])
+found = 1;
+<span class="kw">if</span> (found)
+<span class="cm">/* got one: a[i-1] == b[j-1] */</span></code></pre>
+<p>...</p>
+<p>else</p>
+<pre><code><span class="cm">/* didn't find any common element */</span></code></pre>
+<p>...</p>
+<p>大多数情况下，使用 goto 语句的程序段比不使用 goto 语句的程序段要难以理解和维护，</p>
+<p>少数情况除外，比如我们前面所举的几个例子。尽管该问题并不太严重，但我们还是建议尽</p>
+<p>可能少地使用 goto 语句。</p>
+<p>第4章 函数与程序结构</p>
+<p>函数可以把大的计算任务分解成若干个较小的任务，程序设计人员可以基于函数进一步</p>
+<p>构造程序，而不需要重新编写一些代码。一个设计得当的函数可以把程序中不需要了解的具</p>
+<p>体操作细节隐藏起来，从而使整个程序结构更加清晰，并降低修改程序的难度。</p>
+<p>C 语言在设计中考虑了函数的高效性与易用性这两个因素。C 语言程序一般都由许多小的</p>
+<p>函数组成，而不是由少量较大的函数组成。一个程序可以保存在一个或者多个源文件中。各</p>
+<p>个文件可以单独编译，并可以与库中已编译过的函数一起加载。我们在这里不打算详细讨论</p>
+<p>这一过程，因为编译与加载的具体实现细节在各个编译系统中并不相同。</p>
+<p>ANSI 标准对 C 语言所做的最明显的修改是函数声明与函数定义这两方面。第 1 章中我们</p>
+<p>曾经讲过，目前 C 语言已经允许在声明函数时声明参数的类型。为了使函数的声明与定义相</p>
+<p>适应，ANSI 标准对函数定义的语法也做了修改。基于该原因，编译器就有可能检测出比以前</p>
+<p>的 C 语言版本更多的错误。并且，如果参数声明得当，程序可以自动地进行适当的强制类型</p>
+<p>转换。</p>
+<p>ANSI 标准进一步明确了名字的作用域规则，特别要求每个外部对象只能有一个定义。初</p>
+<p>始化的适用范围也更加广泛了，自动数组与结构都可以进行初始化。</p>
+<p>C 语言预处理的功能也得到了增强。新的预处理器包含一组更完整的条件编译指令（一种</p>
+<p>通过宏参数创建带引号的字符串的方法）</p>
+<p>，对宏扩展过程的控制更严格。</p>
+    </div>
+</body>
+</html>

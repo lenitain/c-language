@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5.11 指向函数的指针 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 5 章</div>
+        <h1 class="section-title">5.11 指向函数的指针</h1>
+    </div>
+    <div class="content">
+<p>在 C 语言中，函数本身不是变量，但可以定义指向函数的指针。这种类型的指针可以被</p>
+<p>赋值、存放在数组中、传递给函数以及作为函数的返回值等等。为了说明指向函数的指针的</p>
+<p>用法，我们接下来将修改本章前面的排序函数，在给定可选参数-n 的情况下，该函数将按数</p>
+<p>值大小而非字典顺序对输入行进行排序。</p>
+<p>排序程序通常包括 3 部分：判断任何两个对象之间次序的比较操作、颠倒对象次序的交</p>
+<p>换操作、一个用于比较和交换对象直到所有对象都按正确次序排列的排序算法。由于排序算</p>
+<p>法与比较、交换操作无关，因此，通过在排序算法中调用不同的比较和交换函数，便可以实</p>
+<p>现按照不同的标准排序。这就是我们的新版本排序函数所采用的方法。</p>
+<p>我们在前面讲过，函数 strcmp 按字典顺序比较两个输入行。在这里，我们还需要一个</p>
+<p>以数值为基础来比较两个输入行，并返回与 strcmp 同样的比较结果的函数 numcmp。这些函</p>
+<p>数在 main 之前声明，并且，指向恰当函数的指针将被传递给 qsort 函数。在这里，参数的</p>
+<p>出错处理并不是问题的重点，我们将主要考虑指向函数的指针问题。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#define MAXLINES 5000
+<span class="cm">/* max #lines to be sorted */</span></code></pre>
+<p>char *lineptr[MAXLINES]; /* pointers to text lines */</p>
+<pre><code><span class="kw">int</span> readlines(<span class="kw">char</span> *lineptr[], <span class="kw">int</span> nlines);
+<span class="kw">void</span> writelines(<span class="kw">char</span> *lineptr[], <span class="kw">int</span> nlines);
+<span class="kw">void</span> qsort(<span class="kw">void</span> *lineptr[], <span class="kw">int</span> left, <span class="kw">int</span> right,
+<span class="kw">int</span> (*comp)(<span class="kw">void</span> *, <span class="kw">void</span> *));
+<span class="kw">int</span> numcmp(<span class="kw">char</span> *, <span class="kw">char</span> *);
+<span class="cm">/* sort input lines */</span>
+<span class="fn">main</span>(<span class="kw">int</span> argc, <span class="kw">char</span> *argv[])
+{
+<span class="kw">int</span> nlines;
+<span class="cm">/* number of input lines read */</span>
+<span class="kw">int</span> numeric = 0; <span class="cm">/* 1 <span class="kw">if</span> numeric sort */</span>
+<span class="kw">if</span> (argc &gt; 1 &amp;&amp; <span class="fn">strcmp</span>(argv[1], <span class="str">"-n"</span>) == 0)
+numeric = 1;
+<span class="kw">if</span> ((nlines = readlines(lineptr, MAXLINES)) &gt;= 0) {</code></pre>
+<p>qsort((void**) lineptr, 0, nlines-1,</p>
+<p>(int (*)(void*,void*))(numeric ? numcmp : strcmp));</p>
+<pre><code>writelines(lineptr, nlines);
+<span class="kw">return</span> 0;
+} <span class="kw">else</span> {
+<span class="fn">printf</span>(<span class="str">"input too big to sort\n"</span>);
+<span class="kw">return</span> 1;
+}
+}</code></pre>
+<p>在调用函数 qsort 的语句中，strcmp 和 numcmp 是函数的地址。因为它们是函数，所</p>
+<p>以前面不需要加上取地址运算符&amp;，同样的原因，数组名前面也不需要&amp;运算符。</p>
+<p>改写后的 qsort 函数能够处理任何数据类型，而不仅仅限于字符串。从函数 qsort 的</p>
+<p>原型可以看出，它的参数表包括一个指针数组、两个整数和一个有两个指针参数的函数。其</p>
+<p>中，指针数组参数的类型为通用指针类型 void *。由于任何类型的指针都可以转换为 void</p>
+<p>*类型，并且在将它转换回原来的类型时不会丢失信息，所以，调用 qsort 函数时可以将参</p>
+<p>数强制转换为 void *类型。比较函数的参数也要执行这种类型的转换。这种转换通常不会影</p>
+<p>响到数据的实际表示，但要确保编译器不会报错。</p>
+<pre><code><span class="cm">/* qsort: sort v[left]...v[right] into increasing order */</span>
+<span class="kw">void</span> qsort(<span class="kw">void</span> *v[], <span class="kw">int</span> left, <span class="kw">int</span> right,
+<span class="kw">int</span> (*comp)(<span class="kw">void</span> *, <span class="kw">void</span> *))
+{
+<span class="kw">int</span> i, last;
+<span class="kw">void</span> swap(<span class="kw">void</span> *v[], <span class="kw">int</span>, <span class="kw">int</span>);
+<span class="kw">if</span> (left &gt;= right)
+<span class="cm">/* <span class="kw">do</span> nothing <span class="kw">if</span> array contains */</span></code></pre>
+<p>return;</p>
+<pre><code><span class="cm">/* fewer than two elements */</span>
+swap(v, left, (left + right)/2);
+last = left;
+<span class="kw">for</span> (i = left+1; i &lt;= right; i++)
+<span class="kw">if</span> ((*comp)(v[i], v[left]) &lt; 0)
+swap(v, ++last, i);
+swap(v, left, last);
+qsort(v, left, last-1, comp);
+qsort(v, last+1, right, comp);
+}</code></pre>
+<p>我们仔细研究一下其中的声明。qsort 函数的第四个参数声明如下：</p>
+<pre><code><span class="kw">int</span> (*comp)(<span class="kw">void</span> *, <span class="kw">void</span> *)</code></pre>
+<p>它表明 comp 是一个指向函数的指针，该函数具有两个 void *类型的参数，其返回值类型为</p>
+<p>int。</p>
+<p>在下列语句中：</p>
+<pre><code><span class="kw">if</span> ((*comp)(v[i], v[left]) &lt; 0)</code></pre>
+<p>comp 的使用和其声明是一致的，comp 是一个指向函数的指针，*comp 代表一个函数。下列</p>
+<p>语句是对该函数进行调用：</p>
+<p>(*comp)(v[i], v[left])</p>
+<p>其中的圆括号是必须的，这样才能够保证其中的各个部分正确结合。如果没有括号，例如写</p>
+<p>成下面的形式：</p>
+<p>int *comp(void *, void *)</p>
+<pre><code><span class="cm">/* WRONG */</span></code></pre>
+<p>则表明 comp 是一个函数，该函数返回一个指向 int 类型的指针，这同我们的本意显然有很</p>
+<p>大的差别。</p>
+<p>我们在前面讲过函数 strcmp，占用于比较两个字符串。这里介绍的函数 numcmp 也是比</p>
+<p>较两个字符串，但它通过调用 atof 计算字符串对应的数值，然后在此基础上进行比较：</p>
+<pre><code>#include &lt;stdlib.h&gt;
+<span class="cm">/* numcmp: compare s1 and s2 numerically */</span>
+<span class="kw">int</span> numcmp(<span class="kw">char</span> *s1, <span class="kw">char</span> *s2)
+{
+<span class="kw">double</span> v1, v2;
+v1 = <span class="fn">atof</span>(s1);
+v2 = <span class="fn">atof</span>(s2);
+<span class="kw">if</span> (v1 &lt; v2)
+<span class="kw">return</span> -1;</code></pre>
+<p>else if (v1 &gt; v2)</p>
+<pre><code><span class="kw">return</span> 1;</code></pre>
+<p>else</p>
+<pre><code><span class="kw">return</span> 0;
+}</code></pre>
+<p>交换两个指引的 swap 函数和本章前面所述的 swap 函数相同，</p>
+<p>但它的参数声明为 void *</p>
+<p>类型。</p>
+<pre><code><span class="kw">void</span> swap(<span class="kw">void</span> *v[], <span class="kw">int</span> i, <span class="kw">int</span> j;)
+{</code></pre>
+<p>void *temp;</p>
+<pre><code>temp = v[i];</code></pre>
+<p>v[i] = v[j];</p>
+<p>v[j] = temp;</p>
+<pre><code>}</code></pre>
+<p>还可以将其它一些选项增加到排序程序中，有些可以作为较难的练习。</p>
+<p>练习 5-14</p>
+<p>修改排序程序，使它能处理-r 标记。该标记表明，以逆序（递减）方式排</p>
+<p>序。要保证-r 和-n 能够组合在一起使用。</p>
+<p>练习 5-15</p>
+<p>增加选项-f，使得排序过程不考虑字母大小写之间的区别。例如，比较 a</p>
+<p>和 A 时认为它们相等。</p>
+<p>练习 5-16</p>
+<p>增加选项-d（代表目录顺序）。该选项表明，只对字母、数字和空格进行比</p>
+<p>较。要保证该选项可以和-f 组合在一起使用。</p>
+<p>练习 5-17</p>
+<p>增加字段处理功能，以使得排序程序可以根据行内的不同字段进行排序，每</p>
+<p>个字段按照一个单独的选项集合进行排序。（在对本书索引进行排序时，索引条目使用了-df</p>
+<p>选项，而对页码排序时使用了-n 选项。</p>
+<p>）</p>
+    </div>
+</body>
+</html>

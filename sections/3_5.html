@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.5 while 循环与 for 循环 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 3 章</div>
+        <h1 class="section-title">3.5 while 循环与 for 循环</h1>
+    </div>
+    <div class="content">
+<p>我们在前面已经使用过 while 与 for 循环语句。在 while 循环语句</p>
+<pre><code><span class="kw">while</span> (表达式)</code></pre>
+<p>语句</p>
+<p>中，首先求表达式的值。如果其值非 0，则执行语句，并再次求该表达式的值。这一循环过程</p>
+<p>一直进行下去，直到该表达式的值为 0 为止，随后继续执行语句后面的部分。</p>
+<p>for 循环语句;</p>
+<pre><code><span class="kw">for</span> (表达式 1; 表达式 2; 表达式 3)</code></pre>
+<p>语句</p>
+<p>它等价于下列 while 语句：</p>
+<p>表达式 1;</p>
+<pre><code><span class="kw">while</span> (表达式 2) {</code></pre>
+<p>语句</p>
+<p>表达式 3;</p>
+<pre><code>}</code></pre>
+<p>但当 while 或 for 循环语句中包含 continue 语句时，上述二者之间就不一定等价了。我</p>
+<p>们将在 3.7 节中介绍 continue 语句。</p>
+<p>从语法角度看，for 循环语句的 3 个组成部分都是表达式。最常见的情况是，表达式 1</p>
+<p>与表达式 3 是赋值表达式或函数调用，表达式 2 是关系表达式。这 3 个组成部分中的任何部</p>
+<p>分都可以省略，但分号必须保留。如果在 for 语句中省略表达式 1 与表达式 3，它就退化成</p>
+<p>了 while 循环语句。如果省略测试条件，即表达式 2，则认为其值永远是真值，因此，下列</p>
+<p>for 循环语句：</p>
+<pre><code><span class="kw">for</span> (;;) {</code></pre>
+<p>...</p>
+<pre><code>}</code></pre>
+<p>是一个“无限”循环语句，这种语句需要借助其它手段（如 break 语句或 return 语句）才</p>
+<p>能终止执行。</p>
+<p>在设计程序时到底选用 while 循环语句还是 for 循环语句，主要取决于程序设计人员的</p>
+<p>个人偏好。例如，在下列语句中：</p>
+<pre><code><span class="kw">while</span> ((c = <span class="fn">getchar</span>()) == ' ' || c == '\n' || c = '\t')</code></pre>
+<p>; /* skip white space characters */</p>
+<p>因为其中没有初始化或重新初始化的操作，所以使用 whi1e 循环语句更自然一些。</p>
+<p>如果语句中需要执行简单的初始化和变量递增，使用 for 语句更合适一些，它将循环控</p>
+<p>制语句集中放在循环的开头，结构更紧凑、更清晰。通过下列语句可以很明显地看出这一点：</p>
+<pre><code><span class="kw">for</span> (i = 0; i &lt; n; i++)</code></pre>
+<p>...</p>
+<p>这是 C 语言处理数组前 n 个元素的一种习惯性用法，它类似于 Fortran 语言中的 DO 循环或</p>
+<p>Pascal 语言中的 for 循环。但是，这种类比并不完全准确，因为在 C 语言中，for 循环语句</p>
+<p>的循环变量和上限在循环体内可以修改，并且当循环因某种原因终止后循环变量 i 的值仍然</p>
+<p>保留。因为 for 语句的各组成部分可以是任何表达式，所以 for 语句并不限于通过算术级数</p>
+<p>进行循环控制。尽管如此，牵强地把一些无关的计算放到 for 语句的初始化和变量递增部分</p>
+<p>是一种不好的程序设计风格，该部分放置循环控制运算更合适。</p>
+<p>作为一个较大的例子，我们来重新编写将字符串转换为对应数值的函数 atoi。这里编写</p>
+<p>的函数比第 2 章中的 atoi 函数更通用，它可以处理可选的前导空白符以及一个可选的加（+）</p>
+<p>或减（-）号。（第 4 章将介绍函数 atof，它用于对浮点数执行同样的转换。）</p>
+<p>下面是程序的结构，从中可以看出输入的格式：</p>
+<p>如果有空白符的话，则跳过</p>
+<p>如果有符号的话，则读取符号</p>
+<p>取整数部分，并执行转换</p>
+<p>其中的每一步都对输入数据进行相应的处理，并为下一步的执行做好准备。当遇到第一个不</p>
+<p>能转换为数字的字符时，整个处理过程终止。</p>
+<pre><code>#include &lt;ctype.h&gt;
+<span class="cm">/* <span class="fn">atoi</span>: convert s to integer; version 2 */</span>
+<span class="kw">int</span> <span class="fn">atoi</span>(<span class="kw">char</span> s[])
+{
+<span class="kw">int</span> i, n, sign;
+<span class="kw">for</span> (i = 0; isspace(s[i]); i++)</code></pre>
+<p>;</p>
+<pre><code>sign = (s[i] == '-') ? -1 : 1;
+<span class="kw">if</span> (s[i] == '+' || s[i] == '-')</code></pre>
+<p>i++;</p>
+<pre><code><span class="kw">for</span> (n = 0; isdigit(s[i]); i++)
+n = 10 * n + (s[i] - '0');
+<span class="kw">return</span> sign * n;
+<span class="cm">/* skip white space */</span>
+<span class="cm">/* skip sign */</span>
+}</code></pre>
+<p>标准库中提供了一个更完善的函数 strtol，它将字符串转换为长整型数。有关函数 strtol</p>
+<p>的详细信息，请参见附录 B.5 节。</p>
+<p>把循环控制部分集中在一起，对于多重嵌套循环，优势更为明显。下面的函数是对整型</p>
+<p>数组进行排序的 Shell 排序算法。Shell 排序算法是 D. L. Shell 于 1959 年发明的，其基本思想</p>
+<p>是：先比较距离远的元素，而不是像简单交换排序算法那样先比较相邻的元素。这样可以快</p>
+<p>速减少大量的无序情况，从而减轻后续的工作。被比较的元素之间的距离逐步减少，直到减</p>
+<p>少为 1，这时排序变成了相邻元素的互换。</p>
+<pre><code><span class="cm">/* shellsort: sort v[0]...v[n-1] into increasing order */</span>
+<span class="kw">void</span> shellsort(<span class="kw">int</span> v[], <span class="kw">int</span> n)
+{
+<span class="kw">int</span> gap, i, j, temp;
+<span class="kw">for</span> (gap = n/2; gap &gt; 0; gap /= 2)
+<span class="kw">for</span> (i = gap; i &lt; n; i++)
+<span class="kw">for</span> (j=i-gap; j&gt;=0 &amp;&amp; v[j]&gt;v[j+gap]; j-=gap) {
+temp = v[j];</code></pre>
+<p>v[j] = v[j+gap];</p>
+<p>v[j+gap] = temp;</p>
+<pre><code>}
+}</code></pre>
+<p>该函数中包含一个三重嵌套的 for 循环语句。最外层的 for 语句控制两个被比较元素之间的</p>
+<p>距离，从 n/2 开始，逐步进行对折，直到距离为 0。中间层的 for 循环语句用于在元素间移</p>
+<p>动位置。最内层的 for 语句用于比较各对相距 gap 个位置的元素，当这两个元素逆序时把它</p>
+<p>们互换过来。由于 gap 的值最终要递减到 1，因此所有元素最终都会位于正确的排序位置上。</p>
+<p>注意，即使最外层 for 循环的控制变量不是算术级数，for 语句的书写形式仍然没有变，这</p>
+<p>就说明 for 语句具有很强的通用性。</p>
+<p>逗号运算符“,”也是 C 语言优先级最低的运算符，在 for 语句中经常会用到它。被逗</p>
+<p>号分隔的一对表达式将按照从左到右的顺序进行求值，表达式右边的操作数的类型和值即为</p>
+<p>其结果的类型和值。这样，在 for 循环语句中，可以将多个表达式放在各个语句成分中，比</p>
+<p>如同时处理两个循环控制变晕。我们可以通过下面的函数 reverse(s)来举例。该函数用于</p>
+<p>倒置字符串 s 中各个字符的位置。</p>
+<pre><code>#include &lt;string.h&gt;
+<span class="cm">/* reverse: reverse string s in place */</span>
+<span class="kw">void</span> reverse(<span class="kw">char</span> s[])
+{
+<span class="kw">int</span> c, i, j;
+<span class="kw">for</span> (i = 0, j = <span class="fn">strlen</span>(s)-1; i &lt; j; i++, j--) {
+c = s[i];</code></pre>
+<p>s[i] = s[j];</p>
+<p>s[j] = c;</p>
+<pre><code>}
+}</code></pre>
+<p>某些情况下的逗号并不是逗号运算符，比如分隔函数参数的逗号，分隔声明中变量的逗号等，</p>
+<p>这些逗号并不保证各表达式按从左至右的顺序求值。</p>
+<p>应该慎用逗号运算符。逗号运算符最适用于关系紧密的结构中，比如上面的 reverse 函</p>
+<p>数内的 for 语句，对于需要在单个表达式中进行多步计算的宏来说也很适合。逗号表达式还</p>
+<p>适用于 reverse 函数中元素的交换，这样，元素的交换过程便可以看成是一个单步操作。</p>
+<pre><code><span class="kw">for</span> (i = 0, j = <span class="fn">strlen</span>(s)-1; i &lt; j; i++, j--)
+c = s[i], s[i] = s[j], s[j] = c;</code></pre>
+<p>练习 3-3</p>
+<p>编写函数 expand(s1, s2)，将字符串 s1 中类似于 a-z 一类的速记符号</p>
+<p>在字符串 s2 中扩展为等价的完整列表 abc…xyz。该函数可以处理大小写字母和数字，并可</p>
+<p>以处理 a-b-c、a-z0-9 与-a-z 等类似的情况。作为前导和尾随的-字符原样排印。</p>
+    </div>
+</body>
+</html>

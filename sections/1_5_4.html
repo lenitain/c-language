@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.5.4 单词计数 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 1 章</div>
+        <h1 class="section-title">1.5.4 单词计数</h1>
+    </div>
+    <div class="content">
+<p>我们将介绍的第 4 个实用程序用于统计行数、单词数与字符数。这里对单词的定义比较</p>
+<p>宽松，它是任何其中不包含空格、制表符或换行符的字符序列。下面这段程序是 UNIX 系统</p>
+<p>中 wc 程序的骨干部分：</p>
+<pre><code>#include &lt;stdio.h&gt;
+#define IN 1 <span class="cm">/* inside a word */</span>
+#define OUT 0 <span class="cm">/* outside a word */</span>
+<span class="cm">/* count lines, words, and characters in input */</span>
+<span class="fn">main</span>()
+{
+<span class="kw">int</span> c, nl, nw, nc, state;
+state = OUT;
+nl = nw = nc = 0;
+<span class="kw">while</span> ((c = <span class="fn">getchar</span>()) != EOF) {</code></pre>
+<p>++nc;</p>
+<pre><code><span class="kw">if</span> (c == '\n')</code></pre>
+<p>++nl;</p>
+<pre><code><span class="kw">if</span> (c == ' ' || c == '\n' || c = '\t')
+state = OUT;</code></pre>
+<p>else if (state == OUT) {</p>
+<pre><code>state = IN;</code></pre>
+<p>++nw;</p>
+<pre><code>}
+}
+<span class="fn">printf</span>(<span class="str">"%d %d %d\n"</span>, nl, nw, nc);
+}</code></pre>
+<p>程序执行时，每当遇到单词的第一个字符，它就作为一个新单词加以统计。state 变量</p>
+<p>记录程序当前是否正位于一个单词之中，它的初值是“不在单词中”，即初值被赋为 OUT。我</p>
+<p>们在这里使用了符号常量 IN 与 OUT，而没有使用其对应的数值 1 与 0，这样程序更易读。在</p>
+<p>较小的程序中，这种做法也许看不出有什么优势，但在较大的程序中，如果从一开始就这样</p>
+<p>做，因此而增加的一点工作量与提高程序可读性带来的好处相比是值得的。读者也会发现，</p>
+<p>如果程序中的幻数都以符号常量的形式出现，对程序进行大量修改就会相对容易得多。</p>
+<p>下列语句</p>
+<pre><code>nl = nw = nc = 0;</code></pre>
+<p>将把其中的 3 个变量 nl、nw 与 nc 都设置为 0。这种用法很常见，但要注意这样一个事实：</p>
+<p>在兼有值与赋值两种功能的表达式中，赋值结合次序是由右至左。所以上面这条语句等同于</p>
+<pre><code>n1 = (nw = (nc = 0));</code></pre>
+<p>运算符||代表 OR（逻辑或）</p>
+<p>，所以下列语句</p>
+<pre><code><span class="kw">if</span> (c == ' ' || c== '\n' || c == '\t')</code></pre>
+<p>的意义是“如果 c 是空格，或 c 是换行符，或 c 是制表符”</p>
+<p>（前面讲过，转义字符序列\t 是</p>
+<p>制表符的可见表示形式）</p>
+<p>。相应地，运算符&amp;&amp;代表 AND（逻辑与）</p>
+<p>，它仅比||高一个优先级。</p>
+<p>由&amp;&amp;或||连接的表达式由左至右求值，并保证在求值过程中只要能够判断最终的结果为真或</p>
+<p>假，求值就立即终止。如果 c 是空格，则没有必要再测试它是否为换行符或制表符，这样就</p>
+<p>不必执行后面两个测试。在这里，这一点并不特别重要，但在某些更复杂的情况下这样做就</p>
+<p>有必要了，不久我们将会看到这种例子。</p>
+<p>这段程序中还包括一个 else 部分，它指定当 if 语句中的条件部分为假时所要执行的动</p>
+<p>作。其一般形式为：</p>
+<pre><code><span class="kw">if</span> (表述式)</code></pre>
+<p>语句 1</p>
+<p>else</p>
+<p>语句 2</p>
+<p>其中，if-else 中的两条语句有且仅有一条语句被执行。如果表达式的值为真，则执行</p>
+<p>语句 1，否则执行语句 2。这两条语句都既可以是单条语句，也可以是括在花括号内的语句序</p>
+<p>列。在单词计数程序中，else 之后的语句仍是一个 if 语句，该 if 语句控制了包含在花括</p>
+<p>号内的两条语句。</p>
+<p>练习 1-11</p>
+<p>你准备如何测试单词计数程序？如果程序中存在某种错误，那么什么样的输</p>
+<p>入最可能发现这类错误呢’</p>
+<p>练习 1-12</p>
+    </div>
+</body>
+</html>

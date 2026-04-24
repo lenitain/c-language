@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.7 在不使用运算符&&或||的条件下编写一个与上面的 for 循环语句等价的循 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 2 章</div>
+        <h1 class="section-title">2.7 在不使用运算符&&或||的条件下编写一个与上面的 for 循环语句等价的循</h1>
+    </div>
+    <div class="content">
+<p>类型转换</p>
+<p>当一个运算符的几个操作数类型不同时，就需要通过一些规则把它们转换为某种共同的</p>
+<p>类型。一般来说，自动转换是指把“比较窄的”操作数转换为“比较宽的”操作数，并且不</p>
+<p>丢失信息的转换，例如，在计算表达式 f+i 时，将整型变量 i 的值自动转换为浮点型（这里</p>
+<p>的变量 f 为浮点型）</p>
+<p>。不允许使用无意义的表达式，例如，不允许把 float 类型的表达式作</p>
+<p>为下标。针对可能导致信息丢失的表达式，编译器可能会给出警告信息，比如把较长的整型</p>
+<p>值赋给较短的整型变量，把浮点型值赋值给整型变量，等等，但这些表达式并不非法。</p>
+<p>由于 char 类型就是较小的整型，因此在算术表达式中可以自由使用 char 类型的变量，</p>
+<p>这就为实现某些字符转换提供了很大的灵活性，比如，下面的函数 atoi 就是一例，它将一串</p>
+<p>数字转换为相应的数值：</p>
+<pre><code><span class="cm">/* <span class="fn">atoi</span>: convert s to integer */</span>
+<span class="kw">int</span> <span class="fn">atoi</span>(<span class="kw">char</span> s[])
+{
+<span class="kw">int</span> i, n;
+n = 0;
+<span class="kw">for</span> (i = 0; s[i] &gt;= '0' &amp;&amp; s[i] &lt;= '9'; ++i)
+n = 10 * n + (s[i] - '0');
+<span class="kw">return</span> n;
+}</code></pre>
+<p>我们在第 1 章讲过，表达式</p>
+<p>s[i] - '0'</p>
+<p>能够计算出 s[i]中存储的字符所对应的数字值，这是因为'0'、'l'等在字符集中对应的数</p>
+<p>值是一个连续的递增序列。</p>
+<p>函数 lower 是将 char 类型转换为 int 类型的另一个例子，它将 ASCII 字符集中的字符</p>
+<p>映射到对应的小写字母。如果待转换的字符不是大写字母，lower 函数将返回字符本身。</p>
+<pre><code><span class="cm">/* lower: convert c to lower <span class="kw">case</span>; ASCII only */</span>
+<span class="kw">int</span> lower(<span class="kw">int</span> c)
+{
+<span class="kw">if</span> (c &gt;= 'A' &amp;&amp; c &lt;= 'Z')
+<span class="kw">return</span> c + 'a' - 'A';</code></pre>
+<p>else</p>
+<pre><code><span class="kw">return</span> c;
+}</code></pre>
+<p>上述这个函数是为 ASCII 字符集设计的。在 ASCII 字符集中，大写字母与对应的小写字母作</p>
+<p>为数字值来说具有固定的间隔，并且每个字母表都是连续的——也就是说，在 A～Z 之间只有</p>
+<p>字母。但是，后面一点对 EBCDIC 字符集是不成立的，因此这一函数作用在 EBCDIC 字符集</p>
+<p>中就不仅限于转换字母的大小写。</p>
+<p>附录 B 介绍的标准头文件&lt;ctype.h&gt;定义了一组与字符集无关的测试和转换函数。</p>
+<p>例如，</p>
+<pre><code>tolower(c)函数将 c 转换为小写形式（如果 c 为大写形式的话）</code></pre>
+<p>，可以使用 tolower 替代</p>
+<p>上述 lower 函数。类似地，测试语句</p>
+<p>c &gt;= '0' &amp;&amp; c &lt;= '9'</p>
+<p>可以用该标准库中的函数</p>
+<pre><code>isdigit(c)</code></pre>
+<p>替代。在本书的后续内容中，我们将使用&lt;ctype.h&gt;中定义的函数。</p>
+<p>将字符类型转换为整型时，我们需要注意一点。C 语言没有指定 char 类型的变量是无符</p>
+<p>号变量（signed）还是带符号变量（unsigned）。当把一个 char 类型的值转换为 int 类</p>
+<p>型的值时，其结果有没有可能为负整数？对于不同的机器，其结果也不同，这反映了不同机</p>
+<p>器结构之间的区别。在某些机器中，如果 char 类型值的最左一位为 1，则转换为负整数（进</p>
+<p>行“符号扩展”</p>
+<p>）</p>
+<p>。而在另一些机器中，把 char 类型值转换为 int 类型时，在 char 类型值</p>
+<p>的左边添加 0，这样导致的转换结果值总是正值。</p>
+<p>C 语言的定义保证了机器的标准打印字符集中的字符不会是负值，因此，在表达式中这些</p>
+<p>字符总是正值。但是，存储在字符变量中的位模式在某些机器中可能是负的，而在另一些机</p>
+<p>器上可能是正的。为了保证程序的可移植性，如果要在 char 类型的变量中存储非字符数据，</p>
+<p>最好指定 signed 或 unsigned 限定符。</p>
+<p>当关系表达式（如 i&gt;j）以及由&amp;&amp;、||连接的逻辑表达式的判定结果为真时，表达式的</p>
+<p>值为 1；当判定结果为假时，表达式的值为 0。因此，对于赋值语句</p>
+<pre><code>d = c &gt;= '0' &amp;&amp; c &lt;= '9'</code></pre>
+<p>来说，当 c 为数字时，d 的值为 l，否则 d 的值为 0。但是，某些函数（比如 isdigit）在结</p>
+<p>果为真时可能返回任意的非 0 值。在 if、while、for 等语句的测试部分中，</p>
+<p>“真”就意味</p>
+<p>着“非 0”，这二者之间没有区别。</p>
+<p>C 语言中，很多情况下会进行隐式的算术类型转换。一般来说，如果二元运算符（具有两</p>
+<p>个操作数的运算符称为二元运算符，比如+或*）的两个操作数具有不同的类型，那么在进行</p>
+<p>运算之前先要把“较低”的类型提升为“较高”的类型，运算的结果为较高的类型。附录 A.6</p>
+<p>节详细地列出了这些转换规则。但是，如果没有 unsigned 类型的操作数，则只要使用下面</p>
+<p>这些非正式的规则就可以了：</p>
+<p>•</p>
+<p>•</p>
+<p>•</p>
+<p>•</p>
+<p>•</p>
+<p>如果其中一个操作数的类型为 long double，则将另一个操作数转换为 1ong</p>
+<p>double 类型；</p>
+<p>如果其中一个操作数的类型为 double，则将另一个操作数转换为 double 类型；</p>
+<p>如果其中一个操作数的类型为 float，则将另一个操作数转换为 float 类型；</p>
+<p>将 char 与 short 类型的操作数转换为 int 类型；</p>
+<p>如果其中一个操作数的类型为 long，则将另一个操作数也转换为 long 类型。</p>
+<p>注意，表达式中 float 类型的操作数不会自动转换为 double 类型，这一点与最初的定</p>
+<p>义有所不同。一般来说，数学函数（如标准头文件&lt;math.h&gt;中定义的函数）使用双精度类型</p>
+<p>的变量。使用 float 类型主要是为了在使用较大的数组时节省存储空间，有时也为了节省机</p>
+<p>器执行时间（双精度算术运算特别费时）</p>
+<p>。</p>
+<p>当表达式中包含 unsigned 类型的操作数时，转换规则要复杂一些。主要原因在于，带</p>
+<p>符号值与无符号值之间的比较运算是与机器相关的，因为它们取决于机器中不同整数类型的</p>
+<p>大小。例如，假定 int 类型占 16 位，long 类型占 32 位，那么，-1L &lt; 1U，这是因为 unsighed</p>
+<p>int 类型的 1U 将被提升为 signed long 类型；但-1L &gt; 1UL，这是因为 1L 将被提升为</p>
+<p>unslgned long 类型，因而成为一个比较大的正数。</p>
+<p>赋值时也要进行类型转换。赋值运算符右边的值需要转换为左边变量的类型，左边变量</p>
+<p>的类型即赋值表达式结果的类型。</p>
+<p>前面提到过，无论是否进行符号扩展，字符型变量都将被转换为整型变量。</p>
+<p>当把较长的整数转换为较短的整数或 char 类型时，超出的高位部分将被丢弃。因此，下</p>
+<p>列程序段：</p>
+<pre><code><span class="kw">int</span> i;
+<span class="kw">char</span> c;
+i = c;
+c = i;</code></pre>
+<p>执行后，c 的值将保持不变。无论是否进行符号扩展，该结论都成立。但是，如果把两个赋值</p>
+<p>语句的次序颠倒一下，则执行后可能会丢失信息。</p>
+<p>如果 x 是 float 类型，i 是 int 类型，那么语句 x = i 与 i = x 在执行时都要进行类</p>
+<p>型转换。当把 float 类型转换为 int 类型时，小数部分将被截取掉；当把 double 类型转换</p>
+<p>为 float 类型时，是进行四舍五入还是截取取决于具体的实现。</p>
+<p>由于函数调用的参数是表达式，所以在把参数传递给函数时也可能进行类型转换。在没</p>
+<p>有函数原型的情况下，char 与 short 类型都将被转换为 int 类型，float 类型将被转换为</p>
+<p>double 类型。因此，即使调用函数的参数为 char 或 float 类型，我们也把函数参数声明</p>
+<p>为 int 或 double 类型。</p>
+<p>最后，在任何表达式中都可以使用一个称为强制类型转换的一元运算符强制进行显式类</p>
+<p>型转换。在下列语句中，表达式将按照上述转换规则被转换为类型名指定的类型：</p>
+<p>(类型名) 表达式</p>
+<p>我们可以这样来理解强制类型转换的准确含义：在上述语句中，表达式首先被赋值给类型名</p>
+<p>指定的类型的某个变量，然后再用该变量替换上述整条语句。例如，库函数 sqrt 的参数为</p>
+<p>double 类型，如果处理不当，结果可能会无意义（sqrt 在&lt;math.h&gt;中声明）。因此，如果</p>
+<p>n 是整数，可以使用</p>
+<p>sqrt((double) n)</p>
+<p>在把 n 传递给函数 sqrt 之前先将其转换为 double 类型。注意，强制类型转换只是生成一</p>
+<p>个指定类型的 n 的值，n 本身的值并没有改变。强制类型转换运算符与其它一元运算符具有相</p>
+<p>同的优先级，表 2-1 对运算符优先级进行了总结。</p>
+<p>在通常情况下，参数是通过函数原型声明的。这样，当函数被调用时，声明将对参数进</p>
+<p>行自动强制转换。例如，对于 sqrt 的函数原型</p>
+<pre><code><span class="kw">double</span> sqrt(<span class="kw">double</span>);</code></pre>
+<p>下列函数调用：</p>
+<pre><code>root2 = sqrt(2);</code></pre>
+<p>不需要使用强制类型转换运算符就可以自动将整数 2 强制转换为 double 类型的值 2.0。</p>
+<p>标准库中包含一个可移植的实现伪随机数发生器的函数 rand 以及一个初始化种子数的</p>
+<p>函数 srand。前一个函数 rand 使用了强制类型转换。</p>
+<p>unsigned long int next = 1;</p>
+<pre><code><span class="cm">/* rand: <span class="kw">return</span> pseudo-random integer on 0..32767 */</span>
+<span class="kw">int</span> rand(<span class="kw">void</span>)
+{
+next = next * 1103515245 + 12345;
+<span class="kw">return</span> (<span class="kw">unsigned</span> <span class="kw">int</span>)(next/65536) % 32768;
+}
+<span class="cm">/* srand: set seed <span class="kw">for</span> rand() */</span>
+<span class="kw">void</span> srand(<span class="kw">unsigned</span> <span class="kw">int</span> seed)
+{
+next = seed;
+}</code></pre>
+<p>练习 2-3</p>
+<p>编写函数 htoi(s)，把由十六进制数字组成的字符串（包含可选的前缀 0x</p>
+<p>或 0X）转换为与之等价的整型值。字符串中允许包含的数字包括：0～9、a～f 以及 A～F。</p>
+    </div>
+</body>
+</html>

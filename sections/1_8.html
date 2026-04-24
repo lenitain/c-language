@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1.8 重新编写 1.2 节中的温度转换程序，使用函数实现温度转换计算。 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 1 章</div>
+        <h1 class="section-title">1.8 重新编写 1.2 节中的温度转换程序，使用函数实现温度转换计算。</h1>
+    </div>
+    <div class="content">
+<p>参数——传值调用</p>
+<p>习惯其它语言（特别是 Fortran 语言）的程序员可能会对 C 语言的函数参数传递方式感到</p>
+<p>陌生。在 C 语言中，所有函数参数都是“通过值”传递的。也就是说，传递给被调用函数的</p>
+<p>参数值存放在临时变量中，而不是存放在原来的变量中。这与其它某些语言是不同的，比如，</p>
+<p>Fortran 等语言是“通过引用调用”</p>
+<p>，Pascal 则采用 var 参数的方式，在这些语言中，被调用的</p>
+<p>函数必须访问原始参数，而不是访问参数的本地副本。</p>
+<p>最主要的区别在于，在 C 语言中，被调用函数不能直接修改主调函数中变量的值，而只</p>
+<p>能修改其私有的临时副本的值。</p>
+<p>传值调用的利大于弊。在被调用函数中，参数可以看作是便于初始化的局部变量，因此</p>
+<p>额外使用的变量更少。这样程序可以更紧凑简洁。侧如，下面的这个 power 函数利用了这一</p>
+<p>性质：</p>
+<pre><code><span class="cm">/* power: raise base to n-th power; n &gt;= 0; version 2 */</span>
+<span class="kw">int</span> power(<span class="kw">int</span> base, <span class="kw">int</span> n)
+{
+<span class="kw">int</span> p;
+<span class="kw">for</span> (p = 1; n &gt; 0; --n)
+p = p * base;
+<span class="kw">return</span> p;
+}</code></pre>
+<p>其中，参数 n 用作临时变量，并通过随后执行的 for 循环语句递减，直到其值为 0，这样就</p>
+<p>不需要额外引入变量 i；power 函数内部对 n 的任何操作不会影响到调用函数中 n 的原始参</p>
+<p>数值。</p>
+<p>必要时，也可以让函数能够修改主调函数中的变量。这种情况下，调用者需要向被调用</p>
+<p>函数提供待设置值的变量的地址（从技术角度看，地址就是指向变量的指针），而被调用函数</p>
+<p>则需要将对应的参数声明为指针类型，并通过它间接访问变量。我们将在第 5 章中讨论指针。</p>
+<p>如果是数组参数，情况就有所不同了。当把数组名用作参数时，传递给函数的值是数组</p>
+<p>起始元素的位置或地址——它并不复制数组元素本身。在被调用函数中，可以通过数组下标</p>
+<p>访问或修改数组元索的值。这是下一节将要讨论的问题。</p>
+    </div>
+</body>
+</html>

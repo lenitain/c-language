@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2.2 数据类型及长度 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 2 章</div>
+        <h1 class="section-title">2.2 数据类型及长度</h1>
+    </div>
+    <div class="content">
+<p>C 语言只提供了下列几种基本数据类型：</p>
+<p>char</p>
+<p>int</p>
+<p>float</p>
+<p>double</p>
+<p>字符型，占用一个字节，可以存放本地字符集中的一个字符</p>
+<p>整型，通常反映了所用机器中整数的最自然长度</p>
+<p>单精度浮点型</p>
+<p>双精度浮点型</p>
+<p>此外，还可以在这些基本数据类型的前面加上一些限定符。short 与 long 两个限定符</p>
+<p>用于限定整型：</p>
+<pre><code><span class="kw">short</span> <span class="kw">int</span> sh;
+<span class="kw">long</span> <span class="kw">int</span> counter;</code></pre>
+<p>在上述这种类型的声明中，关键字 int 可以省略。通常很多人也习惯这么做。</p>
+<p>short 与 long 两个限定符的引入可以为我们提供满足实际需要的不同长度的整型数。</p>
+<p>int 通常代表特定机器中整数的自然长度。short 类型通常为 16 位，1ong 类型通常为 32</p>
+<p>位，int 类型可以为 16 位或 32 位。各编译器可以根据硬件特性自主选择合适的类型长度，</p>
+<p>但要遵循下列限制：short 与 int 类型至少为 16 位，而 long 类型至少为 32 位，并且 short</p>
+<p>类型不得长于 int 类型，而 int 类型不得长于 long 类型。</p>
+<p>类型限定符 signed 与 unsigned 可用于限定 char 类型或任何整型。unsigned 类型</p>
+<p>的数总是正值或 0，并遵守算术模 2n 定律，其中 n 是该类型占用的位数。例如，如果 char 对</p>
+<p>象占用 8 位，那么 unsigned char 类型变量的取值范围为 0～255，而 signed char 类型</p>
+<p>变量的取值范围则为-128～127（在采用对二的补码的机器上）。不带限定符的 char 类型对象</p>
+<p>是否带符号则取决于具体机器，但可打印字符总是正值。</p>
+<pre><code><span class="kw">long</span> <span class="kw">double</span> 类型表示高精度的浮点数。同整型一样，浮点型的长度也取决于具体的实</code></pre>
+<p>现。float、double 与 long double 类型可以表示相同的长度，也可以表示两种或三种不</p>
+<p>同的长度。</p>
+<p>有关这些类型长度定义的符号常量以及其它与机器和编译器有关的属性可以在标准头文</p>
+<p>件&lt;limits.h&gt;与&lt;float.h&gt;中找到，这些内容将在附录 B 中讨论。</p>
+<p>练习 2-1</p>
+<p>编写一个程序以确定分别由 signed 及 unsigned 限定的 char、short、</p>
+<p>int 与 long 类型变量的取值范围。采用打印标准头文件中的相应值以及直接计算两种方式实</p>
+<p>现。后一种方法的实现较困难一些，因为要确定各种浮点类型的取值范围。</p>
+    </div>
+</body>
+</html>

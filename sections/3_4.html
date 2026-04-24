@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.4 switch 语句 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 3 章</div>
+        <h1 class="section-title">3.4 switch 语句</h1>
+    </div>
+    <div class="content">
+<p>switch 语句是一种多路判定语句，它测试表达式是否与一些常量整数值中的某一个值匹</p>
+<p>配，并执行相应的分支动作。</p>
+<p>switch (表达式) {</p>
+<p>case 常量表达式: 语句序列</p>
+<p>case 常量表达式: 语句序列</p>
+<p>default: 语句序列</p>
+<p>每一个分支都由一个或多个整数值常量或常量表达式标记。如果某个分支与表达式的值匹配，</p>
+<p>则从该分支开始执行。各分支表达式必须互不相同。如果没有哪一分支能匹配表达式，则执</p>
+<p>行标记为 default 的分支。default 分支是可选的。如果没有 default 分支也没有其它分</p>
+<p>支与表达式的值匹配，则该 switch 语句不执行任何动作。各分支及 default 分支的排列次</p>
+<p>序是任意的。</p>
+<p>我们在第 1 章中曾用 if…else if…else 结构编写过一个程序以统计各个数字、空白</p>
+<p>符及其它所有字符出现的次数。下面我们用 switch 语句改写该程序如下：</p>
+<pre><code>#include &lt;stdio.h&gt;
+<span class="fn">main</span>() <span class="cm">/* count digits, white space, others */</span>
+{
+<span class="kw">int</span> c, i, nwhite, nother, ndigit[10];
+nwhite = nother = 0;
+<span class="kw">for</span> (i = 0; i &lt; 10; i++)</code></pre>
+<p>ndigit[i] = 0;</p>
+<pre><code><span class="kw">while</span> ((c = <span class="fn">getchar</span>()) != EOF) {
+<span class="kw">switch</span> (c) {</code></pre>
+<p>case '0': case '1': case '2': case '3': case '4':</p>
+<p>case '5': case '6': case '7': case '8': case '9':</p>
+<p>ndigit[c-'0']++;</p>
+<p>break;</p>
+<p>case ' ':</p>
+<p>case '\n':</p>
+<p>case '\t':</p>
+<p>nwhite++;</p>
+<p>break;</p>
+<p>default:</p>
+<p>nother++;</p>
+<p>break;</p>
+<pre><code>}
+}
+<span class="fn">printf</span>(<span class="str">"digits ="</span>);
+<span class="kw">for</span> (i = 0; i &lt; 10; i++)
+<span class="fn">printf</span>(<span class="str">" %d"</span>, ndigit[i]);
+<span class="fn">printf</span>(<span class="str">", white space = %d, other = %d\n"</span>,</code></pre>
+<p>nwhite, nother);</p>
+<pre><code><span class="kw">return</span> 0;
+}</code></pre>
+<p>break 语句将导致程序的执行立即从 switch 语句中退出。在 switch 语句中，case</p>
+<p>的作用只是一个标号，因此，某个分支中的代码执行完后，程序将进入下一分支继续执行，</p>
+<p>除非在程序中显式地跳转。跳出 switch 语句最常用的方法是使用 break 语句与 return 语</p>
+<p>句。break 语句还可强制控制从 while、for 与 do 循环语句中立即退出，对于这一点，我</p>
+<p>们稍后还将做进一步介绍。</p>
+<p>依次执行各分支的做法有优点也有缺点。好的一面是它可以把若干个分支组合在一起完</p>
+<p>成一个任务，如上例中对数字的处理。但是，正常情况下为了防止直接进入下一个分支执行，</p>
+<p>每个分支后必须以一个 break 语句结束。从一个分支直接进入下一个分支执行的做法并不健</p>
+<p>全，这样做在程序修改时很容易出错。除了一个计算需要多个标号的情况外，应尽量减少从</p>
+<p>一个分支直接进入下一个分支执行这种用法，在不得不使用的情况下应该加上适当的程序注</p>
+<p>释。</p>
+<p>作为一种良好的程序设计风格，在 switch 语句最后一个分支（即 default 分支）的后</p>
+<p>面也加上一个 break 语句。这样做在逻辑上没有必要，但当我们需要向该 switch 语句后添</p>
+<p>加其它分支时，这种防范措施会降低犯错误的可能性。</p>
+<p>练习 3-2</p>
+<p>编写一个函数 escape(s, t)，将字符串 t 复制到字符串 s 中，并在复制</p>
+<p>过程中将换行符、制表符等不可见字符分别转换为\n、\t 等相应的可见的转义字符序列。要</p>
+<p>求使用 swich 语句。再编写一个具有相反功能的函数，在复制过程中将转义字符序列转换为</p>
+<p>实际字符。</p>
+    </div>
+</body>
+</html>

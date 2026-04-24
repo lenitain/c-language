@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3.6 do-while 循环 - C语言教程</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            color: #333;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #fafafa;
+        }
+        .section-header {
+            border-left: 5px solid #00599A;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #00599A;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #1a1a1a;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: white;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        .content p {
+            margin-bottom: 14px;
+            color: #d9d0c8;
+        }
+        .content pre {
+            background: #1a211f;
+            color: #d9d0c8;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #3a4543;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #7fb8a4; font-weight: 500; }
+        .content .fn { color: #e0c289; }
+        .content .str { color: #e58f57; }
+        .content .cm { color: #788c69; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #8aad7f;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #3a4543;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            color: #d4cac0;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }
+        .note {
+            background: #323d3b;
+            border-left: 4px solid #8aad7f;
+            padding: 14px 18px;
+            margin: 18px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        body {
+            background: #1e2624;
+        }
+        .content {
+            background: #2b3533;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .section-header {
+            border-left-color: #8aad7f;
+        }
+        .section-number {
+            color: #8aad7f;
+        }
+        .section-title {
+            color: #d9d0c8;
+        }
+    </style>
+</head>
+<body>
+    <div class="section-header">
+        <div class="section-number">第 3 章</div>
+        <h1 class="section-title">3.6 do-while 循环</h1>
+    </div>
+    <div class="content">
+<p>我们在第 1 章中曾经讲过，while 与 for 这两种循环在循环体执行前对终止条件进行测</p>
+<p>试。与此相反，C 语言中的第三种循环——do-while 循环则在循环体执行后测试终止条件，</p>
+<p>这样循环体至少被执行一次。</p>
+<p>do-while 循环的语法形式如下：</p>
+<p>do</p>
+<p>语句</p>
+<pre><code><span class="kw">while</span> (表达式);</code></pre>
+<p>在这一结构中，先执行循环体中的语句部分，然后再求表达式的值。如果表达式的值为真，</p>
+<p>则再次执行语句，依此类推。当表达式的值变为假，则循环终止。除了条件测试的语义不同</p>
+<p>外，do-while 循环与 Pascal 语言的 repeat-until 语句等价。</p>
+<p>经验表明，do-while 循环比 while 循环和 for 循环用得少得多。尽管如此，do-while</p>
+<p>循环语句有时还是很有用的，下面我们通过函数 itoa 来说明这一点。itoa 函数是 atoi 函</p>
+<p>数的逆函数，它把数字转换为字符串。这个工作比最初想像的要复杂一些。如果按照 atoi 函</p>
+<p>数中生成数字的方法将数字转换为字符串，则生成的字符串的次序正好是颠倒的，因此，我</p>
+<p>们首先要生成反序的字符串，然后再把该字符串倒置。</p>
+<pre><code><span class="cm">/* itoa: convert n to characters in s */</span>
+<span class="kw">void</span> itoa(<span class="kw">int</span> n, <span class="kw">char</span> s[])
+{
+<span class="kw">int</span> i, sign;
+<span class="kw">if</span> ((sign = n) &lt; 0) <span class="cm">/* record sign */</span>
+n = -n;
+<span class="cm">/* make n positive */</span>
+i = 0;
+<span class="kw">do</span> {
+<span class="cm">/* generate digits in reverse order */</span></code></pre>
+<p>s[i++] = n % 10 + '0'; /* get next digit */</p>
+<pre><code>} <span class="kw">while</span> ((n /= 10) &gt; 0);
+<span class="cm">/* delete it */</span>
+<span class="kw">if</span> (sign &lt; 0)</code></pre>
+<p>s[i++] = '-';</p>
+<p>s[i] = '\0';</p>
+<pre><code>reverse(s);
+}</code></pre>
+<p>这里有必要使用 do-while 语句，至少使用 do-while 语句会方便一些，因为即使 n 的</p>
+<p>值为 0，也至少要把一个字符放到数组 s 中。其中的 do-while 语句体中只有一条语句，尽</p>
+<p>管没有必要，但我们仍然用花括号将该语句括起来了，这样做可以避免草率的读者将 while</p>
+<p>部分误认为是另个 while 循环的开始。</p>
+<p>练习 3-4</p>
+<p>在数的对二的补码表示中，我们编写的 itoa 函数不能处理最大的负数，即</p>
+<p>字长</p>
+<p>n 等于-2 -1 的情况。请解释其原因。修改该函数，使它在任何机器上运行时都能打印出正确</p>
+<p>的值。</p>
+<p>练习 3-5</p>
+<p>编写函数 itob(n, s, b)，将整数 n 转换为以 b 为底的数，并将转换结果</p>
+<p>以字符的形式保存到字符串 s 中。例如，itob(n, s, 16)把整数 n 格式化成十六进制整数</p>
+<p>保存在 s 中。</p>
+<p>练习 3-6</p>
+<p>修改 itoa 函数，使得该函数可以接收三个参数。其中，第三个参数为最小</p>
+<p>字段宽度。为了保证转换后所得的结果至少具有第三个参数指定的最小宽度，在必要时应在</p>
+<p>所得结果的左边填充一定的空格。</p>
+    </div>
+</body>
+</html>
