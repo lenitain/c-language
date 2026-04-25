@@ -173,11 +173,11 @@ def generate_html(section):
         }}
         .content p {{
             margin-bottom: 14px;
-            color: #d9d0c8;
+            color: #D3C6AA;
         }}
         .content pre {{
-            background: #1a211f;
-            color: #d9d0c8;
+            background: #343F44;
+            color: #D3C6AA;
             padding: 20px;
             border-radius: 8px;
             overflow-x: auto;
@@ -185,53 +185,53 @@ def generate_html(section):
             font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
             font-size: 14px;
             line-height: 1.6;
-            border: 1px solid #3a4543;
+            border: 1px solid #4F585E;
         }}
         .content pre code {{
             background: transparent;
             color: inherit;
             padding: 0;
         }}
-        .content .kw {{ color: #7fb8a4; font-weight: 500; }}
-        .content .fn {{ color: #e0c289; }}
-        .content .str {{ color: #e58f57; }}
-        .content .cm {{ color: #788c69; font-style: italic; }}
+        .content .kw {{ color: #83C092; font-weight: 500; }}
+        .content .fn {{ color: #DBBC7F; }}
+        .content .str {{ color: #E69875; }}
+        .content .cm {{ color: #7A8478; font-style: italic; }}
         .content h2 {{
             font-size: 20px;
-            color: #8aad7f;
+            color: #A7C080;
             margin: 28px 0 14px 0;
-            border-bottom: 2px solid #3a4543;
+            border-bottom: 2px solid #4F585E;
             padding-bottom: 10px;
         }}
         .content h3 {{
             font-size: 17px;
-            color: #d4cac0;
+            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }}
         ul, ol {{ margin: 12px 0 12px 24px; }}
         li {{ margin-bottom: 8px; }}
         .note {{
-            background: #323d3b;
-            border-left: 4px solid #8aad7f;
+            background: #2D353B;
+            border-left: 4px solid #A7C080;
             padding: 14px 18px;
             margin: 18px 0;
             border-radius: 0 8px 8px 0;
         }}
         body {{
-            background: #1e2624;
+            background: #232A2E;
         }}
         .content {{
-            background: #2b3533;
+            background: #2D353B;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }}
         .section-header {{
-            border-left-color: #8aad7f;
+            border-left-color: #A7C080;
         }}
         .section-number {{
-            color: #8aad7f;
+            color: #A7C080;
         }}
         .section-title {{
-            color: #d9d0c8;
+            color: #D3C6AA;
         }}
     </style>
 </head>
