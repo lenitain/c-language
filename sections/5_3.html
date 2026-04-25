@@ -211,7 +211,7 @@
 <div class="section-links">
 <a class="section-link" href="3_1.html">3.1 语句与程序块</a>
 <a class="section-link" href="3_2.html">3.2 if-else 语句</a>
-<a class="section-link" href="3_3.html">3.3 else-if 语旬</a>
+<a class="section-link" href="3_3.html">3.3 else-if 语句</a>
 <a class="section-link" href="3_4.html">3.4 switch 语句</a>
 <a class="section-link" href="3_5.html">3.5 while 循环与 for 循环</a>
 <a class="section-link" href="3_6.html">3.6 do-while 循环</a>
@@ -309,7 +309,7 @@
 <a class="section-link" href="A_2_1.html">A.2.1 记号</a>
 <a class="section-link" href="A_2_2.html">A.2.2 注释</a>
 <a class="section-link" href="A_2_3.html">A.2.3 标识符</a>
-<a class="section-link" href="A_2_4.html">A.2.4 关键宇</a>
+<a class="section-link" href="A_2_4.html">A.2.4 关键字</a>
 <a class="section-link" href="A_2_5.html">A.2.5 常量</a>
 <a class="section-link" href="A_2_6.html">A.2.6 字符串字面值</a>
 <a class="section-link" href="A_3.html">A.3 语法符号</a>
@@ -408,7 +408,7 @@
 <pre><code>pa = a;</code></pre>
 <p>对数组元素 a[i]的引用也可以写成*(a+i)这种形式。对第一次接触这种写法的人来说，可能会觉得很奇怪。在计算数组元素 a[i]的值时，C 语言实际上先将其转换为*(a+i)的形式，然后再进行求值，因此在程序中这两种形式是等价的。如果对这两种等价的表示形式分别施加地址运算符&amp;，便可以得出这样的结论：&amp;a[i]和 a+i 的含义也是相同的。a+i 是 a之后第 i 个元素的地址。相应地，如果 pa 是个指针，那么，在表达式中也可以在它的后面加下标。pa[i]与*(pa+i)是等价的。简而言之，一个通过数组和下标实现的表达式可等价地通过指针和偏移量实现。</p>
 <p>但是，我们必须记住，数组名和指针之间有一个不同之处，指针是一个变量，因此，在 C语言中，语句 pa=a 和 pa++都是合法的。但数组名不是变量，因此，类似于 a=pa 和 a++形式的语句是非法的。</p>
-<p>当把数组名传递给一个函数时，实际上传递的是该数组第一个元索的地址。在被调用函数中，该参数是一个局部变量，因此，数组名参数必须是一个指针，也就是一个存储地址值的变量。我们可以利用该特性编写 strlen 函数的另一个版本，该函数用于计算一个字符串的长度。</p>
+<p>当把数组名传递给一个函数时，实际上传递的是该数组第一个元素的地址。在被调用函数中，该参数是一个局部变量，因此，数组名参数必须是一个指针，也就是一个存储地址值的变量。我们可以利用该特性编写 strlen 函数的另一个版本，该函数用于计算一个字符串的长度。</p>
 <pre><code><span class="cm">/* <span class="fn">strlen</span>: <span class="kw">return</span> length of string s */</span>
 <span class="kw">int</span> <span class="fn">strlen</span>(<span class="kw">char</span> *s)
 {

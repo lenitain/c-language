@@ -211,7 +211,7 @@
 <div class="section-links">
 <a class="section-link" href="3_1.html">3.1 语句与程序块</a>
 <a class="section-link" href="3_2.html">3.2 if-else 语句</a>
-<a class="section-link" href="3_3.html">3.3 else-if 语旬</a>
+<a class="section-link" href="3_3.html">3.3 else-if 语句</a>
 <a class="section-link" href="3_4.html">3.4 switch 语句</a>
 <a class="section-link" href="3_5.html">3.5 while 循环与 for 循环</a>
 <a class="section-link" href="3_6.html">3.6 do-while 循环</a>
@@ -309,7 +309,7 @@
 <a class="section-link" href="A_2_1.html">A.2.1 记号</a>
 <a class="section-link" href="A_2_2.html">A.2.2 注释</a>
 <a class="section-link" href="A_2_3.html">A.2.3 标识符</a>
-<a class="section-link" href="A_2_4.html">A.2.4 关键宇</a>
+<a class="section-link" href="A_2_4.html">A.2.4 关键字</a>
 <a class="section-link" href="A_2_5.html">A.2.5 常量</a>
 <a class="section-link" href="A_2_6.html">A.2.6 字符串字面值</a>
 <a class="section-link" href="A_3.html">A.3 语法符号</a>
@@ -401,7 +401,7 @@ printd(n / 10);
 <span class="fn">putchar</span>(n % 10 + '0');
 }</code></pre>
 <p>函数递归调用自身时，每次调用都会得到一个与以前的自动变量集合不同的新的自动变量集合。因此，调用 printd(123)时，第一次调用 printd 的参数 n=123。它把 12 传递给printd 的第二次调用，后者又把 1 传递结 printd 的第三次调用。第三次调用 printd 时首先将打印 1，然后再返回到第二次调用。从第三次调用返回后的第二次调用同样也将先打印2，然后再返回到第一次调用。返回到第一次调用时将打 3，随之结束函数的执行。</p>
-<p>另外一个能较好说明递归的例子是快速排序。快速排序算法是 C. A. R. Hoare 于 1962 年发明的。对于一个给定的数组，从中选择一个元素，以该元素为界将其余元素划分为两个子集，一个子集中的所有元素都小于该元索，另一个子集中的所有元素都大于或等于该元素。对这样两个子集递归执行这一过程，当某个子集中的元素数小于 2 时，这个子集就不需要再次排序，终止递归。</p>
+<p>另外一个能较好说明递归的例子是快速排序。快速排序算法是 C. A. R. Hoare 于 1962 年发明的。对于一个给定的数组，从中选择一个元素，以该元素为界将其余元素划分为两个子集，一个子集中的所有元素都小于该元素，另一个子集中的所有元素都大于或等于该元素。对这样两个子集递归执行这一过程，当某个子集中的元素数小于 2 时，这个子集就不需要再次排序，终止递归。</p>
 <p>从执行速度来讲，下列版本的快速排序函数可能不是最快的，但它是最简单的算法之一。</p>
 <p>在每次划分子集时，该算法总是选取各个子数组的中间元素。</p>
 <pre><code><span class="cm">/* qsort: sort v[left]...v[right] into increasing order */</span>
