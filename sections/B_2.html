@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,26 @@
         <h1 class="section-title">B.2 字符类别测试：<ctype.h></h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>字符类别测试：&lt;ctype.h&gt;头文件&lt;ctype.h&gt;中声明了一些测试字符的函数。每个函数的参数均为 int 类型，参数的值必须是 EOF 或可用 unsigned char 类型表示的字符，函数的返回值为 int 类型。如果参数 c 满足指定的条件，则函数返回非 0 值（表示真）</p>
+<p>，否则返回 0（表示假）。这些函数包括：</p>
+<pre><code>isalnum(c)</code></pre>
+<p>函数 isalpha(c)或 isdigit(c)为真</p>
+<pre><code>isalpha(c)
+iscntrl(c)
+isdigit(c)
+isgraph(c)
+islower(c)
+isprint(c)
+ispunct(c)
+isspace(c)
+isupper(c)
+isxdigit(c)</code></pre>
+<p>函数 isupper(c)或 islower(c)为真c 为控制字符c 为十进制数字c 是除空格外的可打印字符c 是小写字母c 是包括空格的可打印字符c 是除空格、字母和数字外的可打印字符c 是空格、换页符、换行符、回车符、横向制表符或纵向制表符c 是大写字母c 是十六进制数字在 7 位 ASCII 字符集中，可打印字符是从 0x20（' '）到 0x7E（'~'）之间的字符；控制字符是从 0（NUL）到 0xlF（US）之间的字符以及字符 0x7F（DEL）</p>
+<p>。</p>
+<p>另外，下面两个函数可用于字母的大小写转换：</p>
+<pre><code><span class="kw">int</span> tolower(<span class="kw">int</span> c)</code></pre>
+<p>将 c 转换为小写字母</p>
+<pre><code><span class="kw">int</span> toupper(<span class="kw">int</span> c)</code></pre>
+<p>将 c 转换为大写字母如果 c 是大写字母，则 tolower(c)返回相应的小写字母，否则返回 c。如果 c 是小写字母，则 toupper(c)返回相应的大写字母，否则返回 c。</p>    </div>
 </body>
 </html>

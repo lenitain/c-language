@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,19 @@
         <h1 class="section-title">A.6.6 指针和整数</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>指针可以加上或减去一个整型表达式。在这种情况下，整型表达式的转换按照加法运算符的方式进行（参见 A.7.7 节）</p>
+<p>。</p>
+<p>两个指向同一数组中同一类型的对象的指针可以进行减法运算，其结果将被转换为整型；</p>
+<p>转换方式按照减法运算符的方式进行（参见 A.7.7 节）</p>
+<p>。</p>
+<p>值为 0 的整型常量表达式或强制转换为 void *类型的表达式可通过强制转换、赋值或比较操作转换为任意类型的指针。其结果将产生一个空指针，此空指针等于指向同一类型的另一空指针，但不等于任何指向函数或对象的指针。</p>
+<p>还允许进行指针相关的其它某些转换，但其结果依赖于具体的实现。这些转换必须由一个显式的类型转换运算符或强制类型转换来指定（参见 A.7.5 节和 A.8.8 节）</p>
+<p>。</p>
+<p>指针可以转换为整型，但此整型必须足够大；所要求的大小依赖于具体的实现。映射函数也依赖于具体的实现。</p>
+<p>整型对象可以显式地转换为指针。这种映射总是将一个足够宽的从指针转换来的整数转换为同一个指针，其它情况依赖于具体的实现。</p>
+<p>指向某一类型的指针可以转换为指向另一类型的指针，但是，如果该指针指向的对象不满足一定的存储对齐要求，则结果指针可能会导致地址异常。指向某对象的指针可以转换为一个指向具有更小或相同存储对齐限制的对象的指针，并可以保证原封不动地再转换回来。</p>
+<p>“对齐”的概念依赖于具体的实现，但 char 类型的对象具有最小的对齐限制。我们将在 A.6.8节的讨论中看到，指针也可以转换为 void *类型，并可原封不动地转换回来。</p>
+<p>一个指针可以转换为同类型的另一个指针，但增加或删除了指针所指的对象类型的限定符（参见 A.4.4 节和 A.8.2 节）的情况除外。如果增加了限定符，则新指针与原指针等价，不同的是增加了限定符带来的限制。如果删除了限定符，则对底层对象的运算仍受实际声明中的限定符的限制。</p>
+<p>最后，指向一个函数的指针可以转换为指向另一个函数的指针。调用转换后指针所指的函数的结果依赖于具体的实现。但是，如果转换后的指针被重新转换为原来的类型，则结果与原来的指针一致。</p>    </div>
 </body>
 </html>

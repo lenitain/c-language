@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,39 @@
         <h1 class="section-title">B.1.1 文件操作</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>下列函数用于处理与文件有关的操作。其中，类型 size_t 是由运算符 sizeof 生成的无符号整型。</p>
+<p>FILE *fopen(const char *filename, const char *mode)</p>
+<p>fopen 函数打开 filename 指定的文件，并返回一个与之相关联的流。如果打开操作失败，则返回 NULL。</p>
+<p>访问模式 mode 可以为下列合法值之一：</p>
+<pre><code><span class="str">"r"</span>
+<span class="str">"w"</span>
+<span class="str">"a"</span>
+<span class="str">"r+"</span>
+<span class="str">"w+"</span>
+<span class="str">"a+"</span></code></pre>
+<p>打开文本文件用于读创建文本文件用于写，并删除已存在的内容（如果有的话）</p>
+<p>追加；打开或创建文本文件，并向文件末尾追加内容打开文本文件用于更新（即读和写）</p>
+<p>创建文本文件用于更新，并删除已存在的内容（如果有的话）</p>
+<p>追加；打开或创建文本文件用于更新，写文件时追加到文件末尾后 3 种方式（更新方式）允许对同一文件进行读和写。在读和写的交叉过程中，必须调用 fflush 函数或文件定位函数。如果在上述访问模式之后再加上 b，如“rb”或“w+b”等，则表示对二进制文件进行操作。文件名 filename 限定最多为 FILENAME_MAX 个字符。一次最多可打开 FOPEN_MAX 个文件。</p>
+<p>FILE *freopen(const char *filename, const char *mode, FILE *stream)</p>
+<p>freopen 函数以 mode 指定的模式打开 filename 指定的文件，并将该文件关联到stream 指定的流。它返回 stream；若出错则返回 NULL。Freopen 函数一般用于改变与stdin、stdout 和 stderr 相关联的文件。</p>
+<pre><code><span class="kw">int</span> fflush(FILE *stream)</code></pre>
+<p>对输出流来说，fflush 函数将已写到缓冲区但尚未写入文件的所有数据写到文件中。对输入流来说，其结果是未定义的。如果在写的过程中发生错误，则返回 EOF，否则返回 0。</p>
+<p>fflush(NULL)将清洗所有的输出流。</p>
+<pre><code><span class="kw">int</span> <span class="fn">fclose</span>(FILE *stream)</code></pre>
+<p>fclose 函数将所有未写入的数据写入 stream 中，丢弃缓冲区中的所有未读输入数据，并释放自动分配的全部缓冲区，最后关闭流。若出错则返回 EOF，否则返回 0。</p>
+<pre><code><span class="kw">int</span> remove(<span class="kw">const</span> <span class="kw">char</span> *filename)</code></pre>
+<p>remove 函数删除 filename 指定的文件，这样，后续试图打开该文件的操作将失败。</p>
+<p>如果删除操作失败，则返回一个非 0 值。</p>
+<pre><code><span class="kw">int</span> rename(<span class="kw">const</span> <span class="kw">char</span> *oldname, <span class="kw">const</span> <span class="kw">char</span> *newname)</code></pre>
+<p>rename 函数修改文件的名字。如果操作失败，则返回一个非 0 值。</p>
+<p>FILE *tmpfile(void)</p>
+<p>tmpfile 函数以模式"wb+"创建一个临时文件，该文件在被关闭或程序正常结束时将被自动删除。如果创建操作成功，该函数返回一个流；如果创建文件失败，则返回 NULL。</p>
+<pre><code><span class="kw">char</span> *tmpnam(<span class="kw">char</span> s[L_tmpnam])</code></pre>
+<p>tmpnam(NULL)函数创建一个与现有文件名不同的字符串，并返回一个指向一内部静态数组的指针。tmpnam(S)函数把创建的字符串保存到数组 s 中，并将它作为函数值返回。s中至少要有 L_tmpnam 个字符的空间。Tmpnam 函数在每次被调用时均生成不同的名字。在程序执行的过程中，最多只能确保生成 TMP_MAX 个不同的名字。注意，tmpnam 函数只是用于创建一个名字，而不是创建一个文件。</p>
+<pre><code><span class="kw">int</span> setvbuf(FILE *stream, <span class="kw">char</span> *buf, <span class="kw">int</span> mode, size_t size)</code></pre>
+<p>setvbuf 函数控制流 stream 的缓冲。在执行读、写以及其它任何操作之前必须调用此函数。当 mode 的值为_IOFBF 时，将进行完全缓冲。当 mode 的值为_IOLBF 时，将对文本文件进行行缓冲，当 mode 的值为_IONBF 时，表示不设置缓冲。如果 buf 的值不是 NULL，则 setvbuf 函数将 buf 指向的区域作为流的缓冲区，否则将分配一个缓冲区。size 决定缓冲区的长度。如果 setvbuf 函数出错，则返回个一非 0 值。</p>
+<pre><code><span class="kw">void</span> setbuf(FILE *stream, <span class="kw">char</span> *buf)</code></pre>
+<p>如 果 buf 的值为 NULL ， 则关 闭流 stream 的 缓 冲； 否则 setbuf 函 数 等价 于(void)setvbuf(stream, buf, _IOFBF, BUFSIZ)。</p>    </div>
 </body>
 </html>

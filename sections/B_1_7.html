@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,16 @@
         <h1 class="section-title">B.1.7 错误处理函数</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>当发生错误或到达文件末尾时，标准库中的许多函数都会设置状态指示符。这些状态指示符可被显式地设置和测试。另外，整型表达式 errno（在&lt;errno.h&gt;中声明）可以包含一个错误编号，据此可以进一步了解最近一次出错的信息。</p>
+<pre><code><span class="kw">void</span> clearerr(FILE *stream)</code></pre>
+<p>clearerr 函数清除与流 stream 相关的文件结束符和错误指示符。</p>
+<pre><code><span class="kw">int</span> <span class="fn">feof</span>(FILE *stream)</code></pre>
+<p>如果设置了与 stream 流相关的文件结束指示符，feof 函数将返回一个非 0 值，</p>
+<pre><code><span class="kw">int</span> <span class="fn">ferror</span>(FILE *stream)</code></pre>
+<p>如果设置了与 stream 流相关的错误指示符，ferror 函数将返回一个非 0 值。</p>
+<pre><code><span class="kw">void</span> perror(<span class="kw">const</span> <span class="kw">char</span> *s)</code></pre>
+<p>perror(s)函数打印字符串 s 以及与 errno 中整型值相应的错误信息，错误信息的具体内容与具体的实现有关。该函数的功能类似于执行下列语句：</p>
+<pre><code>fprintf(stderr, <span class="str">"%s: %s\n"</span>, s, <span class="str">"error message"</span>);</code></pre>
+<p>有关函数 strerror 的信息，参见 B.3 节中的介绍。</p>    </div>
 </body>
 </html>

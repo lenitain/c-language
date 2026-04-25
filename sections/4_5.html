@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,10 @@
         <h1 class="section-title">4.5 头文件</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>下面我们来考虑把上述的计算器程序分割到若干个源文件中的情况。如果该程序的各组成部分很长，这么做还是有必要的。我们这样分割：将主函数 main 单独放在文件 main.c中；将 push 与 pop 函数以及它们使用的外部变量放在第二个文件 stack.c 中；将 getop函数放在第三个文件 getop.c 中；</p>
+<p>将 getch 与 ungetch 函数放在第四个文件 getch.c 中。</p>
+<p>之所以分割成多个文件，主要是考虑在实际的程序中，它们分别来自于单独编译的库。</p>
+<p>此外，还必须考虑定义和声明在这些文件之间的共享问题。我们尽可能把共享的部分集中在一起，这样就只需要一个副本，改进程序时也容易保证程序的正确性。我们把这些公共部分放在头文件 calc.h 中，在需要使用该头文件时通过#include 指令将它包含进来（#include 指令将在 4.11 节中介绍）。这样分割后，程序的形式如下所示：</p>
+<p>我们对下面两个因素进行了折衷：一方面是我们期望每个文件只能访问它完成任务所需的信息；另一方面是现实中维护较多的头文件比较困难。我们可以得出这样一个结论：对于某些中等规模的程序，最好只用一个头文件存放程序中各部分共享的对象。较大的程序需要使用更多的头文件，我们需要精心地组织它们。</p>    </div>
 </body>
 </html>

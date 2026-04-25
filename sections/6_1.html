@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,56 +85,41 @@
         <h1 class="section-title">6.1 结构的基本知识</h1>
     </div>
     <div class="content">
-<p>我们首先来建立一些适用于图形领域的结构。点是最基本的对象，假定用 x 与 y 坐标表</p>
-<p>示它，且 x、y 的坐标值都为整数（参见图 6-1）</p>
-<p>图 6-1</p>
-<p>我们可以采用结构存放这两个坐标，其声明如下：</p>
+<p>我们首先来建立一些适用于图形领域的结构。点是最基本的对象，假定用 x 与 y 坐标表示它，且 x、y 的坐标值都为整数（参见图 6-1）</p>
+<p>图 6-1我们可以采用结构存放这两个坐标，其声明如下：</p>
 <pre><code><span class="kw">struct</span> point {
 <span class="kw">int</span> x;
 <span class="kw">int</span> y;
 };</code></pre>
 <p>关键字 struct 引入结构声明。结构声明由包含在花括号内的一系列声明组成。关键字</p>
-<p>struct 后面的名字是可选的，称为结构标记（这里是 point）。结构标记用于为结构命名，</p>
+<pre><code><span class="kw">struct</span> 后面的名字是可选的，称为结构标记（这里是 point）。结构标记用于为结构命名，</code></pre>
 <p>在定义之后，结构标记就代表花括号内的声明，可以用它作为该声明的简写形式。</p>
-<p>结构中定义的变量称为成员。结构成员、结构标记和普通变量（即非成员）可以采用相</p>
-<p>同的名字，它们之间不会冲突，因为通过上下文分析总可以对它们进行区分。另外，不同结</p>
-<p>构中的成员可以使用相同的名字，但是，从编程风格方面来说，通常只有密切相关的对象才</p>
-<p>会使用相同的名字。</p>
-<p>struct 声明定义了一种数据类型。在标志结构成员表结束的右花括号之后可以跟一个变</p>
+<p>结构中定义的变量称为成员。结构成员、结构标记和普通变量（即非成员）可以采用相同的名字，它们之间不会冲突，因为通过上下文分析总可以对它们进行区分。另外，不同结构中的成员可以使用相同的名字，但是，从编程风格方面来说，通常只有密切相关的对象才会使用相同的名字。</p>
+<pre><code><span class="kw">struct</span> 声明定义了一种数据类型。在标志结构成员表结束的右花括号之后可以跟一个变</code></pre>
 <p>量表，这与其它基本类型的变量声明是相同的。例如：</p>
-<p>struct { ... } x, y, z;</p>
+<pre><code><span class="kw">struct</span> { ... } x, y, z;</code></pre>
 <p>从语法角度来说，这种方式的声明与声明</p>
 <pre><code><span class="kw">int</span> x, y, z;</code></pre>
-<p>具有类似的意义。这两个声明都将 x、y 与 z 声明为指定类型的变量，并且为它们分配存储空</p>
-<p>间。</p>
-<p>如果结构声明的后面不带变量表，则不需要为它分配存储空间，它仅仅描述了一个结构</p>
-<p>的模板或轮廓。但是，如果结构声明中带有标记，那么在以后定义结构实例时便可以使用该</p>
-<p>标记定义。例如，对于上面给出的结构声明 point，语句</p>
+<p>具有类似的意义。这两个声明都将 x、y 与 z 声明为指定类型的变量，并且为它们分配存储空间。</p>
+<p>如果结构声明的后面不带变量表，则不需要为它分配存储空间，它仅仅描述了一个结构的模板或轮廓。但是，如果结构声明中带有标记，那么在以后定义结构实例时便可以使用该标记定义。例如，对于上面给出的结构声明 point，语句</p>
 <pre><code><span class="kw">struct</span> point pt;</code></pre>
-<p>定义了一个 struct point 类型的变量 pt。结构的初始化可以在定义的后面使用初值表进</p>
-<p>行。初值表中同每个成员对应的初值必须是常量表达式，例如：</p>
+<p>定义了一个 struct point 类型的变量 pt。结构的初始化可以在定义的后面使用初值表进行。初值表中同每个成员对应的初值必须是常量表达式，例如：</p>
 <pre><code><span class="kw">struct</span> point maxpt = {320, 200};</code></pre>
 <p>自动结构也可以通过赋值初始化，还可以通过调用返回相应类型结构的函数进行初始化。</p>
 <p>在表达式中，可以通过下列形式引用某个特定结构中的成员：</p>
-<p>结构名.成员</p>
-<p>其中的结构成员运算符“.”将结构名与成员名连接起来。例如，可用下列语句打印点 pt 的</p>
-<p>坐标：</p>
+<p>结构名.成员其中的结构成员运算符“.”将结构名与成员名连接起来。例如，可用下列语句打印点 pt 的坐标：</p>
 <pre><code><span class="fn">printf</span>(<span class="str">"%d,%d"</span>, pt.x, pt.y);</code></pre>
 <p>或者通过下列代码计算原点(0, 0)到点 pt 的距离：</p>
 <pre><code><span class="kw">double</span> dist, sqrt(<span class="kw">double</span>);
 dist = sqrt((<span class="kw">double</span>)pt.x * pt.x + (<span class="kw">double</span>)pt.y * pt.y);</code></pre>
-<p>结构可以嵌套。我们可以用对角线上的两个点来定义矩形（参见图 6-2），相应的结构定</p>
-<p>义如下：</p>
+<p>结构可以嵌套。我们可以用对角线上的两个点来定义矩形（参见图 6-2），相应的结构定义如下：</p>
 <p>图 6-2</p>
-<pre><code><span class="kw">struct</span> rect {
+<pre><code><span class="kw">struct</span> rect {
 <span class="kw">struct</span> point pt1;
 <span class="kw">struct</span> point pt2;
 };</code></pre>
 <p>结构 rect 包含两个 point 类型的成员。如果按照下列方式声明 screen 变量：</p>
 <pre><code><span class="kw">struct</span> rect screen;</code></pre>
-<p>则可以用语句</p>
-<p>screen.pt1.x</p>
-<p>引用 screen 的成员 pt1 的 x 坐标。</p>
-    </div>
+<p>则可以用语句screen.pt1.x引用 screen 的成员 pt1 的 x 坐标。</p>    </div>
 </body>
 </html>

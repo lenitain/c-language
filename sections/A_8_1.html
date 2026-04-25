@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,18 @@
         <h1 class="section-title">A.8.1 存储类说明符</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>存储类说明符如下所示：</p>
+<p>存储类说明符：</p>
+<p>autoregisterstaticexterntypedef有关存储类的意义，我们已在 A.4 节中讨论过。</p>
+<p>说明符 auto 和 register 将声明的对象说明为自动存储类对象，这些对象仅可用在函数中。这种声明也具有定义的作用，并将预留存储空间。带有 register 说明符的声明等价于带有 auto 说明符的声明，所不同的是，前者暗示了声明的对象将被频繁地访问。只有很少的对象被真正存放在寄存器中，并且只有特定类型才可以。该限制同具体的实现有关。但是，如果一个对象被声明为 register，则将不能对它应用一元运算符&amp;（显式应用或隐式应用都不允许）。</p>
+<p>说明：对声明为 register 但实际按照 auto 类型处理的对象的地址进行计算是非法的。</p>
+<p>这是一个新增加的规则。</p>
+<p>说明符 static 将声明的对象说明为静态存储类。这种对象可以用在函数内部或函数外部。在函数内部，该说明符将引起存储空间的分配，具有定义的作用。有关该说明符在函数外部的作用参见 A.11.2 节。</p>
+<p>函数内部的 extern 声明表明，被声明的对象的存储空间定义在其它地方。有关该说明符在函数外部的作用参见 A.11.2 节。</p>
+<pre><code><span class="kw">typedef</span> 说明符并不会为对象预留存储空间。之所以将它称为存储类说明符，是为了语</code></pre>
+<p>法描述上的方便。我们将在 A.8.9 节中讨论它。</p>
+<p>一个声明中最多只能有一个存储类说明符。如果没有指定存储类说明符，则将按照下列规则进行：在函数内部声明的对象被认为是 auto 类型；在函数内部声明的函数被认为是</p>
+<pre><code><span class="kw">extern</span> 类型；在函数外部声明的对象与函数将被认为是 <span class="kw">static</span> 类型，且具有外部连接。详</code></pre>
+<p>细信息参见 A.10 节和 A.11 节。</p>    </div>
 </body>
 </html>

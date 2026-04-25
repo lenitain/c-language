@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,28 @@
         <h1 class="section-title">A.8.9 typedef</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>存储类说明符为 typedef 的声明不用于声明对象，而是定义为类型命名的标识符。这些标识符称为类型定义名。</p>
+<p>类型定义名：</p>
+<p>标识符</p>
+<pre><code><span class="kw">typedef</span> 声明按照普通的声明方式将个类型指派给其声明符中的每个名字（参见 A.8.6 节）。</code></pre>
+<p>此后，类型定义名在语法上就等价于相关类型的类型说明符关键字。</p>
+<p>例如，在定义</p>
+<pre><code><span class="kw">typedef</span> <span class="kw">long</span> Blockno, *Blockptr;
+<span class="kw">typedef</span> <span class="kw">struct</span> { <span class="kw">double</span> r, theta; } Complex;</code></pre>
+<p>之后，下述形式：</p>
+<pre><code>Blockno b;
+<span class="kw">extern</span> Blockptr bp;
+Complex z, *zp;</code></pre>
+<p>都是合法的声明。b 的类型为 long，bp 的类型为“指向 long 类型的指针”。z 的类型为指定的结构类型，zp 的类型为指向该结构的指针。</p>
+<pre><code><span class="kw">typedef</span> 类型定义并没有引入新的类型，它只是定义了数据类型的同义词，这样，就可</code></pre>
+<p>以通过另一种方式进行类型声明。在本侧中，b 与其它任何 long 类型对象的类型相同。</p>
+<p>类型定义名可在内层作用域中重新声明，但必须给出一个非空的类型说明符集合。例如，下列声明：</p>
+<pre><code><span class="kw">extern</span> Blockno;</code></pre>
+<p>并没有重新声明 Blockno，但下列声明：</p>
+<pre><code><span class="kw">extern</span> <span class="kw">int</span> Blockno;</code></pre>
+<p>则重新声明了 Blockno。</p>
+<p>A.8.10 类型等价如果两个类型说明符表包含相同的类型说明符集合（需要考虑类型说明符之间的蕴涵关系，例如，单独的 long 蕴含了 long int）</p>
+<p>，则这两个类型说明符表是等价的。具有不同标记的结构、不同标记的联合和不同标记的枚举是不等价的，无标记的联合、无标记的结构或无标记的枚举指定的类型也是不等价的。</p>
+<p>在展开其中的任何 typedef 类型并删除所有函数形式参数标识符后，如果两个类型的抽象声明符（参见 A.8.8 节）相同，且它们的类型说明符表等价，则这两个类型是相同的。数组长度和函数形式参数类型是其中很重要的因素。</p>    </div>
 </body>
 </html>

@@ -3,46 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7.6 错误处理——stderr 和 exit - C语言教程</title>
+    <title>7.6 7.7. - C语言教程</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,97 +73,55 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
     <div class="section-header">
         <div class="section-number">第 7 章</div>
-        <h1 class="section-title">7.6 错误处理——stderr 和 exit</h1>
+        <h1 class="section-title">7.6 7.7.</h1>
     </div>
     <div class="content">
-<p>cat 程序的错误处理功能并不完善。问题在于，如果因为某种原因而造成其中的一个文</p>
-<p>件无法访问，相应的诊断信息要在该连接的输出的末尾才能打印出来。当输出到屏幕时，这</p>
-<p>种处理方法尚可以接受，但如果输出到一个文件或通过管道输出到另一个程序时，就无法接</p>
-<p>受了。</p>
-<p>为了更好地处理这种情况，</p>
-<p>另一个输出流以与 stdin 和 stdout 相同的方式分派给程序，</p>
-<p>即 stderr。即使对标准输出进行了重定向，写到 stderr 中的输出通常也会显示在屏幕上。</p>
+<p>cat 程序的错误处理功能并不完善。问题在于，如果因为某种原因而造成其中的一个文件无法访问，相应的诊断信息要在该连接的输出的末尾才能打印出来。当输出到屏幕时，这种处理方法尚可以接受，但如果输出到一个文件或通过管道输出到另一个程序时，就无法接受了。</p>
+<p>为了更好地处理这种情况，另一个输出流以与 stdin 和 stdout 相同的方式分派给程序，即 stderr。即使对标准输出进行了重定向，写到 stderr 中的输出通常也会显示在屏幕上。</p>
 <p>下面我们改写 cat 程序，将其出错信息写到标准错误文件上。</p>
 <pre><code>#include &lt;stdio.h&gt;
 <span class="cm">/* cat: concatenate files, version 2 */</span>
 <span class="fn">main</span>(<span class="kw">int</span> argc, <span class="kw">char</span> *argv[])
-{</code></pre>
-<p>FILE *fp;</p>
-<pre><code><span class="kw">void</span> filecopy(FILE *, FILE *);</code></pre>
-<p>char *prog = argv[0]; /* program name for errors */</p>
-<pre><code><span class="kw">if</span> (argc == 1 ) <span class="cm">/* no args; copy standard input */</span>
-filecopy(stdin, stdout);</code></pre>
-<p>else</p>
-<pre><code><span class="kw">while</span> (--argc &gt; 0)
+{
+FILE *fp;
+<span class="kw">void</span> filecopy(FILE *, FILE *);
+<span class="kw">char</span> *prog = argv[0]; <span class="cm">/* program name <span class="kw">for</span> errors */</span>
+<span class="kw">if</span> (argc == 1 ) <span class="cm">/* no args; copy standard input */</span>
+filecopy(stdin, stdout);
+<span class="kw">else</span>
+<span class="kw">while</span> (--argc &gt; 0)
 <span class="kw">if</span> ((fp = <span class="fn">fopen</span>(*++argv, <span class="str">"r"</span>)) == NULL) {
-fprintf(stderr, <span class="str">"%s: can't open %s\n"</span>,</code></pre>
-<p>prog, *argv);</p>
-<p>exit(1);</p>
-<pre><code>} <span class="kw">else</span> {
+fprintf(stderr, <span class="str">"%s: can't open %s\n"</span>,
+prog, *argv);
+<span class="fn">exit</span>(1);
+} <span class="kw">else</span> {
 filecopy(fp, stdout);
 <span class="fn">fclose</span>(fp);
 }
 <span class="kw">if</span> (<span class="fn">ferror</span>(stdout)) {
-fprintf(stderr, <span class="str">"%s: error writing stdout\n"</span>, prog);</code></pre>
-<p>exit(2);</p>
-<pre><code>}</code></pre>
-<p>exit(0);</p>
-<pre><code>}</code></pre>
-<p>该程序通过两种方式发出出错信息。首先，将 fprintf 函数产生的诊断信息输出到</p>
-<p>stderr 上，因此诊断信息将会显示在屏幕上，而不是仅仅输出到管道或输出文件中。诊断信</p>
-<p>息中包含 argv[0]中的程序名，因此，当该程序和其它程序一起运行时，可以识别错误的来</p>
-<p>源。</p>
-<p>其次，程序使用了标准库函数 exit，当该函数被调用时，它将终止调用程序的执行。任</p>
-<p>何调用该程序的进程都可以获取 exit 的参数值，因此，可通过另一个将该程序作为子进程的</p>
-<p>程序来测试该程序的执行是否成功。按照惯例，返回值 0 表示一切正常，而非 0 返回值通常</p>
-<p>表示出现了异常情况。exit 为每个已打开的输出文件调用 fclose 函数，以将缓冲区中的所</p>
-<p>有输出写到相应的文件中。</p>
-<p>在主程序 main 中，语句 return expr 等价于 exit(expr)。但是，使用函数 exit</p>
-<p>有一个优点，它可以从其它函数中调用，并且可以用类似于第 5 章中描述的模式查找程序查</p>
-<p>找这些调用。</p>
+fprintf(stderr, <span class="str">"%s: error writing stdout\n"</span>, prog);
+<span class="fn">exit</span>(2);
+}
+<span class="fn">exit</span>(0);
+}</code></pre>
+<p>该程序通过两种方式发出出错信息。首先，将 fprintf 函数产生的诊断信息输出到stderr 上，因此诊断信息将会显示在屏幕上，而不是仅仅输出到管道或输出文件中。诊断信息中包含 argv[0]中的程序名，因此，当该程序和其它程序一起运行时，可以识别错误的来源。</p>
+<p>其次，程序使用了标准库函数 exit，当该函数被调用时，它将终止调用程序的执行。任何调用该程序的进程都可以获取 exit 的参数值，因此，可通过另一个将该程序作为子进程的程序来测试该程序的执行是否成功。按照惯例，返回值 0 表示一切正常，而非 0 返回值通常表示出现了异常情况。exit 为每个已打开的输出文件调用 fclose 函数，以将缓冲区中的所有输出写到相应的文件中。</p>
+<p>在主程序 main 中，语句 return expr 等价于 exit(expr)。但是，使用函数 exit有一个优点，它可以从其它函数中调用，并且可以用类似于第 5 章中描述的模式查找程序查找这些调用。</p>
 <p>如果流 fp 中出现错误，则函数 ferror 返回一个非 0 值。</p>
 <pre><code><span class="kw">int</span> <span class="fn">ferror</span>(FILE *fp)</code></pre>
 <p>尽管输出错误很少出现，但还是存在的（例如，当磁盘满时）</p>
-<p>，因此，成熟的产品程序应该检</p>
-<p>查这种类型的错误。</p>
-<p>函数 feof(FILE *)与 ferror 类似。如果指定的文件到达文件结尾，它将返回一个非</p>
-<p>0 值。</p>
+<p>，因此，成熟的产品程序应该检查这种类型的错误。</p>
+<p>函数 feof(FILE *)与 ferror 类似。如果指定的文件到达文件结尾，它将返回一个非0 值。</p>
 <pre><code><span class="kw">int</span> <span class="fn">feof</span>(FILE *fp)</code></pre>
-<p>在上面的小程序中，我们的目的是为了说明问题，因此并不太关心程序的退出状态，但</p>
-<p>对于任何重要的程序来说，都应该让程序返回有意义且有用的值。</p>
-    </div>
+<p>在上面的小程序中，我们的目的是为了说明问题，因此并不太关心程序的退出状态，但对于任何重要的程序来说，都应该让程序返回有意义且有用的值。</p>    </div>
 </body>
 </html>

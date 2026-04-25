@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,42 @@
         <h1 class="section-title">A.8.7 初始化</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>声明对象时，对象的初始化声明符可为其指定一个初始值。初值紧跟在运算符=之后，它可以是一个表达式，也可以是嵌套在花括号中的初值序列。初值序列可以以逗号结束，这样可以使格式简洁美观。</p>
+<p>初值：</p>
+<p>赋值表达式{初值表}{初值表,}初值表：</p>
+<p>初值初值表, 初值对静态对象或数组而言，初值中的所有表达式必须是 A.7.19 节中描述的常量表达式。</p>
+<p>如果初值是用花括号括起来的初值表，则对 auto 或 register 类型的对象或数组来说，初值中的表达式也同样必须是常量表达式。但是，如果自动对象的初值是一个单个的表达式，则它不必是常量表达式，但必须符合对象赋值的类型要求。</p>
+<p>说明：第 1 版不支持自动结构、联合或数组的初始化。而 ANSI 标准是允许的，但只能通过常量结构进行初始化，除非初值可以通过简单表达式表示出来。</p>
+<p>未显式初始化的静态对象将被隐式初始化，其效果等同于它（或它的成员）被赋以常量 0。</p>
+<p>未显式初始化的自动对象的初始值没有定义。</p>
+<p>指针或算术类型对象的初值是一个单个的表达式，也可能括在花括号中。该表达式将赋值给对象。</p>
+<p>结构的初值可以是类型相同的表达式，也可以是括在花括号中的按其成员次序排列的初值表。无名的位字段成员将被忽略，因此不被初始化。如果表中初值的数目比结构的成员数少，则后面余下的结构成员将被初始化为 0。初值的数目不能比成员数多。</p>
+<p>数组的初值是一个括在花括号中的、由数组成员的初值构成的表。如果数组大小未知，则初值的数目将决定数组的大小，从而使数组类型成为完整类型。若数组大小固定，则初值的数目不能超过数组成员的数目。如果初值的数目比数组成员的数目少，则尾部余下的数组成员将被初始化为 0。</p>
+<p>这里有一个特例：字符数组可用字符串字面值初始化。字符串中的各个字符依次初始化数组中的相应成员。类似地，宽字符字面值（参见 A.2.6 节）可以初始化 wchar_t 类型的数组。若数组大小未知，则数组大小将由字符串中字符的数目（包括尾部的空字符）决定。若数组大小固定，则字符串中的字符数（不计尾部的空字符）不能超过数组的大小。</p>
+<p>联合的初值可以是类型相同的单个表达式，也可以是括在花括号中的联合的第一个成员的初值。</p>
+<p>说明：第 1 版不允许对联合进行和始化。</p>
+<p>“第一个成员”规则并不很完美，但在没有新语法的情况下很难对它进行一般化。除了至少允许以一种简单方式对联合进行显式初始化外，ANSI 规则还给出了非显式初始化的静态联合的精确语义。</p>
+<p>聚集是一个结构或数组。如果一个聚集包含聚集类型的成员，则初始化时将递归使用初始化规则。在下列情况的初始化中可以省略括号：如果聚集的成员也足一个聚集，且该成员的初始化符以左花括号开头，则后续部分中用逗号隔开的初值表将初始化子聚集的成员。初值的数目不允许超过成员的数目。但是，如果子聚集的初值不以左花括号开头，则只从初值表中取出足够数目的元素作为于聚集的成员，其它剩余的成员将用来初始化该子聚集所在的聚集的下一个成员。</p>
+<p>例如：</p>
+<pre><code><span class="kw">int</span> x[] = { 1, 3, 5 };</code></pre>
+<p>将 x 声明并初始化为一个具有 3 个成员的一维数组，这是因为，数组未指定大小且有 3 个初值。下面的例子：</p>
+<pre><code><span class="kw">float</span> y[4][3] = {
+{ 1, 3, 5 },
+{ 2, 4, 6 },
+{ 3, 5, 7 },
+};</code></pre>
+<p>是一个完全用花括号分隔的初始化：1、3 和 5 这 3 个数初始化数组 y[0]的第一行，即 y[0][0]、y[0][1]和 y[0][2]。类似地，另两行将初始化 y[1]和 y[2]。因为初值的数目不够，所以y[3]中的元素将被初始化为 0，完全相同的效果还可以通过下列声明获得：</p>
+<pre><code><span class="kw">float</span> y[4][3] = {
+1, 3, 5, 2, 4, 6, 3, 5, 7
+};</code></pre>
+<p>y 的初值以左花括号开始，但 y[0]的初值则没有以左花括号开始，因此 y[0]的初始化将使用表中的 3 个元素。同理，y[1]将使用后续的 3 个元素进行初始化，y[2]依此类推。另外，下列声明：</p>
+<pre><code><span class="kw">float</span> y[4][3] = {
+{ 1 }, { 2 }, { 3 }, { 4 }
+};</code></pre>
+<p>将初始化 y 的第一列（将 y 看成为一个二维数组），其余的元素将默认初始化为 0。</p>
+<p>最后</p>
+<pre><code><span class="kw">char</span> msg[] = <span class="str">"Syntax error on line %s\n"</span>;</code></pre>
+<p>声明了一个字符数组，并用一个字符串字面值初始化该字符数组的元素。该数组的大小包括尾部的空字符。</p>
+<p>类型名</p>    </div>
 </body>
 </html>

@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,10 +85,8 @@
         <h1 class="section-title">6.4 指向结构的指针</h1>
     </div>
     <div class="content">
-<p>为了进一步说明指向结构的指针和结构数组，我们重新编写关键字统计程序，这次采用</p>
-<p>指针，而不使用数组下标。</p>
-<p>keytab 的外部声明不需要修改，但 main 和 binsearch 函数必须修改。修改后的程序</p>
-<p>如下：</p>
+<p>为了进一步说明指向结构的指针和结构数组，我们重新编写关键字统计程序，这次采用指针，而不使用数组下标。</p>
+<p>keytab 的外部声明不需要修改，但 main 和 binsearch 函数必须修改。修改后的程序如下：</p>
 <pre><code>#include &lt;stdio.h&gt;
 #include &lt;ctype.h&gt;
 #include &lt;string.h&gt;
@@ -127,9 +100,9 @@
 <span class="kw">struct</span> key *p;
 <span class="kw">while</span> (getword(word, MAXWORD) != EOF)
 <span class="kw">if</span> (isalpha(word[0]))
-<span class="kw">if</span> ((p=binsearch(word, keytab, NKEYS)) != NULL)</code></pre>
-<p>p-&gt;count++;</p>
-<pre><code><span class="kw">for</span> (p = keytab; p &lt; keytab + NKEYS; p++)
+<span class="kw">if</span> ((p=binsearch(word, keytab, NKEYS)) != NULL)
+p-&gt;count++;
+<span class="kw">for</span> (p = keytab; p &lt; keytab + NKEYS; p++)
 <span class="kw">if</span> (p-&gt;count &gt; 0)
 <span class="fn">printf</span>(<span class="str">"%4d %s\n"</span>, p-&gt;count, p-&gt;word);
 <span class="kw">return</span> 0;
@@ -144,55 +117,40 @@
 <span class="kw">while</span> (low &lt; high) {
 mid = low + (high-low) / 2;
 <span class="kw">if</span> ((cond = <span class="fn">strcmp</span>(word, mid-&gt;word)) &lt; 0)
-high = mid;</code></pre>
-<p>else if (cond &gt; 0)</p>
-<pre><code>low = mid + 1;</code></pre>
-<p>else</p>
-<pre><code><span class="kw">return</span> mid;
+high = mid;
+<span class="kw">else</span> <span class="kw">if</span> (cond &gt; 0)
+low = mid + 1;
+<span class="kw">else</span>
+<span class="kw">return</span> mid;
 }
 <span class="kw">return</span> NULL;
 }</code></pre>
-<p>这里需要注意几点。首先，binsearch 函数在声明中必须表明：它返回的值类型是一个</p>
-<p>指向 struct key 类型的指针，而非整型，这在函数原型及 binsearch 函数中都要声明。</p>
-<p>如果 binsearch 找到与输入单词匹配的数组元素，它将返回一个指向该元素的指针，否则返</p>
-<p>回 NULL。</p>
+<p>这里需要注意几点。首先，binsearch 函数在声明中必须表明：它返回的值类型是一个指向 struct key 类型的指针，而非整型，这在函数原型及 binsearch 函数中都要声明。</p>
+<p>如果 binsearch 找到与输入单词匹配的数组元素，它将返回一个指向该元素的指针，否则返回 NULL。</p>
 <p>其次，keytab 的元素在这里是通过指针访问的。这就需要对 binsearch 做较大的修改。</p>
-<p>在这里，low 和 high 的初值分别是指向表头元素的指针和指向表尾元素后面的一个元素</p>
-<p>的指针。</p>
+<p>在这里，low 和 high 的初值分别是指向表头元素的指针和指向表尾元素后面的一个元素的指针。</p>
 <p>这样，我们就无法简单地通过下列表达式计算中间元素的位置：</p>
 <pre><code>mid = (low+high) / 2
 <span class="cm">/* WRONG */</span></code></pre>
-<p>这是因为，两个指针之间的加法运算是非法的。但是，指针的减法运算却是合法的，high-low</p>
-<p>的值就是数组元素的个数，因此，可以用下列表达式：</p>
+<p>这是因为，两个指针之间的加法运算是非法的。但是，指针的减法运算却是合法的，high-low的值就是数组元素的个数，因此，可以用下列表达式：</p>
 <pre><code>mid = low + (high-low) / 2</code></pre>
 <p>将 mid 设置为指向位于 high 和 low 之间的中间元素的指针。</p>
-<p>对算法的最重要修改在于，要确保不会生成非法的指针，或者是试图访问数组范围之外</p>
-<p>的元素。问题在于，&amp;tab[-1]和&amp;tab[n]都超出了数组 tab 的范围。前者是绝对非法的，</p>
-<p>而对后者的间接引用也是非法的。但是，C 语言的定义保证数组末尾之后的第一个元素（即</p>
-<p>&amp;tab[n]）的指针算术运算可以正确执行。</p>
+<p>对算法的最重要修改在于，要确保不会生成非法的指针，或者是试图访问数组范围之外的元素。问题在于，&amp;tab[-1]和&amp;tab[n]都超出了数组 tab 的范围。前者是绝对非法的，而对后者的间接引用也是非法的。但是，C 语言的定义保证数组末尾之后的第一个元素（即&amp;tab[n]）的指针算术运算可以正确执行。</p>
 <p>主程序 main 中有下列语句：</p>
 <pre><code><span class="kw">for</span> (p = keytab; p &lt; keytab + NKEYS; p++)</code></pre>
-<p>如果 p 是指向结构的指针，则对 p 的算术运算需要考虑结构的长度，所以，表达式 p++执行</p>
-<p>时，将在 p 的基础上加上一个正确的值，以确保得到结构数组的下一个元素，这样，上述测</p>
-<p>试条件便可以保证循环正确终止，</p>
-<p>但是，千万不要认为结构的长度等于各成员长度的和。因为不同的对象有不同的对齐要</p>
-<p>求，所以，结构中可能会出现未命名的“空穴“</p>
-<p>（hole）。例如，假设 char 类型占用一个字节，</p>
-<p>int 类型占用 4 个字节，则下列结构：</p>
-<p>struct {</p>
-<pre><code><span class="kw">char</span> c;
+<p>如果 p 是指向结构的指针，则对 p 的算术运算需要考虑结构的长度，所以，表达式 p++执行时，将在 p 的基础上加上一个正确的值，以确保得到结构数组的下一个元素，这样，上述测试条件便可以保证循环正确终止，但是，千万不要认为结构的长度等于各成员长度的和。因为不同的对象有不同的对齐要求，所以，结构中可能会出现未命名的“空穴“（hole）。例如，假设 char 类型占用一个字节，</p>
+<pre><code><span class="kw">int</span> 类型占用 4 个字节，则下列结构：
+<span class="kw">struct</span> {
+<span class="kw">char</span> c;
 <span class="kw">int</span> i;
 };</code></pre>
-<p>可能需要 8 个字节的存储空间，而不是 5 个字节。使用 sizeof 运算符可以返回正确的对象</p>
-<p>长度。</p>
+<p>可能需要 8 个字节的存储空间，而不是 5 个字节。使用 sizeof 运算符可以返回正确的对象长度。</p>
 <p>最后，说明一点程序的格式问题：当函数的返回值类型比较复杂时（如结构指针）</p>
 <p>，例如</p>
 <pre><code><span class="kw">struct</span> key *binsearch(<span class="kw">char</span> *word, <span class="kw">struct</span> key *tab, <span class="kw">int</span> n)</code></pre>
-<p>很难看出函数名，也不太容易使用文本编辑器找到函数名。我们可以采用另一种格式书写上</p>
-<p>述语句：</p>
+<p>很难看出函数名，也不太容易使用文本编辑器找到函数名。我们可以采用另一种格式书写上述语句：</p>
 <pre><code><span class="kw">struct</span> key *
 binsearch(<span class="kw">char</span> *word, <span class="kw">struct</span> key *tab, <span class="kw">int</span> n)</code></pre>
-<p>具体采用哪种写法属于个人的习惯问题，可以选择自己喜欢的方式并始终保持自己的风格。</p>
-    </div>
+<p>具体采用哪种写法属于个人的习惯问题，可以选择自己喜欢的方式并始终保持自己的风格。</p>    </div>
 </body>
 </html>

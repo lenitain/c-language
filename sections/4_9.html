@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,52 +85,36 @@
         <h1 class="section-title">4.9 初始化</h1>
     </div>
     <div class="content">
-<p>前面我们多次提到过初始化的概念，不过始终没有详细讨论。本节将对前面讨论的各种</p>
-<p>存储类的初始化规则做一个总结。</p>
-<p>在不进行显式初始化的情况下，外部变量和静态变量都将被初始化为 0，而自动变量和寄</p>
-<p>存器变量的初值则没有定义（即初值为无用的信息）</p>
+<p>前面我们多次提到过初始化的概念，不过始终没有详细讨论。本节将对前面讨论的各种存储类的初始化规则做一个总结。</p>
+<p>在不进行显式初始化的情况下，外部变量和静态变量都将被初始化为 0，而自动变量和寄存器变量的初值则没有定义（即初值为无用的信息）</p>
 <p>。</p>
 <p>定义标量变量时，可以在变量名后紧跟一个等号和一个表达式来初始化变量：</p>
 <pre><code><span class="kw">int</span> x = 1;
 <span class="kw">char</span> squota = '\'';
 <span class="kw">long</span> day = 1000L * 60L * 60L * 24L; <span class="cm">/* milliseconds/day */</span></code></pre>
-<p>对于外部变量与静态变量来说，初始化表达式必须是常量表达式，且只初始化一次（从概念</p>
-<p>上讲是在程序开始执行前进行初始化）</p>
-<p>。对于自动变量与寄存器变量，则在每次进入函数或程</p>
-<p>序块时都将被初始化。</p>
-<p>对于自动变量与寄存器变量来说，初始化表达式可以不是常量表达式：表达式中可以包</p>
-<p>含任意在此表达式之前已经定义的值，包括函数调用，我们在 3.3 节中介绍的折半查找程序的</p>
-<p>初始化可以采用下列形式：</p>
+<p>对于外部变量与静态变量来说，初始化表达式必须是常量表达式，且只初始化一次（从概念上讲是在程序开始执行前进行初始化）</p>
+<p>。对于自动变量与寄存器变量，则在每次进入函数或程序块时都将被初始化。</p>
+<p>对于自动变量与寄存器变量来说，初始化表达式可以不是常量表达式：表达式中可以包含任意在此表达式之前已经定义的值，包括函数调用，我们在 3.3 节中介绍的折半查找程序的初始化可以采用下列形式：</p>
 <pre><code><span class="kw">int</span> binsearch(<span class="kw">int</span> x, <span class="kw">int</span> v[], <span class="kw">int</span> n)
 {
 <span class="kw">int</span> low = 0;
 <span class="kw">int</span> high = n - 1;
-<span class="kw">int</span> mid;</code></pre>
-<p>...</p>
-<pre><code>}</code></pre>
+<span class="kw">int</span> mid;
+...
+}</code></pre>
 <p>代替原来的形式：</p>
 <pre><code><span class="kw">int</span> low, high, mid;
 low = 0;
 high = n - 1;</code></pre>
-<p>实际上，自动变量的初始化等效于简写的赋值语句。究竟采用哪一种形式，还得看个人的习</p>
-<p>惯。考虑到变量声明中的初始化表达式容易被人忽略，且距使用的位置较远，我们一般使用</p>
-<p>显式的赋值语句。</p>
-<p>数组的初始化可以在声明的后面紧跟一个初始化表达式列表，初始化表达式列表用花括</p>
-<p>号括起来，各初始化表达式之间通过逗号分隔。例如，如果要用一年中各月的天数初始化数</p>
-<p>组 days，其变量的定义如下：</p>
+<p>实际上，自动变量的初始化等效于简写的赋值语句。究竟采用哪一种形式，还得看个人的习惯。考虑到变量声明中的初始化表达式容易被人忽略，且距使用的位置较远，我们一般使用显式的赋值语句。</p>
+<p>数组的初始化可以在声明的后面紧跟一个初始化表达式列表，初始化表达式列表用花括号括起来，各初始化表达式之间通过逗号分隔。例如，如果要用一年中各月的天数初始化数组 days，其变量的定义如下：</p>
 <pre><code><span class="kw">int</span> days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};</code></pre>
-<p>当省略数组的长度时，编译器将把花括号中初始化表达式的个数作为数组的长度，在本例中</p>
-<p>数组的长度为 12。</p>
-<p>如果初始化表达式的个数比数组元索数少，则对外部变量、静态变量和自动变量来说，</p>
-<p>没有初始化表达式的元素将被初始化为 0，如果初始化表达式的个数比数组元素数多，则是错</p>
-<p>误的。不能一次将一个初始化表达式指定给多个数组元素，也不能跳过前面的数组元素而直</p>
-<p>接初始化后面的数组元素。</p>
-<p>字符数组的初始化比较特殊：可以用一个字符串来代替用花括号括起来并用逗号分隔的</p>
-<p>初始化表达式序列。例如：</p>
-<pre><code><span class="kw">char</span> pattern[] = <span class="str">"ould "</span>;</code></pre>
+<p>当省略数组的长度时，编译器将把花括号中初始化表达式的个数作为数组的长度，在本例中数组的长度为 12。</p>
+<p>如果初始化表达式的个数比数组元索数少，则对外部变量、静态变量和自动变量来说，没有初始化表达式的元素将被初始化为 0，如果初始化表达式的个数比数组元素数多，则是错误的。不能一次将一个初始化表达式指定给多个数组元素，也不能跳过前面的数组元素而直接初始化后面的数组元素。</p>
+<p>字符数组的初始化比较特殊：可以用一个字符串来代替用花括号括起来并用逗号分隔的初始化表达式序列。例如：</p>
+<pre><code><span class="kw">char</span> pattern[] = <span class="str">"ould "</span>;</code></pre>
 <p>它同下面的声明是等价的：</p>
 <pre><code><span class="kw">char</span> pattern[] = { 'o', 'u', 'l', 'd'};</code></pre>
-<p>这种情况下，数组的长度是 5（4 个字符加上一个字符串结束符'\0'）。</p>
-    </div>
+<p>这种情况下，数组的长度是 5（4 个字符加上一个字符串结束符'\0'）。</p>    </div>
 </body>
 </html>

@@ -1,103 +1,462 @@
 #!/usr/bin/env python3
+"""Generate HTML section files from c_tutorial.txt.
+
+Parses C Programming Language textbook into per-section HTML files
+with syntax-highlighted code blocks and merged paragraphs.
+"""
 import re
+import os
+
+OUTPUT_DIR = '/home/pilot/.cloned/d1ee2/sections'
+INPUT_FILE = '/home/pilot/.cloned/d1ee2/c_tutorial.txt'
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+def is_title_like(text):
+    """Check if text looks like a section title (short, no sentence punctuation)."""
+    if len(text) > 25:
+        return False
+    if re.search(r'[，。、；：？！？,]', text):
+        return False
+    # Reject lines with operators or programming symbols
+    if re.search(r'&&|\|\||->|==|!=|<=|>=|\+=|-=|\*=|/=', text):
+        return False
+    # Title has Chinese chars and no digits in the first 3 chars
+    if re.search(r'[\u4e00-\u9fff]', text):
+        if re.match(r'^.{0,3}\d', text):
+            return False
+        return True
+    # Appendix titles might be English or mixed
+    return bool(text.strip()) and not re.match(r'^\d', text)
+
+# ---------------------------------------------------------------------------
+# Section Parsing
+# ---------------------------------------------------------------------------
+
+def build_section_data(content):
+    """Extract valid section numbers and titles from the TOC area."""
+    content = content.replace('\f', '')
+    valid = set()
+    titles = {}
+
+    lines = content.split('\n')
+    total = len(lines)
+
+    num_pat = re.compile(r'^(\d+(?:\.\d+)*)\.?\s*$')
+    app_pat = re.compile(r'^([AB])\.(\d+(?:\.\d+)*)\s*$')
+
+    i = 0
+    while i < total:
+        line = lines[i]
+        m = num_pat.match(line)
+        is_app = False
+        if m:
+            section_num = m.group(1)
+        else:
+            m = app_pat.match(line)
+            if m:
+                section_num = f'{m.group(1)}.{m.group(2)}'
+                is_app = True
+            else:
+                i += 1
+                continue
+
+        parts = section_num.split('.')
+        if len(parts) < 2 or len(parts) > 3:
+            i += 1
+            continue
+
+        char_pos = sum(len(l) + 1 for l in lines[:i])
+        if char_pos >= content.find('第1章 导言'):
+            break
+
+        valid.add(section_num)
+
+        # Extract title: next non-blank line
+        title = ''
+        for j in range(i + 1, min(i + 4, total)):
+            if lines[j].strip():
+                title = lines[j].strip()
+                break
+
+        title = re.sub(r'\s*\.{5,}\s*\d*\s*$', '', title)
+        if title:
+            titles[section_num] = title
+
+        i += 1
+
+    return valid, titles
+
 
 def parse_tutorial(input_file):
     with open(input_file, 'r', encoding='utf-8') as f:
         content = f.read()
 
+    content = content.replace('\f', '')
     content = re.sub(r'\n\d+\n---\n', '\n', content)
+    valid_sections, toc_titles = build_section_data(content)
 
-    sections = []
-    section_pattern = re.compile(r'^(\d+(?:\.\d+)*)\.\s*(.+?)\s*$', re.MULTILINE)
-    matches = list(section_pattern.finditer(content))
+    content_start = content.find('第1章 导言')
+    if content_start < 0:
+        content_start = 0
 
-    for i, match in enumerate(matches):
-        section_num = match.group(1)
-        section_title = match.group(2).strip()
-        start_pos = match.end()
-        end_pos = matches[i+1].start() if i+1 < len(matches) else len(content)
-        section_content = content[start_pos:end_pos].strip()
+    lines = content.split('\n')
+    total_lines = len(lines)
 
-        section_title = re.sub(r'\s*\.\.{5,}\s*\d*\s*$', '', section_title)
+    num_pat = re.compile(r'^(\d+(?:\.\d+)*)\.?\s*$')
+    num_same_pat = re.compile(r'^(\d+(?:\.\d+)*)\.\s+(.+)$')
+    app_pat = re.compile(r'^([AB])\.(\d+(?:\.\d+)*)\s*$')
+
+    matched_indices = []
+    # For same-line titles, store (line_index, title)
+    matched_same_line = {}  # section_num -> (line_index, title)
+
+    for i, line in enumerate(lines):
+        char_pos = sum(len(l) + 1 for l in lines[:i])
+        if char_pos < content_start:
+            continue
+
+        # Try same-line format first
+        sm = num_same_pat.match(line)
+        if sm:
+            section_num = sm.group(1)
+            candidate_title = sm.group(2).strip()
+            candidate_title = re.sub(r'\s*\.{5,}\s*\d*\s*$', '', candidate_title)
+            if section_num in valid_sections:
+                parts = section_num.split('.')
+                if 2 <= len(parts) <= 3:
+                    if i > 0 and lines[i - 1].strip():
+                        continue
+                    if is_title_like(candidate_title):
+                        matched_same_line[section_num] = (i, candidate_title)
+                        matched_indices.append(i)
+            continue
+
+        m = num_pat.match(line)
+        if m:
+            section_num = m.group(1)
+        else:
+            m = app_pat.match(line)
+            if m:
+                section_num = f'{m.group(1)}.{m.group(2)}'
+            else:
+                continue
+
+        if section_num not in valid_sections:
+            continue
 
         parts = section_num.split('.')
-        # Accept chapter sections (1.1, 2.3) and subsections (1.5.1, 1.5.2, 4.11.1, 4.11.2)
-        if len(parts) >= 2 and len(parts) <= 3:
-            sections.append({
-                'number': section_num,
-                'title': section_title,
-                'content': section_content
-            })
+        if len(parts) < 2 or len(parts) > 3:
+            continue
+
+        if i > 0 and lines[i - 1].strip():
+            continue
+
+        matched_indices.append(i)
+
+    sections = []
+    for idx, line_idx in enumerate(matched_indices):
+        m = num_pat.match(lines[line_idx])
+        if m:
+            section_num = m.group(1)
+        else:
+            m = num_same_pat.match(lines[line_idx])
+            if m:
+                section_num = m.group(1)
+            else:
+                m = app_pat.match(lines[line_idx])
+                if m:
+                    section_num = f'{m.group(1)}.{m.group(2)}'
+                else:
+                    continue
+
+        # Determine title and content start
+        if section_num in matched_same_line:
+            title = matched_same_line[section_num][1]
+            content_start_lidx = line_idx + 1
+        else:
+            title = ''
+            content_start_lidx = line_idx + 1
+            skipped = 0
+            for j in range(line_idx + 1, min(line_idx + 8, total_lines)):
+                if not lines[j].strip():
+                    skipped += 1
+                    continue
+                candidate = lines[j].strip()
+                candidate = re.sub(r'\s*\.{5,}\s*\d*\s*$', '', candidate)
+                if is_title_like(candidate):
+                    title = candidate
+                    content_start_lidx = j + 1
+                    break
+                if skipped >= 2:
+                    break
+
+        # Use TOC title when available (more reliable than content extraction)
+        toc_title = toc_titles.get(section_num, '')
+        if toc_title:
+            title = toc_title
+        elif not title:
+            title = toc_title  # both empty
+
+        content_start_char = sum(len(l) + 1 for l in lines[:content_start_lidx])
+        if idx + 1 < len(matched_indices):
+            content_end_char = sum(len(l) + 1 for l in lines[:matched_indices[idx + 1]])
+        else:
+            content_end_char = len(content)
+
+        section_content = content[content_start_char:content_end_char].strip()
+
+        sections.append({
+            'number': section_num,
+            'title': title,
+            'content': section_content,
+        })
 
     return sections
 
+
+# ---------------------------------------------------------------------------
+# Content Cleaning
+# ---------------------------------------------------------------------------
+
 def clean_content(content):
+    """Strip form feeds, page numbers, collapse blank lines. No paragraph merging."""
+    content = content.replace('\f', '')
+    content = re.sub(r'\n\d{1,3}\n', '\n', content)
     content = re.sub(r'\n\d+\n---\n', '\n', content)
-    content = re.sub(r'\n\d+\n', '\n', content)
     content = re.sub(r'\n{3,}', '\n\n', content)
+
     lines = content.split('\n')
-    cleaned_lines = []
+    cleaned = []
     for line in lines:
-        line = re.sub(r'^(\d+)\s*$', '', line)
         line = line.rstrip()
+        if re.match(r'^\s*\d{1,3}\s*$', line):
+            continue
         if line:
-            cleaned_lines.append(line)
-    return '\n'.join(cleaned_lines)
+            cleaned.append(line)
+
+    return cleaned  # Return list of lines
+
+
+# ---------------------------------------------------------------------------
+# Code / Text Block Detection
+# ---------------------------------------------------------------------------
+
+def is_strong_code(line):
+    """Line that definitively starts or is part of a code block."""
+    s = line.strip()
+    if not s:
+        return False
+    if s.startswith('#'):
+        return True
+    if s.startswith('/*') or s.startswith('*/'):
+        return True
+    if s in ('{', '}'):
+        return True
+    # Function calls/defs without Chinese
+    if re.match(r'^[a-zA-Z_][a-zA-Z0-9_\[\]]*\s*\(', s) and not re.search(r'[\u4e00-\u9fff]', s):
+        return True
+    # Type declarations
+    if re.match(r'^(int|char|float|double|void|long|short|unsigned|struct|enum|typedef|static|const|extern|register|auto|volatile)\s+', s):
+        return True
+    # Broken string start
+    if re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*\s*\(\s*"[^"]*$', s):
+        return True
+    return False
+    if s.startswith('#'):
+        return True
+    if s.startswith('/*') or s.startswith('*/'):
+        return True
+    if s in ('{', '}'):
+        return True
+    if re.match(r'^[a-zA-Z_][a-zA-Z0-9_\[\]]*\s*\(', s) and not re.search(r'[\u4e00-\u9fff]', s):
+        return True
+    if re.match(r'^(int|char|float|double|void|long|short|unsigned|struct|enum|typedef|static|const|extern|register|auto|volatile)\s+', s):
+        return True
+    return False
 
 def is_code_line(line):
-    patterns = [
-        r'^\s*#\s*include',
-        r'^\s*#\s*define',
-        r'^\s*#\s*if',
-        r'^\s*#\s*else',
-        r'^\s*#\s*endif',
-        r'^\s*main\s*\(',
-        r'^\s*int\s+main\s*\(',
-        r'^\s*void\s+main\s*\(',
-        r'^\s*printf\s*\(',
-        r'^\s*scanf\s*\(',
-        r'^\s*if\s*\(',
-        r'^\s*else\s*\{',
-        r'^\s*for\s*\(',
-        r'^\s*while\s*\(',
-        r'^\s*do\s*\{',
-        r'^\s*return\s+',
-        r'^\s*\{',
-        r'^\s*\}',
-        r'^\s*/\*',
-        r'^\s*\*/',
-        r'^\s*\*\s',
-        r'^\s*//',
-        r'^\s*int\s+[a-zA-Z_]',
-        r'^\s*char\s+[a-zA-Z_]',
-        r'^\s*float\s+[a-zA-Z_]',
-        r'^\s*double\s+[a-zA-Z_]',
-        r'^\s*void\s+[a-zA-Z_]',
-        r'^\s*long\s+[a-zA-Z_]',
-        r'^\s*short\s+[a-zA-Z_]',
-        r'^\s*struct\s+[a-zA-Z_]',
-        r'^\s*typedef\s+',
-        r'^\s*enum\s+[a-zA-Z_]',
-        r'^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*=\s*[^{}]',
-        r'^\s*[a-zA-Z_][a-zA-Z0-9_]*\s*\(\s*[a-zA-Z_*]',
-        r'^\s*\"[^\"]*\"',
-        r'^\s*cc\s+',
-        r'^\s*a\.out',
-        r'^\s*\$',
-        r'^\s*>\s*',
-        r'^\s*<\s*',
-    ]
-    for p in patterns:
-        if re.match(p, line):
-            return True
+    s = line.strip()
+    if not s:
+        return False
+    if is_strong_code(s):
+        return True
+    if s.endswith(';'):
+        return True
+    if s.endswith('*/') and not s.startswith('/*'):
+        return True
+    if re.match(r'^(if|else|for|while|do|switch|case|default|break|continue|return|goto)\b', s):
+        return True
+    if re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*\s*=', s):
+        return True
+    if re.match(r'^"[^"]*"', s) or re.match(r'^"[^"]*$', s) or re.match(r'^[^"]*"$', s):
+        return True
+    if re.match(r'^(printf|scanf|getchar|putchar|malloc|free|exit)\s*\(', s):
+        return True
+    if re.match(r'^(cc|a\.out|gcc|make)\b', s):
+        return True
+    if s in ('...', ');'):
+        return True
     return False
+
+def is_text_line(line):
+    s = line.strip()
+    if not s:
+        return False
+    if re.search(r'[\u4e00-\u9fff]', s):
+        return True
+    return False
+
+def detect_blocks(lines):
+    blocks = []
+    in_code = False
+    code_buf = []
+    text_buf = []
+
+    def flush_code():
+        nonlocal in_code, code_buf
+        if code_buf:
+            blocks.append(('code', code_buf))
+        in_code = False
+        code_buf = []
+
+    def flush_text():
+        nonlocal text_buf
+        if text_buf:
+            blocks.append(('text', text_buf))
+        text_buf = []
+
+    for line in lines:
+        s = line.strip()
+        if not s:
+            if in_code:
+                flush_code()
+            else:
+                flush_text()
+            continue
+
+        if is_strong_code(s):
+            flush_text()
+            if not in_code:
+                in_code = True
+                code_buf = []
+            code_buf.append(line)
+        elif in_code:
+            if is_text_line(s) and not is_code_line(s):
+                flush_code()
+                text_buf.append(line)
+            else:
+                code_buf.append(line)
+        else:
+            if is_code_line(s) and not is_text_line(s):
+                flush_text()
+                code_buf.append(line)
+                in_code = True
+            else:
+                text_buf.append(line)
+
+    flush_code()
+    flush_text()
+    return blocks
+
+
+# ---------------------------------------------------------------------------
+# HTML Generation
+# ---------------------------------------------------------------------------
+
+CSS = '''        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.9;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            background: #232A2E;
+            color: #D3C6AA;
+        }
+        .section-header {
+            border-left: 5px solid #A7C080;
+            padding-left: 18px;
+            margin-bottom: 36px;
+        }
+        .section-number {
+            font-size: 13px;
+            color: #A7C080;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+        .section-title {
+            font-size: 30px;
+            color: #D3C6AA;
+            font-weight: 700;
+            margin-top: 8px;
+        }
+        .content {
+            font-size: 16px;
+            background: #2D353B;
+            padding: 36px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        }
+        .content p {
+            margin-bottom: 14px;
+        }
+        .content pre {
+            background: #343F44;
+            color: #D3C6AA;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 18px 0;
+            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border: 1px solid #4F585E;
+        }
+        .content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .content .kw { color: #83C092; font-weight: 500; }
+        .content .fn { color: #DBBC7F; }
+        .content .str { color: #E69875; }
+        .content .cm { color: #7A8478; font-style: italic; }
+        .content h2 {
+            font-size: 20px;
+            color: #A7C080;
+            margin: 28px 0 14px 0;
+            border-bottom: 2px solid #4F585E;
+            padding-bottom: 10px;
+        }
+        .content h3 {
+            font-size: 17px;
+            margin: 22px 0 10px 0;
+        }
+        ul, ol { margin: 12px 0 12px 24px; }
+        li { margin-bottom: 8px; }'''
+
 
 def escape_html(text):
     return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
+
 def highlight_syntax(code):
-    keywords = ['int', 'char', 'float', 'double', 'void', 'long', 'short', 'unsigned', 'signed', 'const', 'static', 'extern', 'register', 'sizeof', 'struct', 'union', 'enum', 'typedef', 'auto', 'volatile', 'if', 'else', 'for', 'while', 'do', 'break', 'continue', 'return', 'goto', 'switch', 'case', 'default']
-    functions = ['main', 'printf', 'scanf', 'getchar', 'putchar', 'strlen', 'strcpy', 'strcmp', 'malloc', 'free', 'atoi', 'atof', 'feof', 'ferror', 'fopen', 'fclose', 'fread', 'fwrite', 'fseek', 'getc', 'putc', 'exit']
+    keywords = [
+        'int', 'char', 'float', 'double', 'void', 'long', 'short', 'unsigned', 'signed',
+        'const', 'static', 'extern', 'register', 'sizeof', 'struct', 'union', 'enum',
+        'typedef', 'auto', 'volatile',
+        'if', 'else', 'for', 'while', 'do', 'break', 'continue', 'return', 'goto',
+        'switch', 'case', 'default',
+    ]
+    functions = [
+        'main', 'printf', 'scanf', 'getchar', 'putchar', 'strlen', 'strcpy', 'strcmp',
+        'malloc', 'free', 'atoi', 'atof', 'feof', 'ferror', 'fopen', 'fclose',
+        'fread', 'fwrite', 'fseek', 'getc', 'putc', 'exit',
+    ]
 
     code = escape_html(code)
 
@@ -112,9 +471,55 @@ def highlight_syntax(code):
 
     return code
 
+
+def merge_text_lines(lines):
+    """Merge continuation text lines into paragraphs within a text block."""
+    if not lines:
+        return []
+    sentence_end = set('。！？；：)》）"\'…—.')
+    merged = []
+    buf = []
+    for line in lines:
+        is_break = bool(re.match(r'^练习\s*\d+', line))
+        if is_break:
+            if buf:
+                merged.append(''.join(buf))
+                buf = []
+            merged.append(line)
+            continue
+        if buf:
+            last = buf[-1]
+            last_char = last[-1] if last else ''
+            if last_char and last_char not in sentence_end:
+                buf.append(line)
+            else:
+                merged.append(''.join(buf))
+                buf = [line]
+        else:
+            buf.append(line)
+    if buf:
+        merged.append(''.join(buf))
+    return merged
+
+
+def render_blocks(blocks):
+    parts = []
+    for btype, blines in blocks:
+        if btype == 'code':
+            code_text = '\n'.join(blines)
+            code_text = highlight_syntax(code_text)
+            parts.append(f'<pre><code>{code_text}</code></pre>')
+        else:
+            # Merge text lines into paragraphs
+            paragraphs = merge_text_lines(blines)
+            for para in paragraphs:
+                parts.append(f'<p>{escape_html(para)}</p>')
+    return '\n'.join(parts)
+
+
 def generate_html(section):
     parts = section['number'].split('.')
-    chapter = parts[0]
+    chapter_display = parts[0]
 
     html = f'''<!DOCTYPE html>
 <html lang="zh-CN">
@@ -123,156 +528,46 @@ def generate_html(section):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{section['number']} {section['title']} - C语言教程</title>
     <style>
-        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.9;
-            color: #333;
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            background: #fafafa;
-        }}
-        .section-header {{
-            border-left: 5px solid #00599A;
-            padding-left: 18px;
-            margin-bottom: 36px;
-        }}
-        .section-number {{
-            font-size: 13px;
-            color: #00599A;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }}
-        .section-title {{
-            font-size: 30px;
-            color: #1a1a1a;
-            font-weight: 700;
-            margin-top: 8px;
-        }}
-        .content {{
-            font-size: 16px;
-            background: white;
-            padding: 36px;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
-        }}
-        .content p {{
-            margin-bottom: 14px;
-            color: #D3C6AA;
-        }}
-        .content pre {{
-            background: #343F44;
-            color: #D3C6AA;
-            padding: 20px;
-            border-radius: 8px;
-            overflow-x: auto;
-            margin: 18px 0;
-            font-family: "SF Mono", Consolas, "Liberation Mono", Menlo, monospace;
-            font-size: 14px;
-            line-height: 1.6;
-            border: 1px solid #4F585E;
-        }}
-        .content pre code {{
-            background: transparent;
-            color: inherit;
-            padding: 0;
-        }}
-        .content .kw {{ color: #83C092; font-weight: 500; }}
-        .content .fn {{ color: #DBBC7F; }}
-        .content .str {{ color: #E69875; }}
-        .content .cm {{ color: #7A8478; font-style: italic; }}
-        .content h2 {{
-            font-size: 20px;
-            color: #A7C080;
-            margin: 28px 0 14px 0;
-            border-bottom: 2px solid #4F585E;
-            padding-bottom: 10px;
-        }}
-        .content h3 {{
-            font-size: 17px;
-            color: #D3C6AA;
-            margin: 22px 0 10px 0;
-        }}
-        ul, ol {{ margin: 12px 0 12px 24px; }}
-        li {{ margin-bottom: 8px; }}
-        .note {{
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }}
-        body {{
-            background: #232A2E;
-        }}
-        .content {{
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }}
-        .section-header {{
-            border-left-color: #A7C080;
-        }}
-        .section-number {{
-            color: #A7C080;
-        }}
-        .section-title {{
-            color: #D3C6AA;
-        }}
+{CSS}
     </style>
 </head>
 <body>
     <div class="section-header">
-        <div class="section-number">第 {chapter} 章</div>
+        <div class="section-number">第 {chapter_display} 章</div>
         <h1 class="section-title">{section['number']} {section['title']}</h1>
     </div>
     <div class="content">
 '''
 
     content = clean_content(section['content'])
-    lines = content.split('\n')
-    in_code = False
-    code_lines = []
+    lines = content  # Already a list from clean_content
+    blocks = detect_blocks(lines)
+    body = render_blocks(blocks)
 
-    for line in lines:
-        if is_code_line(line):
-            if not in_code:
-                in_code = True
-                code_lines = []
-            code_lines.append(line)
-        else:
-            if in_code:
-                code_text = '\n'.join(code_lines)
-                code_text = highlight_syntax(code_text)
-                html += f'<pre><code>{code_text}</code></pre>\n'
-                in_code = False
-                code_lines = []
-            html += f'<p>{escape_html(line)}</p>\n'
-
-    if in_code:
-        code_text = '\n'.join(code_lines)
-        code_text = highlight_syntax(code_text)
-        html += f'<pre><code>{code_text}</code></pre>\n'
-
+    html += body
     html += '''    </div>
 </body>
 </html>'''
     return html
 
-def main():
-    import os
-    os.makedirs('/home/pilot/.cloned/d1ee2/sections', exist_ok=True)
-    sections = parse_tutorial('/home/pilot/.cloned/d1ee2/c_tutorial.txt')
 
-    for section in sections:
-        html = generate_html(section)
-        safe_num = section['number'].replace('.', '_')
-        filename = f"/home/pilot/.cloned/d1ee2/sections/{safe_num}.html"
+# ---------------------------------------------------------------------------
+# Entry Point
+# ---------------------------------------------------------------------------
+
+def main():
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+    sections = parse_tutorial(INPUT_FILE)
+
+    for sec in sections:
+        html = generate_html(sec)
+        safe_num = sec['number'].replace('.', '_')
+        filename = f'{OUTPUT_DIR}/{safe_num}.html'
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(html)
 
     print(f"Generated {len(sections)} section files")
+
 
 if __name__ == '__main__':
     main()

@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -112,85 +87,59 @@
     <div class="content">
 <p>字符串常量是一个字符数组，例如：</p>
 <pre><code><span class="str">"I am a string"</span></code></pre>
-<p>在字符串的内部表示中，字符数组以空字符'\0'结尾，所以，程序可以通过检查空字符找到</p>
-<p>字符数组的结尾。字符串常量占据的存储单元数也因此比双引号内的字符数大 1。</p>
+<p>在字符串的内部表示中，字符数组以空字符'\0'结尾，所以，程序可以通过检查空字符找到字符数组的结尾。字符串常量占据的存储单元数也因此比双引号内的字符数大 1。</p>
 <p>字符串常量最常见的用法也许是作为函数参数，例如：</p>
-<p>princf("hello, world\n"};</p>
-<p>当类似于这样的一个字符串出现在程序中时，实际上是通过字符指针访问该字符串的。在上</p>
-<p>述语句中，printf 接受的是一个指向字符数组第一个字符的指针。也就是说，字符串常量可</p>
-<p>通过一个指向其第一个元素的指针访问。</p>
+<pre><code>princf(<span class="str">"hello, world\n"</span>};</code></pre>
+<p>当类似于这样的一个字符串出现在程序中时，实际上是通过字符指针访问该字符串的。在上述语句中，printf 接受的是一个指向字符数组第一个字符的指针。也就是说，字符串常量可通过一个指向其第一个元素的指针访问。</p>
 <p>除了作为函数参数外，字符串常量还有其它用法。假定指针 pmessage 的声明如下：</p>
-<p>char *pmessage;</p>
+<pre><code><span class="kw">char</span> *pmessage;</code></pre>
 <p>那么，语句</p>
 <pre><code>pmessage =<span class="str">"now is the time"</span>;</code></pre>
-<p>将把一个指向该字符数组的指针赋值给 pmessage。该过程并没有进行字符串的复制，而只</p>
-<p>是涉及到指针的操作。C 语言没有提供将整个字符串作为一个整体进行处理的运算符。</p>
+<p>将把一个指向该字符数组的指针赋值给 pmessage。该过程并没有进行字符串的复制，而只是涉及到指针的操作。C 语言没有提供将整个字符串作为一个整体进行处理的运算符。</p>
 <p>下面两个定义之间有很大的差别：</p>
-<pre><code><span class="kw">char</span> amessage[] = <span class="str">"nw is the time"</span>; <span class="cm">/* 定义一个数组 */</span></code></pre>
-<p>char *pmessage = "now is the time"; /* 定义一个指针 */</p>
-<p>上述声明中，amessage 是一个仅仅足以存放初始化字符串以及空字符'\0'的一维数组。数</p>
-<p>组中的单个字符可以进行修改，</p>
-<p>但 amessage 始终指向同一个存储位置。另一方面，</p>
-<p>pmessage</p>
-<p>是一个指针，其初值指向一个字符串常量，之后它可以被修改以指向其它地址，但如果试图</p>
-<p>修改字符串的内容，结果是没有定义的（参见图 5-7）</p>
+<pre><code><span class="kw">char</span> amessage[] = <span class="str">"nw is the time"</span>; <span class="cm">/* 定义一个数组 */</span>
+<span class="kw">char</span> *pmessage = <span class="str">"now is the time"</span>; <span class="cm">/* 定义一个指针 */</span></code></pre>
+<p>上述声明中，amessage 是一个仅仅足以存放初始化字符串以及空字符'\0'的一维数组。数组中的单个字符可以进行修改，但 amessage 始终指向同一个存储位置。另一方面，pmessage是一个指针，其初值指向一个字符串常量，之后它可以被修改以指向其它地址，但如果试图修改字符串的内容，结果是没有定义的（参见图 5-7）</p>
 <p>。</p>
-<p>图 5-7</p>
-<p>为了更进一步地讨论指针和数组其它方面的问题，下面以标准库中两个有用的函数为例</p>
-<p>来研究它们的不同实现版本。第一个函数 strcpy(s, t)把指针 t 指向的字符串复制到指针</p>
-<p>s 指向的位置。如果使用语句 s=t 实现该功能，其实质上只是拷贝了指针，而并没有复制字</p>
-<p>符。为了进行字符的复制，这里使用了一个循环语句。strcpy 函数的第 1 个版本是通过数组</p>
-<p>方法实现的，如下所示：</p>
+<p>图 5-7为了更进一步地讨论指针和数组其它方面的问题，下面以标准库中两个有用的函数为例来研究它们的不同实现版本。第一个函数 strcpy(s, t)把指针 t 指向的字符串复制到指针s 指向的位置。如果使用语句 s=t 实现该功能，其实质上只是拷贝了指针，而并没有复制字符。为了进行字符的复制，这里使用了一个循环语句。strcpy 函数的第 1 个版本是通过数组方法实现的，如下所示：</p>
 <pre><code><span class="cm">/* <span class="fn">strcpy</span>: copy t to s; array subscript version */</span>
 <span class="kw">void</span> <span class="fn">strcpy</span>(<span class="kw">char</span> *s, <span class="kw">char</span> *t)
 {
 <span class="kw">int</span> i;
 i = 0;
-<span class="kw">while</span> ((s[i] = t[i]) != '\0')</code></pre>
-<p>i++;</p>
-<pre><code>}</code></pre>
+<span class="kw">while</span> ((s[i] = t[i]) != '\0')
+i++;
+}</code></pre>
 <p>为了进行比较，下面是用指针方法实现的 strcpy 函数：</p>
 <pre><code><span class="cm">/* <span class="fn">strcpy</span>: copy t to s; pointer version */</span>
 <span class="kw">void</span> <span class="fn">strcpy</span>(<span class="kw">char</span> *s, <span class="kw">char</span> *t)
 {
 <span class="kw">int</span> i;
 i = 0;
-<span class="kw">while</span> ((*s = *t) != '\0') {</code></pre>
-<p>s++;</p>
-<p>t++;</p>
-<pre><code>}
+<span class="kw">while</span> ((*s = *t) != '\0') {
+s++;
+t++;
+}
 }</code></pre>
-<p>因为参数是通过值传递的，所以在 strcpy 函数中可以以任何方式使用参数 s 和 t。在此，s</p>
-<p>和 t 是方便地进行了初始化的指针，循环每执行一次，它们就沿着相应的数组前进一个字符，</p>
-<p>直到将 t 中的结束符'\0'复制到 s 为止。</p>
-<p>实际上，strcpy 函数并不会按照上面的这些方式编写。经验丰富的程序员更喜欢将它编</p>
-<p>写成下列形式：</p>
+<p>因为参数是通过值传递的，所以在 strcpy 函数中可以以任何方式使用参数 s 和 t。在此，s和 t 是方便地进行了初始化的指针，循环每执行一次，它们就沿着相应的数组前进一个字符，直到将 t 中的结束符'\0'复制到 s 为止。</p>
+<p>实际上，strcpy 函数并不会按照上面的这些方式编写。经验丰富的程序员更喜欢将它编写成下列形式：</p>
 <pre><code><span class="cm">/* <span class="fn">strcpy</span>: copy t to s; pointer version 2 */</span>
 <span class="kw">void</span> <span class="fn">strcpy</span>(<span class="kw">char</span> *s, <span class="kw">char</span> *t)
 {
-<span class="kw">while</span> ((*s++ = *t++) != '\0')</code></pre>
-<p>;</p>
-<pre><code>}</code></pre>
-<p>在该版本中，s 和 t 的自增运算放到了循环的测试部分中。表达式*t++的值是执行自增</p>
-<p>运算之前 t 所指向的字符。后缀运算符++表示在读取该字符之后才改变 t 的值。同样的道理，</p>
-<p>在 s 执行自增运算之前，字符就被存储到了指针 s 指向的旧位置。该字符值同时也用来和空</p>
-<p>字符'\0'进行比较运算，以控制循环的执行。最后的结果是依次将 t 指向的字符复制到 s 指</p>
-<p>向的位置，直到遇到结束符'\0'为止（同时也复制该结束符）</p>
-<p>，</p>
-<p>为了更进一步地精炼程序，我们注意到，表达式同'\0'的比较是多余的，因为只需要判</p>
-<p>断表达式的值是否为 0 即可。因此，该函数可进一步写成下列形式：</p>
+<span class="kw">while</span> ((*s++ = *t++) != '\0')
+;
+}</code></pre>
+<p>在该版本中，s 和 t 的自增运算放到了循环的测试部分中。表达式*t++的值是执行自增运算之前 t 所指向的字符。后缀运算符++表示在读取该字符之后才改变 t 的值。同样的道理，在 s 执行自增运算之前，字符就被存储到了指针 s 指向的旧位置。该字符值同时也用来和空字符'\0'进行比较运算，以控制循环的执行。最后的结果是依次将 t 指向的字符复制到 s 指向的位置，直到遇到结束符'\0'为止（同时也复制该结束符）</p>
+<p>，为了更进一步地精炼程序，我们注意到，表达式同'\0'的比较是多余的，因为只需要判断表达式的值是否为 0 即可。因此，该函数可进一步写成下列形式：</p>
 <pre><code><span class="cm">/* <span class="fn">strcpy</span>: copy t to s; pointer version 3 */</span>
 <span class="kw">void</span> <span class="fn">strcpy</span>(<span class="kw">char</span> *s, <span class="kw">char</span> *t)
-{
-<span class="kw">while</span> (*s++ = *t++)</code></pre>
-<p>;</p>
-<pre><code>}</code></pre>
-<p>该函数初看起来不太容易理解，但这种表示方法是很有好处的，我们应该掌握这种方法，C 语</p>
-<p>言程序中经常会采用这种写法。</p>
+{
+<span class="kw">while</span> (*s++ = *t++)
+;
+}</code></pre>
+<p>该函数初看起来不太容易理解，但这种表示方法是很有好处的，我们应该掌握这种方法，C 语言程序中经常会采用这种写法。</p>
 <p>标准库（&lt;string.h&gt;）中提供的函数 strcpy 把目标字符串作为函数值返回。</p>
-<p>我们研究的第二个函数是字符串比较函数 strcmp(s, t)。该函数比较字符串 s 和 t，</p>
-<p>并且根据 s 按照字典顺序小于、等于或大于 t 的结果分别返回负整数、0 或正整数。该返回值</p>
-<p>是 s 和 t 由前向后逐字符比较时遇到的第一个不相等字符处的字符的差值。</p>
+<p>我们研究的第二个函数是字符串比较函数 strcmp(s, t)。该函数比较字符串 s 和 t，并且根据 s 按照字典顺序小于、等于或大于 t 的结果分别返回负整数、0 或正整数。该返回值是 s 和 t 由前向后逐字符比较时遇到的第一个不相等字符处的字符的差值。</p>
 <pre><code><span class="cm">/* <span class="fn">strcmp</span>: <span class="kw">return</span> &lt;0 <span class="kw">if</span> s&lt;t, 0 <span class="kw">if</span> s==t, &gt;0 <span class="kw">if</span> s&gt;t */</span>
 <span class="kw">int</span> <span class="fn">strcmp</span>(<span class="kw">char</span> *s, <span class="kw">char</span> *t)
 {
@@ -209,34 +158,23 @@ i = 0;
 <span class="kw">return</span> 0;
 <span class="kw">return</span> *s - *t;
 }</code></pre>
-<p>由于++和--既可以作为前缀运算符，也可以作为后缀运算符，所以还可以将运算符*与</p>
-<p>运算符++和--按照其它方式组合使用，但这些用法并不多见。例如，下列表达式</p>
-<p>*--p</p>
-<p>在读取指针 p 指向的字符之前先对 p 执行自减运算。事实上，下面的两个表达式：</p>
-<p>*p++ = val;</p>
-<pre><code>val = *--p;
+<p>由于++和--既可以作为前缀运算符，也可以作为后缀运算符，所以还可以将运算符*与运算符++和--按照其它方式组合使用，但这些用法并不多见。例如，下列表达式*--p在读取指针 p 指向的字符之前先对 p 执行自减运算。事实上，下面的两个表达式：</p>
+<pre><code>*p++ = val;
+val = *--p;
 <span class="cm">/* 将 val 压入栈 */</span>
 <span class="cm">/* 将栈顶元素弹出到 val 中 */</span></code></pre>
 <p>是进栈和出栈的标准用法。更详细的信息，请参见 4.3 节。</p>
-<p>头文件&lt;string.h&gt;中包含本节提到的函数的声明，另外还包括标准库中其它一些字符</p>
-<p>串处理函数的声明。</p>
+<p>头文件&lt;string.h&gt;中包含本节提到的函数的声明，另外还包括标准库中其它一些字符串处理函数的声明。</p>
 <p>练习 5-3</p>
-<p>用指针方式实现第 2 章中的函数 strcat。函数 strcat(s, t)将 t 指向</p>
-<p>的字符串复制到 s 指向的字符串的尾部。</p>
+<p>用指针方式实现第 2 章中的函数 strcat。函数 strcat(s, t)将 t 指向的字符串复制到 s 指向的字符串的尾部。</p>
 <p>练习 5-4</p>
-<p>编写函数 strend(s, t)。如果字符串 t 出现在字符串 s 的尾部，该函数</p>
-<p>返回 1；否则返回 0。</p>
+<p>编写函数 strend(s, t)。如果字符串 t 出现在字符串 s 的尾部，该函数返回 1；否则返回 0。</p>
 <p>练习 5-5</p>
-<p>实现库函数 strncpy、strncat 和 strncmp，它们最多对参数字符串中</p>
-<p>的前 n 个字符进行操作。例如，函数 strncpy(s, t, n)将 t 中最多前 n 个字符复制到 s</p>
-<p>中。更详细的说明请参见附录 B。</p>
+<p>实现库函数 strncpy、strncat 和 strncmp，它们最多对参数字符串中的前 n 个字符进行操作。例如，函数 strncpy(s, t, n)将 t 中最多前 n 个字符复制到 s中。更详细的说明请参见附录 B。</p>
 <p>练习 5-6</p>
-<p>采用指针而非数组索引方式改写前面章节和练习中的某些程序，例如</p>
-<p>getline（第 1、4 章）</p>
+<p>采用指针而非数组索引方式改写前面章节和练习中的某些程序，例如getline（第 1、4 章）</p>
 <p>，atoi、itoa 以及它们的变体形式（第 2、3、4 章）</p>
-<p>，reverse（第</p>
-<p>3 章）</p>
-<p>，strindex、getop（第 4 章）等等。</p>
-    </div>
+<p>，reverse（第3 章）</p>
+<p>，strindex、getop（第 4 章）等等。</p>    </div>
 </body>
 </html>

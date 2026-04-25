@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,22 +85,15 @@
         <h1 class="section-title">5.7 多维数组</h1>
     </div>
     <div class="content">
-<p>C 语言提供了类似于矩阵的多维数组，但实际上它们并不像指针数组使用得那样广泛。本</p>
-<p>节将对多维数组的特性进行介绍。</p>
-<p>我们考虑一个日期转换的问题，把某月某日这种日期表示形式转换为某年中第几天的表</p>
-<p>示形式，反之亦然。例如，3 月 1 日是非闰年的第 60 天，是闰年的第 61 天。在这里，我们定</p>
-<p>义下列两个函数以进行日期转换：函数 day_of_year 将某月某日的日期表示形式转换为某</p>
-<p>一年中第几天的表示形式，函数 month_day 则执行相反的转换。因为后一个函数要返回两个</p>
-<p>值，所以在函数 month_day 中，月和日这两个参数使用指针的形式。例如，下列语句：</p>
-<p>month_day(1988, 60, &amp;m, &amp;d);</p>
+<p>C 语言提供了类似于矩阵的多维数组，但实际上它们并不像指针数组使用得那样广泛。本节将对多维数组的特性进行介绍。</p>
+<p>我们考虑一个日期转换的问题，把某月某日这种日期表示形式转换为某年中第几天的表示形式，反之亦然。例如，3 月 1 日是非闰年的第 60 天，是闰年的第 61 天。在这里，我们定义下列两个函数以进行日期转换：函数 day_of_year 将某月某日的日期表示形式转换为某一年中第几天的表示形式，函数 month_day 则执行相反的转换。因为后一个函数要返回两个值，所以在函数 month_day 中，月和日这两个参数使用指针的形式。例如，下列语句：</p>
+<pre><code>month_day(1988, 60, &amp;m, &amp;d);</code></pre>
 <p>将把 m 的值设置为 2，把 d 的值设置为 29（2 月 29 日）</p>
 <p>。</p>
 <p>这些函数都要用到一张记录每月天数的表（如“9 月有 30 天”等）</p>
-<p>。对闰年和非闰年来说，</p>
-<p>每个月的天数不同，所以，将这些天数分别存放在一个二维数组的两行中比在计算过程中判</p>
-<p>断 2 月有多少天更容易。该数组以及执行日期转换的函数如下所示：</p>
-<p>static char daytab[2][13] = {</p>
-<pre><code>{0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
+<p>。对闰年和非闰年来说，每个月的天数不同，所以，将这些天数分别存放在一个二维数组的两行中比在计算过程中判断 2 月有多少天更容易。该数组以及执行日期转换的函数如下所示：</p>
+<pre><code><span class="kw">static</span> <span class="kw">char</span> daytab[2][13] = {
+{0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
 {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
 };
 <span class="cm">/* day_of_year: set day of year from month &amp; day */</span>
@@ -133,78 +101,43 @@
 {
 <span class="kw">int</span> i, leap;
 leap = year%4 == 0 &amp;&amp; year%100 != 0 || year%400 == 0;
-<span class="kw">for</span> (i = 1; i &lt; month; i++)</code></pre>
-<p>day += daytab[leap][i];</p>
-<pre><code><span class="kw">return</span> day;
+<span class="kw">for</span> (i = 1; i &lt; month; i++)
+day += daytab[leap][i];
+<span class="kw">return</span> day;
 }
 <span class="cm">/* month_day: set month, day from day of year */</span>
 <span class="kw">void</span> month_day(<span class="kw">int</span> year, <span class="kw">int</span> yearday, <span class="kw">int</span> *pmonth, <span class="kw">int</span> *pday)
 {
 <span class="kw">int</span> i, leap;
 leap = year%4 == 0 &amp;&amp; year%100 != 0 || year%400 == 0;
-<span class="kw">for</span> (i = 1; yearday &gt; daytab[leap][i]; i++)</code></pre>
-<p>yearday -= daytab[leap][i];</p>
-<p>*pmonth = i;</p>
-<p>*pday = yearday;</p>
-<pre><code>}</code></pre>
+<span class="kw">for</span> (i = 1; yearday &gt; daytab[leap][i]; i++)
+yearday -= daytab[leap][i];
+*pmonth = i;
+*pday = yearday;
+}</code></pre>
 <p>我们在前面的章节中曾讲过，逻辑表达式的算术运算值只可能是 0（为假时）或者 1（为真时）。</p>
 <p>因此，在本例中，可以将逻辑表达式 leap 用做数组 daytab 的下标。</p>
-<p>数组 daytab 必须在函数 day_of_year 和 month_day 的外部进行声明，这样，这两</p>
-<p>个函数都可以使用该数组。这里之所以将 daytab 的元素声明为 char 类型，是为了说明在</p>
-<p>char 类型的变量中存放较小的非字符整数也是合法的。</p>
-<p>到目前为止，daytab 是我们遇到的第一个二维数组。在 C 语言中，二维数组实际上是</p>
-<p>一种特殊的一维数组，它的每个元素也是一个一维数组。因此，数组下标应该写成</p>
-<p>daytab[i][j]</p>
+<p>数组 daytab 必须在函数 day_of_year 和 month_day 的外部进行声明，这样，这两个函数都可以使用该数组。这里之所以将 daytab 的元素声明为 char 类型，是为了说明在</p>
+<pre><code><span class="kw">char</span> 类型的变量中存放较小的非字符整数也是合法的。</code></pre>
+<p>到目前为止，daytab 是我们遇到的第一个二维数组。在 C 语言中，二维数组实际上是一种特殊的一维数组，它的每个元素也是一个一维数组。因此，数组下标应该写成daytab[i][j]</p>
 <pre><code><span class="cm">/* [row][col] */</span></code></pre>
-<p>而不能写成</p>
-<p>daytab[i,j]</p>
+<p>而不能写成daytab[i,j]</p>
 <pre><code><span class="cm">/* WRONG */</span></code></pre>
-<p>除了表示方式的区别外，C 语言中二维数组的使用方式和其它语言一样。数组元素按行存储，</p>
-<p>因此，当按存储顺序访问数组时，最右边的数组下标（即列）变化得最快。</p>
-<p>数组可以用花括号括起来的初值表进行初始化，二维数组的每一行由相应的子列表进行</p>
-<p>初始化。在本例中，我们将数组 daytab 的第一列元素设置为 0，这样，月份的值为 1～12，</p>
-<p>而不是 0～11。由于在这里存储空间并不是主要问题，所以这种处理方式比在程序中调整数组</p>
-<p>的下标更加直观。</p>
+<p>除了表示方式的区别外，C 语言中二维数组的使用方式和其它语言一样。数组元素按行存储，因此，当按存储顺序访问数组时，最右边的数组下标（即列）变化得最快。</p>
+<p>数组可以用花括号括起来的初值表进行初始化，二维数组的每一行由相应的子列表进行初始化。在本例中，我们将数组 daytab 的第一列元素设置为 0，这样，月份的值为 1～12，而不是 0～11。由于在这里存储空间并不是主要问题，所以这种处理方式比在程序中调整数组的下标更加直观。</p>
 <p>如果将二维数组作为参数传递给函数，那么在函数的参数声明中必须指明数组的列数。</p>
-<p>数组的行数没有太大关系，因为前面已经讲过，函数调用时传递的是一个指针，它指向由行</p>
-<p>向量构成的一维数组，其中每个行向量是具有 13 个整型元素的一维数组。在该例子中，传递</p>
-<p>给函数的是一个指向很多对象的指针，其中每个对象是由 13 个整型元素构成的一维数组。因</p>
-<p>此，如果将数组 daytab 作为参数传递给函数 f，那么 f 的声明应该写成下列形式：</p>
+<p>数组的行数没有太大关系，因为前面已经讲过，函数调用时传递的是一个指针，它指向由行向量构成的一维数组，其中每个行向量是具有 13 个整型元素的一维数组。在该例子中，传递给函数的是一个指向很多对象的指针，其中每个对象是由 13 个整型元素构成的一维数组。因此，如果将数组 daytab 作为参数传递给函数 f，那么 f 的声明应该写成下列形式：</p>
 <pre><code>f(<span class="kw">int</span> daytab[2][13]) { ... }</code></pre>
 <p>也可以写成</p>
 <pre><code>f(<span class="kw">int</span> daytab[][13]) { ... }</code></pre>
 <p>因为数组的行数无关紧要，所以，该声明还可以写成</p>
 <pre><code>f(<span class="kw">int</span> (*daytab)[13]) { ... }</code></pre>
-<p>这种声明形式表明参数是一个指针，它指向具有 13 个整型元素的一维数组。因为方括号[]的</p>
-<p>优先级高于*的优先级，所以上述声明中必须使用圆括号。如果去掉括号，则声明变成</p>
-<p>int *daytab[13]</p>
+<p>这种声明形式表明参数是一个指针，它指向具有 13 个整型元素的一维数组。因为方括号[]的优先级高于*的优先级，所以上述声明中必须使用圆括号。如果去掉括号，则声明变成</p>
+<pre><code><span class="kw">int</span> *daytab[13]</code></pre>
 <p>这相当于声明了一个数组，该数组有 13 个元素，其中每个元素都是一个指向整型对象的指针。</p>
 <p>一般来说，除数组的第一维（下标）可以不指定大小外，其余各维都必须明确指定大小。</p>
 <p>我们将在 5.12 节中进一步讨论更复杂的声明。</p>
 <p>练习 5-8</p>
-<p>函数 day_of_year 和 month_day 中没有进行错误检查，请解决该问题。</p>
-<p>5.8.</p>
-<p>指针数组的初始化</p>
-<p>考虑这样一个问题：编写一个函数 month_name(n)，它返回一个指向第 n 个月名字的</p>
-<p>字符串的指针。这是内部 static 类型数组的一种理想的应用。month_name 函数中包含一</p>
-<p>个私有的字符串数组，当它被调用时，返回一个指向正确元素的指针。本节将说明如何初始</p>
-<p>化该名字数组。</p>
-<p>指针数组的初始化语法和前面所讲的其它类型对象的初始化语法类似：</p>
-<pre><code><span class="cm">/* month_name: <span class="kw">return</span> name of n-th month */</span></code></pre>
-<p>char *month_name(int n)</p>
-<pre><code>{</code></pre>
-<p>static char *name[] = {</p>
-<pre><code><span class="str">"Illegal month"</span>,
-<span class="str">"January"</span>, <span class="str">"February"</span>, <span class="str">"March"</span>,
-<span class="str">"April"</span>, <span class="str">"May"</span>, <span class="str">"June"</span>,
-<span class="str">"July"</span>, <span class="str">"August"</span>, <span class="str">"September"</span>,
-<span class="str">"October"</span>, <span class="str">"November"</span>, <span class="str">"December"</span>
-};</code></pre>
-<p>其中，name 的声明与排序例子中 lineptr 的声明相同，是一个一维数组，数组的元素为字</p>
-<p>符指针。name 数组的初始化通过一个字符串列表实现，列表中的每个字符串赋值给数组相应</p>
-<p>位置的元素。第 i 个字符串的所有字符存储在存储器中的某个位置，指向它的指针存储在</p>
-<p>name[i]中。由于上述声明中没有指明 name 的长度，因此，编译器编译时将对初值个数进</p>
-<p>行统计，并将这一准确数字填入数组的长度。</p>
-    </div>
+<p>函数 day_of_year 和 month_day 中没有进行错误检查，请解决该问题。</p>    </div>
 </body>
 </html>

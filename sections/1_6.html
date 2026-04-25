@@ -3,46 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1.6 编写一个程序，以每行一个单词的形式打印其输入。 - C语言教程</title>
+    <title>1.6 数组 - C语言教程</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,48 +73,20 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
     <div class="section-header">
         <div class="section-number">第 1 章</div>
-        <h1 class="section-title">1.6 编写一个程序，以每行一个单词的形式打印其输入。</h1>
+        <h1 class="section-title">1.6 数组</h1>
     </div>
     <div class="content">
-<p>数组</p>
-<p>在这部分内容中，我们来编写一个程序，以统计各个数字、空白符（包括空格符、制表</p>
-<p>符及换行符）以及所有其它字符出现的次数。这个程序的实用意义并不大，但我们可以通过</p>
-<p>该程序讨论 C 语言多方面的问题。</p>
-<p>所有的输入字符可以分成 12 类，因此可以用一个数组存放各个数字出现的次数，这样比</p>
-<p>使用 10 个独立的变量更方便。下面是该程序的一种版本：</p>
+<p>在这部分内容中，我们来编写一个程序，以统计各个数字、空白符（包括空格符、制表符及换行符）以及所有其它字符出现的次数。这个程序的实用意义并不大，但我们可以通过该程序讨论 C 语言多方面的问题。</p>
+<p>所有的输入字符可以分成 12 类，因此可以用一个数组存放各个数字出现的次数，这样比使用 10 个独立的变量更方便。下面是该程序的一种版本：</p>
 <pre><code>#include &lt;stdio.h&gt;
 <span class="cm">/* count digits, white space, others */</span>
 <span class="fn">main</span>()
@@ -123,72 +94,54 @@
 <span class="kw">int</span> c, i, nwhite, nother;
 <span class="kw">int</span> ndigit[10];
 nwhite = nother = 0;
-<span class="kw">for</span> (i = 0; i &lt; 10; ++i)</code></pre>
-<p>ndigit[i] = 0;</p>
-<pre><code><span class="kw">while</span> ((c = <span class="fn">getchar</span>()) != EOF)
-<span class="kw">if</span> (c &gt;= '0' &amp;&amp; c &lt;= '9')</code></pre>
-<p>++ndigit[c-'0'];</p>
-<p>else if (c == ' ' || c == '\n' || c == '\t')</p>
-<p>++nwhite;</p>
-<p>else</p>
-<p>++nother;</p>
-<pre><code><span class="fn">printf</span>(<span class="str">"digits ="</span>);
+<span class="kw">for</span> (i = 0; i &lt; 10; ++i)
+ndigit[i] = 0;
+<span class="kw">while</span> ((c = <span class="fn">getchar</span>()) != EOF)
+<span class="kw">if</span> (c &gt;= '0' &amp;&amp; c &lt;= '9')
+++ndigit[c-'0'];
+<span class="kw">else</span> <span class="kw">if</span> (c == ' ' || c == '\n' || c == '\t')
+++nwhite;
+<span class="kw">else</span>
+++nother;
+<span class="fn">printf</span>(<span class="str">"digits ="</span>);
 <span class="kw">for</span> (i = 0; i &lt; 10; ++i)
 <span class="fn">printf</span>(<span class="str">" %d"</span>, ndigit[i]);
-<span class="fn">printf</span>(<span class="str">", white space = %d, other = %d\n"</span>,</code></pre>
-<p>nwhite, nother);</p>
-<pre><code>}</code></pre>
+<span class="fn">printf</span>(<span class="str">", white space = %d, other = %d\n"</span>,
+nwhite, nother);
+}</code></pre>
 <p>当把这段程序本身作为输入时，输出结果为：</p>
 <pre><code>digits = 9 3 0 0 0 0 0 0 0 1, white space = 123, other = 345</code></pre>
 <p>该程序中的声明语句</p>
 <pre><code><span class="kw">int</span> ndigit[10]，</code></pre>
-<p>将变量 ndigit 声明为由 10 个整型数构成的数组。在 C 语言中，数组下标总是从 0 开始，因</p>
-<p>此该数组的 10 个元素分别为 ndigit[0]、ndiglt[1]、…、ndigit[9]，这可以通过初始</p>
-<p>化和打印数组的两个 for 循环语句反映出来。</p>
+<p>将变量 ndigit 声明为由 10 个整型数构成的数组。在 C 语言中，数组下标总是从 0 开始，因此该数组的 10 个元素分别为 ndigit[0]、ndiglt[1]、…、ndigit[9]，这可以通过初始化和打印数组的两个 for 循环语句反映出来。</p>
 <p>数组下标可以是任何整型表达式，包括整型变量（如 i）以及整型常量。</p>
 <p>该程序的执行取决于数字的字符表示属性。例如，测试语句</p>
 <pre><code><span class="kw">if</span> (c &gt;= '0' &amp;&amp; c &lt;= '9')</code></pre>
-<p>用于判断 c 中的字符是否为数字。如果它是数字，那么该数字对应的数值是</p>
-<p>c- '0'</p>
-<p>只有当'0'、'1'、…、'9'具有连续递增的值时，这种做法才可行。幸运的是，所有的字符</p>
-<p>集都是这样的。</p>
-<p>由定义可知，char 类型的字符是小整型，因此 char 类型的变量和常量在算术表达式中</p>
-<p>等价于 int 类型的变量和常量。这样做既自然又方便，例如，c - '0'是一个整型表达式，</p>
-<p>如果存储在 c 中的字符是'0'～'9'，其值将为 0～9，因此可以充当数组 ndigit 的合法下</p>
-<p>标。</p>
+<p>用于判断 c 中的字符是否为数字。如果它是数字，那么该数字对应的数值是c- '0'</p>
+<p>只有当'0'、'1'、…、'9'具有连续递增的值时，这种做法才可行。幸运的是，所有的字符集都是这样的。</p>
+<p>由定义可知，char 类型的字符是小整型，因此 char 类型的变量和常量在算术表达式中等价于 int 类型的变量和常量。这样做既自然又方便，例如，c - '0'是一个整型表达式，如果存储在 c 中的字符是'0'～'9'，其值将为 0～9，因此可以充当数组 ndigit 的合法下标。</p>
 <p>判断一个字符是数字、空白符还是其它字符的功能可以由下列语句序列完成：</p>
-<pre><code><span class="kw">if</span> (c &gt;= '0' &amp;&amp; c &lt;= '9')</code></pre>
-<p>++ndigit[c-'0'];</p>
-<p>else if (c == ' ' || c == '\n' || c == '\t')</p>
-<p>++nwhite;</p>
-<p>else</p>
-<p>++nother;</p>
+<pre><code><span class="kw">if</span> (c &gt;= '0' &amp;&amp; c &lt;= '9')
+++ndigit[c-'0'];
+<span class="kw">else</span> <span class="kw">if</span> (c == ' ' || c == '\n' || c == '\t')
+++nwhite;
+<span class="kw">else</span>
+++nother;</code></pre>
 <p>程序中经常使用下列方式表示多路判定：</p>
-<pre><code><span class="kw">if</span> (条件 1)</code></pre>
-<p>语句 1</p>
-<p>else if (条件 1)</p>
+<p>if (条件 1)</p>
+<p>语句 1else if (条件 1)</p>
 <p>语句 2</p>
-<p>...</p>
-<p>...</p>
-<p>else</p>
-<p>语句 n</p>
-<p>在这种方式中，各条件从前往后依次求值，直到满足某个条件，然后执行对应的语句部分。</p>
-<p>这部分语句执行完成后，整个语句体执行结束（其中的任何语句都可以是括在花括号中的若</p>
-<p>干条语句）。如果所有条件都不满足，则执行位于最后一个 else 之后的语句（如果有的话）。</p>
-<p>类似于前面的单词计数程序，如果没有最后一个 else 及对应的语句，该语句体将不执行任何</p>
-<p>动作。在第一个 if 与最后一个 else 之间可以有 0 个或多个下列形式的语句序列：</p>
+<pre><code>...
+...
+<span class="kw">else</span></code></pre>
+<p>语句 n在这种方式中，各条件从前往后依次求值，直到满足某个条件，然后执行对应的语句部分。</p>
+<p>这部分语句执行完成后，整个语句体执行结束（其中的任何语句都可以是括在花括号中的若干条语句）。如果所有条件都不满足，则执行位于最后一个 else 之后的语句（如果有的话）。</p>
+<p>类似于前面的单词计数程序，如果没有最后一个 else 及对应的语句，该语句体将不执行任何动作。在第一个 if 与最后一个 else 之间可以有 0 个或多个下列形式的语句序列：</p>
 <p>else if (条件)</p>
-<p>语句</p>
-<p>就程序设计风格而言，我们建议读者采用上面所示的缩进格式以体现该结构的层次关系，</p>
-<p>否则，如果每个 if 都比前一个 else 向里缩进一些距离，那么较长的判定序列就可能超出页</p>
-<p>面的右边界。</p>
-<p>第 3 章将讨论的 switch 语句提供了编写多路分支程序的另一种方式，它特别适合于判</p>
-<p>定某个整型或字符表达式是否与一个常量集合中的某个元素相匹配的情况。我们将在 3.4 节给</p>
-<p>出用 switch 语句编写的该程序的另一个版本，与此进行比较。</p>
+<p>语句就程序设计风格而言，我们建议读者采用上面所示的缩进格式以体现该结构的层次关系，否则，如果每个 if 都比前一个 else 向里缩进一些距离，那么较长的判定序列就可能超出页面的右边界。</p>
+<p>第 3 章将讨论的 switch 语句提供了编写多路分支程序的另一种方式，它特别适合于判定某个整型或字符表达式是否与一个常量集合中的某个元素相匹配的情况。我们将在 3.4 节给出用 switch 语句编写的该程序的另一个版本，与此进行比较。</p>
 <p>练习 1-13</p>
-<p>编写一个程序，打印输入中单词长度的直方图。水平方向的直方图比较容易</p>
-<p>绘制，垂直方向的直方图则要困难些。</p>
-<p>练习 1-14</p>
-    </div>
+<p>编写一个程序，打印输入中单词长度的直方图。水平方向的直方图比较容易绘制，垂直方向的直方图则要困难些。</p>
+<p>练习 1-14</p>    </div>
 </body>
 </html>

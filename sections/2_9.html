@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,68 +85,39 @@
         <h1 class="section-title">2.9 按位运算符</h1>
     </div>
     <div class="content">
-<p>C 语言提供了 6 个位操作运算符。这些运算符只能作用于整型操作数，即只能作用于带符</p>
-<p>号或无符号 char、short、int、long 类型：</p>
-<p>&amp;</p>
-<p>|</p>
-<p>^</p>
-<pre><code>&lt;&lt;
-&gt;&gt;</code></pre>
-<p>~</p>
-<p>按位与（AND）</p>
+<p>C 语言提供了 6 个位操作运算符。这些运算符只能作用于整型操作数，即只能作用于带符号或无符号 char、short、int、long 类型：</p>
+<p>&amp;|^&lt;&lt;&gt;&gt;~按位与（AND）</p>
 <p>按位或（OR）</p>
 <p>按位异或（XOR）</p>
-<p>左移</p>
-<p>右移</p>
-<p>按位求反（一元运算符）</p>
+<p>左移右移按位求反（一元运算符）</p>
 <p>按位与运算符&amp;经常用于屏蔽某些二进制位，例如：</p>
 <pre><code>n = n &amp; 0177：</code></pre>
 <p>该语句将 n 中除 7 个低二进制位外的其它各位均置为 0。</p>
 <p>按位或运算符|常用于将某些二进制位置为 1，例如：</p>
 <pre><code>x = x | SET_ON；</code></pre>
 <p>该语句将 x 中对应于 SET_ON 中为 1 的那些二进制位置为 1。</p>
-<p>按位异或运算符^当两个操作数的对应位不相同时将该位设置为 1，否则，将该位设置为</p>
-<p>0。</p>
-<p>我们必须将位运算符&amp;、|同逻辑运算符&amp;&amp;、||区分开来，后者用于从左至右求表达式的</p>
-<p>真值。例如，如果 x 的值为 1，Y 的值为 2，那么，x &amp; y 的结果为 0，而 x &amp;&amp; y 的值为 1。</p>
-<p>移位运算符&lt;&lt;与&gt;&gt;分别用于将运算的左操作数左移与右移，移动的位数则由右操作数指</p>
-<p>定（右操作数的值必须是非负值）</p>
-<p>。因此，表达式 x &lt;&lt; 2 将把 x 的值左移 2 位，右边空出的</p>
-<p>2 位用 0 填补，该表达式等价于对左操作数乘以 4。在对 unsigned 类型的无符号值进行右移</p>
-<p>位时，左边空出的部分将用 0 填补；当对 signed 类型的带符号值进行右移时，某些机器将</p>
-<p>对左边空出的部分用符号位填补（即“算术移位”），而另一些机器则对左边空出的部分用 0</p>
-<p>填补（即“逻辑移位”</p>
-<p>）</p>
+<p>按位异或运算符^当两个操作数的对应位不相同时将该位设置为 1，否则，将该位设置为0。</p>
+<p>我们必须将位运算符&amp;、|同逻辑运算符&amp;&amp;、||区分开来，后者用于从左至右求表达式的真值。例如，如果 x 的值为 1，Y 的值为 2，那么，x &amp; y 的结果为 0，而 x &amp;&amp; y 的值为 1。</p>
+<p>移位运算符&lt;&lt;与&gt;&gt;分别用于将运算的左操作数左移与右移，移动的位数则由右操作数指定（右操作数的值必须是非负值）</p>
+<p>。因此，表达式 x &lt;&lt; 2 将把 x 的值左移 2 位，右边空出的2 位用 0 填补，该表达式等价于对左操作数乘以 4。在对 unsigned 类型的无符号值进行右移位时，左边空出的部分将用 0 填补；当对 signed 类型的带符号值进行右移时，某些机器将对左边空出的部分用符号位填补（即“算术移位”），而另一些机器则对左边空出的部分用 0填补（即“逻辑移位”）</p>
 <p>。</p>
-<p>一元运算符~用于求整数的二进制反码，即分别将操作数各二进制位上的 1 变为 0，0 变</p>
-<p>为 1。例如：</p>
+<p>一元运算符~用于求整数的二进制反码，即分别将操作数各二进制位上的 1 变为 0，0 变为 1。例如：</p>
 <pre><code>x = x &amp; ~077</code></pre>
-<p>将把 x 的最后 6 位设置为 0。注意，表达式 x &amp; ~077 与机器字长无关，它比形式为 x &amp; 0177700</p>
-<p>的表达式要好，同为后者假定 x 是 16 位的数值。这种可移植的形式并没有增加额外开销，因</p>
-<p>为，~077 是常量表达式，可以在编译时求值。</p>
-<p>为了进一步说明某些位运算符，我们来看函数 getbits(x, p, n)，它返回 x 中从右边</p>
-<p>数第 p 位开始向右数 n 位的字段。这里假定最右边的一位是第 0 位，n 与 p 都是合理的正值。</p>
+<p>将把 x 的最后 6 位设置为 0。注意，表达式 x &amp; ~077 与机器字长无关，它比形式为 x &amp; 0177700的表达式要好，同为后者假定 x 是 16 位的数值。这种可移植的形式并没有增加额外开销，因为，~077 是常量表达式，可以在编译时求值。</p>
+<p>为了进一步说明某些位运算符，我们来看函数 getbits(x, p, n)，它返回 x 中从右边数第 p 位开始向右数 n 位的字段。这里假定最右边的一位是第 0 位，n 与 p 都是合理的正值。</p>
 <p>例如，getbits(x, 4, 3)返回 x 中第 4、3、2 三位的值。</p>
-<pre><code><span class="cm">/* getbits: get n bits from position p */</span></code></pre>
-<p>unsigned getbits(unsigned x, int p, int n)</p>
-<pre><code>{
+<pre><code><span class="cm">/* getbits: get n bits from position p */</span>
+<span class="kw">unsigned</span> getbits(<span class="kw">unsigned</span> x, <span class="kw">int</span> p, <span class="kw">int</span> n)
+{
 <span class="kw">return</span> (x &gt;&gt; (p+1-n)) &amp; ~(~0 &lt;&lt; n);
 }</code></pre>
-<p>其中，表达式 m &lt;&lt; (p+1-n)将期望获得的字段移位到字的最右端。~0 的所有位都为 1，这</p>
-<p>里使用语句~0 &lt;&lt; n 将~0 左移 n 位，并将最右边的 n 位用 0 填补。再使用~运算对它按位取</p>
-<p>反，这样就建立了最右边 n 位全为 1 的屏蔽码。</p>
+<p>其中，表达式 m &lt;&lt; (p+1-n)将期望获得的字段移位到字的最右端。~0 的所有位都为 1，这里使用语句~0 &lt;&lt; n 将~0 左移 n 位，并将最右边的 n 位用 0 填补。再使用~运算对它按位取反，这样就建立了最右边 n 位全为 1 的屏蔽码。</p>
 <p>练习 2-6</p>
-<p>编写一个函数 setbits(x, p, n, y)，该函数返回对 x 执行下列操作后</p>
-<p>的结果值：将 x 中从第 p 位开始的 n 个（二进制）位设置为 y 中最右边 n 位的值，x 的其余</p>
-<p>各位保持不变。</p>
+<p>编写一个函数 setbits(x, p, n, y)，该函数返回对 x 执行下列操作后的结果值：将 x 中从第 p 位开始的 n 个（二进制）位设置为 y 中最右边 n 位的值，x 的其余各位保持不变。</p>
 <p>练习 2-7</p>
-<p>编写一个函数 invert(x, p, n)，该函数返回对 x 执行下列操作后的结</p>
-<p>果值：将 x 中从第 p 位开始的 n 个（二进制）位求反（即，1 变成 0，0 变成 1）</p>
-<p>，x 的其余各</p>
-<p>位保持不变。</p>
+<p>编写一个函数 invert(x, p, n)，该函数返回对 x 执行下列操作后的结果值：将 x 中从第 p 位开始的 n 个（二进制）位求反（即，1 变成 0，0 变成 1）</p>
+<p>，x 的其余各位保持不变。</p>
 <p>练习 2-8</p>
-<p>编写一个函数 rightrot(x, n)，该函数返回将 x 循环右移（即从最右端</p>
-<p>移出的位将从最左端移入）n（二进制）位后所得到的值。</p>
-    </div>
+<p>编写一个函数 rightrot(x, n)，该函数返回将 x 循环右移（即从最右端移出的位将从最左端移入）n（二进制）位后所得到的值。</p>    </div>
 </body>
 </html>

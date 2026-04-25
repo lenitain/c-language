@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,21 @@
         <h1 class="section-title">4.6 静态变量</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>某些变量，比如文件 stack.c 中定义的变量 sp 与 val 以及文件 getch.c 中定义的变量 buf 与 bufp，它们仅供其所在的源文件中的函数使用，其它函数不能访问。用 static声明限定外部变量与函数，可以将其后声明的对象的作用域限定为被编译源文件的剩余部分。</p>
+<p>通过 static 限定外部对象，可以达到隐藏外部对象的目的，比如，getch-ungetch 复合结构需要共享 buf 与 bufp 两个变量，这样 buf 与 bufp 必须是外部变量，但这两个对象不应该被 getch 与 ungetch 函数的调用者所访问。</p>
+<p>要将对象指定为静态存储，可以在正常的对象声明之前加上关键字 static 作为前缀。</p>
+<p>如果把上述两个函数和两个变量放在一个文件中编译，如下所示：</p>
+<pre><code><span class="kw">static</span> <span class="kw">char</span> buf[BUFSIZE]; <span class="cm">/* buffer <span class="kw">for</span> ungetch */</span>
+<span class="kw">static</span> <span class="kw">int</span> bufp = 0;
+<span class="cm">/* next <span class="fn">free</span> position in buf */</span>
+<span class="kw">int</span> getch(<span class="kw">void</span>) { ... }
+<span class="kw">void</span> ungetch(<span class="kw">int</span> c) { ... }</code></pre>
+<p>那么其它函数就不能访问变量 buf 与 bufp，因此这两个名字不会和同一程序中的其它文件中的相同的名字相冲突。同样，可以通过把变量 sp 与 val 声明为静态类型隐藏这两个由执行栈操作的 push 与 pop 函数使用的变量。</p>
+<p>外部的 static 声明通常多用于变量，当然，它也可用于声明函数。通常情况下，函数名字是全局可访问的，对整个程序的各个部分而言都可见。但是，如果把函数声明为 static类型，则该函数名除了对该函数声明所在的文件可见外，其它文件都无法访问。</p>
+<pre><code><span class="kw">static</span> 也可用于声明内部变量。<span class="kw">static</span> 类型的内部变量同自动变量一样，是某个特定</code></pre>
+<p>函数的局部变量，只能在该函数中使用，但它与自动变量不同的是，不管其所在函数是否被调用，它一直存在，而不像自动变量那样，随着所在函数的被调用和退出而存在和消失。换句话说，static 类型的内部变量是一种只能在某个特定函数中使用但一直占据存储空间的变量。</p>
+<p>练习 4-11</p>
+<p>修改 getop 函数，使其不必使用 ungetch 函数。提示：可以使用一个</p>
+<pre><code><span class="kw">static</span> 类型的内部变量解决该问题。</code></pre>    </div>
 </body>
 </html>

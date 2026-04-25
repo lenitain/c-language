@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,60 @@
         <h1 class="section-title">B.5 实用函数：<stdlib.h></h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>实用函数：&lt;stdlib.h&gt;头文件&lt;stdlib.h&gt;中声明了一些执行数值转换、内存分配以及其它类似工作的函数。</p>
+<pre><code><span class="kw">double</span> <span class="fn">atof</span>(<span class="kw">const</span> <span class="kw">char</span> *s)</code></pre>
+<p>atof 函 数 将 字 符 串 s 转 换 为 double 类 型 。 该 函 数 等 价 于 strtod （ s,(char**)NULL）</p>
+<p>。</p>
+<pre><code><span class="kw">int</span> <span class="fn">atoi</span>(<span class="kw">const</span> <span class="kw">char</span> *s)</code></pre>
+<p>atoi 函 数 将 字 符 串 s 转 换 为 int 类 型 。 该 函 数 等 价 于 (int)strtol(s,(char**)NULL, 10)。</p>
+<pre><code><span class="kw">long</span> atol(<span class="kw">const</span> <span class="kw">char</span> *s)</code></pre>
+<p>atol 函数将字符串 s 转换为 long 类型。该函数等价于 strtol(s, (char**)NULL,10)。</p>
+<pre><code><span class="kw">double</span> strtod(<span class="kw">const</span> <span class="kw">char</span> *s, <span class="kw">char</span> **endp)</code></pre>
+<p>strtod 函数将字符串 s 的前缀转换为 double 类型，并在转换时跳过 s 的前导空白符。</p>
+<p>除了 endp 为 NULL，否则该函数将把指向 s 中未转换部分（s 的后缀部分）</p>
+<p>的指针保存在*endp中。如果结果上溢，则函数返回带有适当符号 HUGE_VAL；如果结果下溢，则返回 0。在这两种情况下，errno 都将被设置为 ERANGE。</p>
+<pre><code><span class="kw">long</span> strtol(<span class="kw">const</span> <span class="kw">char</span> *s, <span class="kw">char</span> **endp, <span class="kw">int</span> base)</code></pre>
+<p>strtol 函数将字符串 s 的前缀转换为 long 类型，并在转换时跳过 s 的前导空白符。除非 endp 为 NULL，否则该函数将把指向 s 中末转换部分（s 的后辍部分）的指针保存在*endp中。如果 base 的取值在 2～36 之间，则假定输入是以该数为基底的；如果 base 的取值为 0，则基底为八进制、十进制或十六进制。以 0 为前缀的是八进制，以 0x 或 0X 为前缀的是十六进制。无论在哪种情况下。字母均表示 10～base-1 之间的数字。如果 base 值是 16，则可以加上前导 0x 或 0X。如果结果上溢，则函数根据结果的符号返回 LONG_MAX 或 LONG_MIN，同时将 errno 的值设置为 ERANGE。</p>
+<pre><code><span class="kw">unsigned</span> <span class="kw">long</span> strtoul(<span class="kw">const</span> <span class="kw">char</span> *s, <span class="kw">char</span> **endp, <span class="kw">int</span> base)</code></pre>
+<p>strtoul 函数的功能与 strtol 函数相同，但其结果为 unsigned long 类型，错误值为 ULONG_MAX。</p>
+<pre><code><span class="kw">int</span> rand(<span class="kw">void</span>)</code></pre>
+<p>rand 函数产生一个 0～RAND_MAX 之间的伪随机整数。RAND_MAX 的取值至少为 32767。</p>
+<pre><code><span class="kw">void</span> srand(<span class="kw">unsigned</span> <span class="kw">int</span> seed)</code></pre>
+<p>srand 函数将 seed 作为生成新的伪随机数序列的种子数。种子数 seed 的初值为 1。</p>
+<pre><code><span class="kw">void</span> *calloc(size_t nobj, size_t size)</code></pre>
+<p>calloc 函数为由 nobj 个长度为 size 的对象组成的数组分配内存，并返回指向分配区域的指针；若无法满足要求，则返回 NULL。该空间的初始长度为 0 字节。</p>
+<pre><code><span class="kw">void</span> *<span class="fn">malloc</span>(size_t size)</code></pre>
+<p>malloc 函数为长度为 size 的对象分配内存，并返回指向分配区域的指针；若无法满足要求，则返回 NULL。该函数不对分配的内存区域进行初始化。</p>
+<pre><code><span class="kw">void</span> *realloc(<span class="kw">void</span> *p, size_t size)</code></pre>
+<p>realloc 函数将 p 指向的对象的长度修改为 size 个字节。如果新分配的内存比原内存大，则原内存的内容保持不变，增加的空间不进行初始化。如果新分配的内存比原内存小，则新分配内存单元不被初始化：realloc 函数返回指向新分配空间的指针；若无法满足要求，则返回 NULL。在这种情况下，原指针 p 指向的单元内容保持不变。</p>
+<pre><code><span class="kw">void</span> <span class="fn">free</span>(<span class="kw">void</span> *p)</code></pre>
+<p>free 函数释放 p 指向的内存空间。当 p 的值为 NULL 时，该函数不执行任何操作。P 必须指向先前使用动态分配函数 malloe、realloc 或 calloc 分配的空间。</p>
+<pre><code><span class="kw">void</span> abort(<span class="kw">void</span>)</code></pre>
+<p>abort 函数使程序非正常终止。其功能与 raise(SIGABRT)类似。</p>
+<pre><code><span class="kw">void</span> <span class="fn">exit</span>(<span class="kw">int</span> status)</code></pre>
+<p>exit 函数使程序正常终止。atexit 函数的调用顺序与登记的顺序相反，这种情况下，所有已打开的文件缓冲区将被清洗，所有已打开的流将被关闭，控制也将返回给环境。status的值如何返回给环境要视具体的实现而定，但 0 值表示终止成功。也可使用值 EXIT_SUCCESS和 EXIT_FAILURE 作为返回值。</p>
+<pre><code><span class="kw">int</span> atexit(<span class="kw">void</span> (*fcn)(<span class="kw">void</span>))</code></pre>
+<p>atexit 函数登记函数 fcn，该函数将在程序正常终止时被调用。如果登记失败，则返回非 0 值。</p>
+<pre><code><span class="kw">int</span> system(<span class="kw">const</span> <span class="kw">char</span> *s)</code></pre>
+<p>system 函数将字符串 s 传递给执行环境。如果 s 的值为 NULL，并且有命令处理程序，则该函数返回非 0 值。如果 s 的值不是 NULL，则返回值与具体的实现有关。</p>
+<pre><code><span class="kw">char</span> *getenv(<span class="kw">const</span> <span class="kw">char</span> *name)</code></pre>
+<p>getenv 函数返回与 name 有关的环境字符串。如果该字符串不存在，则返回 NULL。其细节与具体的实现有关。</p>
+<pre><code><span class="kw">void</span> *bsearch(<span class="kw">const</span> <span class="kw">void</span> *key, <span class="kw">const</span> <span class="kw">void</span> *base,
+size_t n, size_t size,
+<span class="kw">int</span> (*cmp)(<span class="kw">const</span> <span class="kw">void</span> *keyval, <span class="kw">const</span> <span class="kw">void</span> *datum))</code></pre>
+<p>bsearch 函数在 base[0]...base[n-1]之间查找与*key 匹配的项。在函数 cmp 中，如果第一个参数（查找关键字）小于第二个参数（表项）</p>
+<p>，它必须返回一个负值；如果第一个参数等于第二个参数，它必须返回零；如果第一个参数大于第二个参数，它必须返回一个正值。数组 base 中的项必须按升序排列。bsearch 函数返回一个指针，它指向一个匹配项，如果不存在匹配项，则返回 NULL。</p>
+<pre><code><span class="kw">void</span> qsort(<span class="kw">void</span> *base, size_t n, size_t size,
+<span class="kw">int</span> (*cmp)(<span class="kw">const</span> <span class="kw">void</span> *, <span class="kw">const</span> <span class="kw">void</span> *))</code></pre>
+<p>qsort 函数对 base[0]...base[n-1]数组中的对象进行升序排序，数组中每个对象的长度为 size。比较函数 cmp 与 bsearch 函数中的描述相同。</p>
+<pre><code><span class="kw">int</span> abs(<span class="kw">int</span> n)</code></pre>
+<p>abs 函数返回 int 类型参数 n 的绝对值。</p>
+<pre><code><span class="kw">long</span> labs(<span class="kw">long</span> n)</code></pre>
+<p>labs 函数返回 long 类型参数 n 的绝对值。</p>
+<p>div_t div(int num, int denom)</p>
+<p>div 函数计算 num/denom 的商和余数，并把结果分别保存在结构类型 div_t 的两个 int类型的成员 quot 和 rem 中。</p>
+<p>ldiv_t ldiv(long num, long denom)</p>
+<p>idiv 函数计算 num/denom 的商和余数，并把结果分别保存在结构类型 idiv_t 的两个</p>
+<pre><code><span class="kw">long</span> 类型的成员 quot 和 rem 中。</code></pre>    </div>
 </body>
 </html>

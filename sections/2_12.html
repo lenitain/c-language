@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,80 +85,28 @@
         <h1 class="section-title">2.12 运算符优先级与求值次序</h1>
     </div>
     <div class="content">
-<p>表 2-1 总结了所有运算符的优先级与结合性，其中的一些规则我们还没有讲述。同一行中</p>
-<p>的各运算符具有相同的优先级，各行间从上往下优先级逐行降低。例如，*、/与%三者具有相</p>
-<p>同的优先级，它们的优先级都比二元运算符+、-高。运算符( )表示函数调用。运算符-&gt;和.</p>
-<p>用于访问结构成员，第 6 章将讨论这两个运算符以及 sizeof(对象长度)运算符。第 5 章将</p>
-<p>讨论运算符*（通过指针间接访问）与&amp;（对象地址）</p>
+<p>表 2-1 总结了所有运算符的优先级与结合性，其中的一些规则我们还没有讲述。同一行中的各运算符具有相同的优先级，各行间从上往下优先级逐行降低。例如，*、/与%三者具有相同的优先级，它们的优先级都比二元运算符+、-高。运算符( )表示函数调用。运算符-&gt;和.</p>
+<p>用于访问结构成员，第 6 章将讨论这两个运算符以及 sizeof(对象长度)运算符。第 5 章将讨论运算符*（通过指针间接访问）与&amp;（对象地址）</p>
 <p>，第 3 章将讨论逗号运算符。</p>
-<p>表 2-1 运算符的优先级与结合性</p>
-<p>运算符</p>
-<p>结合性</p>
-<p>() [] -&gt; .</p>
-<p>从左至右</p>
-<p>! ~ ++ -- + - * (type) sizeof</p>
-<p>从右至左</p>
-<pre><code>* / %</code></pre>
-<p>从左至右</p>
-<p>+ -</p>
-<p>从左至右</p>
-<pre><code>&lt;&lt; &gt;&gt;</code></pre>
-<p>从左至右</p>
-<pre><code>&lt; &lt;= &gt; &gt;=</code></pre>
-<p>从左至右</p>
-<p>== !=</p>
-<p>从左至右</p>
-<p>&amp;</p>
-<p>从左至右</p>
-<p>^</p>
-<p>从左至右</p>
-<p>|</p>
-<p>从左至右</p>
-<p>&amp;&amp;</p>
-<p>从左至右</p>
-<p>||</p>
-<p>从左至右</p>
-<p>?:</p>
-<p>从左至右</p>
-<p>= += -= *= /= %= &amp;= ^= |= &lt;&lt;= &gt;&gt;=</p>
-<p>从右至左</p>
-<p>,</p>
-<p>从右至左</p>
-<p>注：一元运算符+、-、&amp;与*比相应的二元运算符+、-、&amp;与*的优先级高。</p>
+<p>表 2-1 运算符的优先级与结合性运算符结合性() [] -&gt; .</p>
+<p>从左至右! ~ ++ -- + - * (type) sizeof从右至左* / %从左至右+ -从左至右&lt;&lt; &gt;&gt;从左至右&lt; &lt;= &gt; &gt;=从左至右== !=从左至右&amp;从左至右^从左至右|从左至右&amp;&amp;从左至右||从左至右?:从左至右= += -= *= /= %= &amp;= ^= |= &lt;&lt;= &gt;&gt;=从右至左,从右至左注：一元运算符+、-、&amp;与*比相应的二元运算符+、-、&amp;与*的优先级高。</p>
 <p>注意，位运算符&amp;、^与|的优先级比运算符==与!=的低。这意味着，位测试表达式，如</p>
 <pre><code><span class="kw">if</span> ((x &amp; MASK) == 0) ...</code></pre>
 <p>必须用圆括号括起来才能得到正确结果。</p>
-<p>同大多数语言一样，C 语言没有指定同一运算符中多个操作数的计算顺序（&amp;&amp;、||、?:</p>
-<p>和,运算符除外）</p>
+<p>同大多数语言一样，C 语言没有指定同一运算符中多个操作数的计算顺序（&amp;&amp;、||、?:和,运算符除外）</p>
 <p>。例如，在形如</p>
 <pre><code>x = f() + g();</code></pre>
-<p>的语句中，f()可以在 g()之前计算，也可以在 g()之后计算。因此，如果函数 f 或 g 改变</p>
-<p>了另一个函数所使用的变量，那么 x 的结果可能会依赖于这两个函数的计算顺序。为了保证</p>
-<p>特定的计算顺序，可以把中间结果保存在临时变量中。</p>
-<p>类似地，C 语言也没有指定函数各参数的求值顺序。因此，下列语句</p>
-<pre><code><span class="fn">printf</span>(<span class="str">"%d %d\n"</span>, ++n, power(2, n)); <span class="cm">/* 错 */</span></code></pre>
-<p>在不同的编译器中可能会产生不同的结果，这取决于 n 的自增运算在 power 调用之前还是之</p>
-<p>后执行。解决的办法是把该语句改写成下列形式：</p>
-<p>++n;</p>
-<pre><code><span class="fn">printf</span>(<span class="str">"%d %d\n"</span>, n, power(2, n));</code></pre>
-<p>函数调用、嵌套赋值语句、自增与自减运算符都有可能产生“副作用”——在对表达式</p>
-<p>求值的同时，修改了某些变量的值。在有副作用影响的表达式中，其执行结果同表达式中的</p>
-<p>变量被修改的顺序之间存在着微妙的依赖关系，下列语句就是一个典型的令人不愉快的情况：</p>
-<p>a[i] = i++;</p>
-<p>问题是：数组下标 i 是引用旧值还是引用新值？对这种情况编译器的解释可能不同，并因此</p>
-<p>产生不同的结果。C 语言标准对大多数这类问题有意未作具体规定。表达式何时会产生这种副</p>
-<p>作用（对变量赋值）</p>
+<p>的语句中，f()可以在 g()之前计算，也可以在 g()之后计算。因此，如果函数 f 或 g 改变了另一个函数所使用的变量，那么 x 的结果可能会依赖于这两个函数的计算顺序。为了保证特定的计算顺序，可以把中间结果保存在临时变量中。</p>
+<p>类似地，C 语言也没有指定函数各参数的求值顺序。因此，下列语句printf("%d %d\n", ++n, power(2, n)); /* 错 */在不同的编译器中可能会产生不同的结果，这取决于 n 的自增运算在 power 调用之前还是之后执行。解决的办法是把该语句改写成下列形式：</p>
+<pre><code>++n;
+<span class="fn">printf</span>(<span class="str">"%d %d\n"</span>, n, power(2, n));</code></pre>
+<p>函数调用、嵌套赋值语句、自增与自减运算符都有可能产生“副作用”——在对表达式求值的同时，修改了某些变量的值。在有副作用影响的表达式中，其执行结果同表达式中的变量被修改的顺序之间存在着微妙的依赖关系，下列语句就是一个典型的令人不愉快的情况：</p>
+<pre><code>a[i] = i++;</code></pre>
+<p>问题是：数组下标 i 是引用旧值还是引用新值？对这种情况编译器的解释可能不同，并因此产生不同的结果。C 语言标准对大多数这类问题有意未作具体规定。表达式何时会产生这种副作用（对变量赋值）</p>
 <p>，将由编译器决定，因为最佳的求值顺序同机器结构有很大关系。</p>
-<p>（ANSI C</p>
-<p>标准明确规定了所有对参数的副作用都必须在函数调用之前生效，但这对前面介绍的 printf</p>
-<p>函数调用没有什么帮助。</p>
+<p>（ANSI C标准明确规定了所有对参数的副作用都必须在函数调用之前生效，但这对前面介绍的 printf函数调用没有什么帮助。</p>
 <p>）</p>
-<p>在任何一种编程语言中，如果代码的执行结果与求值顺序相关，则都是不好的程序设计</p>
-<p>风格。很自然，有必要了解哪些问题需要避免，但是，如果不知道这些问题在各种机器上是</p>
-<p>如何解决的，就最好不要尝试运用某种特殊的实现方式。</p>
-<p>第3章 控制流</p>
-<p>程序语言中的控制流语句用于控制各计算操作执行的次序。在前面的例子中，我们曾经</p>
-<p>使用了一些最常用的控制流结构。本章将更详细地讲述控制流语句。</p>
-    </div>
+<p>在任何一种编程语言中，如果代码的执行结果与求值顺序相关，则都是不好的程序设计风格。很自然，有必要了解哪些问题需要避免，但是，如果不知道这些问题在各种机器上是如何解决的，就最好不要尝试运用某种特殊的实现方式。</p>
+<p>第3章 控制流程序语言中的控制流语句用于控制各计算操作执行的次序。在前面的例子中，我们曾经使用了一些最常用的控制流结构。本章将更详细地讲述控制流语句。</p>    </div>
 </body>
 </html>

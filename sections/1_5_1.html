@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,53 @@
         <h1 class="section-title">1.5.1 文件复制</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>借助于 getchar 与 putchar 函数，可以在不了解其它输入／输出知识的情况下编写出数量惊人的有用的代码。最简单的例子就是把输入一次一个字符地复制到输出，其基本思想如下：</p>
+<p>读一个字符while (该字符不是文件结束指示符)</p>
+<p>输出刚读入的字符读下一个字符将上述基本思想转换为 C 语言程序为：</p>
+<pre><code>#include &lt;stdio.h&gt;
+<span class="cm">/* copy input to output; 1st version
+<span class="fn">main</span>()
+{
+<span class="kw">int</span> c;
+*/</span>
+c = <span class="fn">getchar</span>();
+<span class="kw">while</span> (c != EOF) {
+<span class="fn">putchar</span>(c);
+c = <span class="fn">getchar</span>();
+}
+}</code></pre>
+<p>其中，关系运算符!=表示“不等于”。</p>
+<p>字符在键盘、屏幕或其它的任何地方无论以什么形式表现，它在机器内部都是以位模式存储的。char 类型专门用于存储这种字符型数据，当然任何整型（int）也可以用于存储字符型数据。因为某些潜在的重要原因，我们在此使用 int 类型。</p>
+<p>这里需要解决如何区分文件中有效数据与输入结束符的问题。C 语言采取的解决方法是：</p>
+<p>在没有输入时，getchar 函数将返回一个特殊值，这个特殊值与任何实际字符都不同。这个值称为 EOF（end of file，文件结束）</p>
+<p>。我们在声明变量 c 的时候，必须让它大到足以存放 getchar 函数返回的任何值。这里之所以不把 c 声明成 char 类型，是因为它必须足够大，除了能存储任何可能的字符外还要能存储文件结束符 EOF。因此，我们将 c 声明成 int 类型。</p>
+<p>EOF 定义在头文件&lt;stdio.h&gt;中，是个整型数，其具体数值是什么并不重要，只要它与任何 char 类型的值都不相同即可。这里使用符号常量，可以确保程序不需要依赖于其对应的任何特定的数值。</p>
+<p>对于经验比较丰富的 C 语言程序员，可以把这个字符复制程序编写得更精炼一些。在 C语言中，类似于</p>
+<pre><code>c = <span class="fn">getchar</span>()</code></pre>
+<p>之类的赋值操作是一个表达式，并且具有一个值，即赋值后左边变量保存的值。也就是说，赋值可以作为更大的表达式的一部分出现。如果将为 c 赋值的操作放在 while 循环语句的测试部分中，上述字符复制程序便可以改写成下列形式：</p>
+<pre><code>#include &lt;stdio.h&gt;
+<span class="cm">/* copy input to output; 2nd version
+<span class="fn">main</span>()
+{
+<span class="kw">int</span> c;
+*/</span>
+<span class="kw">while</span> ((c = <span class="fn">getchar</span>()) != EOF)
+<span class="fn">putchar</span>(c);
+}</code></pre>
+<p>在该程序中，while 循环语句首先读一个字符并将其赋值给 c，然后测试该字符是否为文件结束标志。如果该字符不是文件结束标志，则执行 while 语句体，并打印该字符。随后重复执行 while 语句。当到达输入的结尾位置时，while 循环语句终止执行，从而整个 main 函数执行结束。</p>
+<p>以上这段程序将输入集中化，getchar 函数在程序中只出现了一次，这样就缩短了程序，整个程序看起来更紧凑。习惯这种风格后，读者就会发现按照这种方式编写的程序更易阅读。</p>
+<p>我们经常会看到这种风格。</p>
+<p>（不过，如果我们过多地使用这种类型的复杂语句，编写的程序可能会很难理解，应尽量避免这种情况。</p>
+<p>）</p>
+<p>对 while 语句的条件部分来说，赋值表达式两边的圆括号不能省略。不等于运算符!=的优先级比赋值运算符=的优先级要高，这样，在不使用圆括号的情况下关系测试!=将在赋值=操作之前执行。因此语句</p>
+<pre><code>c = <span class="fn">getchar</span>() != EOF</code></pre>
+<p>等价于语句</p>
+<pre><code>c = (<span class="fn">getchar</span>() != EOF)</code></pre>
+<p>该语句执行后，c 的值将被置为 0 或 1（取决于调用 getchar 函数时是否碰到文件结束标志），这并不是我们所希望的结果（更详细的内容，请参见第 2 章的相关部分）</p>
+<p>。</p>
+<p>练习 1-6</p>
+<p>验证表达式 getchar() != EOF 的值是 0 还是 1。</p>
+<p>练习 1-7</p>
+<p>编写一个打印 EOF 值的程序。</p>    </div>
 </body>
 </html>

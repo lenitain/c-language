@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -113,20 +88,14 @@
 <p>文件包含指令（即#include 指令）使得处理大量的#define 指令以及声明更加方便。</p>
 <p>在源文件中，任何形如：</p>
 <pre><code>#include <span class="str">"文件名"</span></code></pre>
-<p>或</p>
+<p>或</p>
 <pre><code>#include &lt;文件名&gt;</code></pre>
-<p>的行都将被替换为由文件名指定的文件的内容。如果文件名用引号引起来，则在源文件所在</p>
-<p>位置查找该文件；如果在该位置没有找到文件，或者如果文件名是用尖括号&lt;与&gt;括起来的，</p>
-<p>则将根据相应的规则查找该文件，这个规则同具体的实现有关。被包含的文件本身也可包含</p>
+<p>的行都将被替换为由文件名指定的文件的内容。如果文件名用引号引起来，则在源文件所在位置查找该文件；如果在该位置没有找到文件，或者如果文件名是用尖括号&lt;与&gt;括起来的，则将根据相应的规则查找该文件，这个规则同具体的实现有关。被包含的文件本身也可包含</p>
 <pre><code>#include 指令。</code></pre>
 <p>源文件的开始处通常都会有多个#include 指令，它们用以包含常见的#define 语句和</p>
-<p>extern 声明，或从头文件中访问库函数的函数原型声明，比如&lt;stdio.h&gt;。</p>
-<p>（严格地说，这</p>
-<p>些内容没有必要单独存放在文件中；访问头文件的细节同具体的实现有关。</p>
+<pre><code><span class="kw">extern</span> 声明，或从头文件中访问库函数的函数原型声明，比如&lt;stdio.h&gt;。</code></pre>
+<p>（严格地说，这些内容没有必要单独存放在文件中；访问头文件的细节同具体的实现有关。</p>
 <p>）</p>
-<p>在大的程序中，#include 指令是将所有声明捆绑在一起的较好的方法。它保证所有的</p>
-<p>源文件都具有相同的定义与变量声明，这样可以避免出现一些不必要的错误。很自然，如果</p>
-<p>某个包含文件的内容发生了变化，那么所有依赖于该包含文件的源文件都必须重新编译。</p>
-    </div>
+<p>在大的程序中，#include 指令是将所有声明捆绑在一起的较好的方法。它保证所有的源文件都具有相同的定义与变量声明，这样可以避免出现一些不必要的错误。很自然，如果某个包含文件的内容发生了变化，那么所有依赖于该包含文件的源文件都必须重新编译。</p>    </div>
 </body>
 </html>

@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,55 @@
         <h1 class="section-title">A.2.5 常量</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>常量有多种类型。每种类型的常量都有一个数据类型。基本数据类型将在 A.4.2 节讨论。</p>
+<p>常量：</p>
+<p>整型常量字符常量浮点常量枚举常量1. 整型常量整型常量由一串数字组成。如果它以数字 0 开头，则为八进制数，否则为十进制数。八进制常量不包括数字 8 和 9，以 0x 和 0X 开头的数字序列表示十六进制数，十六进制数包含从a（或 A）到 f（或 F）的字母，它们分别表示数值 10 到 15。</p>
+<p>整型常量若以字母 u 或 U 为后缀，则表示它是一个无符号数；若以字母 l 或 L 为后缀，则表示它是一个长整型数；若以字母 UL 为后缀，则表示它是一个无符号长整型数。</p>
+<p>整型常量的类型同它的形式、值和后缀有关（有关类型的讨论，参见 A.4 节）</p>
+<p>。如果它没有后缀且是十进制表示，则其类型很可能是 int、long int 或 unsigned long int。如果它没有后缀且是八进制或十六进制表示，则其类型很可能是 int、unsigned int、long</p>
+<pre><code><span class="kw">int</span> 或 <span class="kw">unsigned</span> <span class="kw">long</span> <span class="kw">int</span>。如果它的后缀为 u 或 U，则其类型很可能是 <span class="kw">unsigned</span> <span class="kw">int</span></code></pre>
+<p>或 ungigned long int。</p>
+<p>如果它的后缀为 l 或 L，则其类型很可能是 long int 或 unsigned</p>
+<pre><code><span class="kw">long</span> <span class="kw">int</span>。</code></pre>
+<p>说明：ANSI 标准中，整型常量的类型比第 1 版要复杂得多。在第 1 版中，大的整型常量仅被看做是 long 类型。U 后缀是新增加的。</p>
+<p>2. 字符常量字符常量是用单引号引起来的一个或多个字符构成的序列，如'x'。单字符常量的值是执行时机器字符集中此字符对应的数值，多字符常量的值由具体实现定义。</p>
+<p>字符常量不包括字符'和换行符，可以使用以下转义字符序列表示这些字符以及其它一些字符：</p>
+<p>换行符横向制表符纵向制表符回退符回车符换页符响铃符</p>
+<pre><code>NL(LF)
+HT
+VT
+BS
+CR
+FF
+BEL
+\n
+\t
+\v
+\b
+\r
+\f
+\a</code></pre>
+<p>反斜杠问号单引号双引号八进制数十六进制数\?'</p>
+<pre><code>"
+ooo
+hh
+\\
+\?
+\'
+\"
+\ooo
+\xhh</code></pre>
+<p>转义序列\ooo 由反斜杠后跟 1 个、2 个或 3 个八进制数字组成，这些八进制数字用来指定所期望的字符的值。\0（其后没有数字）便是一个常见的例子，它表示字符 NUL。转义序列\xhh 中，反斜杠后面紧跟 x 以及十六进制数字，这些十六进制数用来指定所期望的字符的值。数字的个数没有限制，但如果字符值超过最大的字符值，该行为是未定义的。对于八进制或十六进制转义字符，如果实现中将类型 char 看做是带符号的，则将对字符值进行符号扩展，就好像它被强制转换为 char 类型一样。如果\后面紧跟的字符不在以上指定的字符中，则其行为是未定义的。</p>
+<p>在 C 语言的某些实现中，还有一个扩展的字符集，它不能用 char 类型表示。扩展集中的常量要以一个前导符 L 开头（例如 L'x'。）</p>
+<p>，称为宽字符常量。这种常量的类型为 wchar_t。</p>
+<p>这是一种整型类型，定义在标准头文件&lt;stddef.h&gt;中。与通常的字符常量一样，宽字符常量可以使用八进制或十六进制转义字符序列；但是，如果值超过 wchar_t 可以表示的范围，则结果是未定义的。</p>
+<p>说明：某些转义序列是新增加的，特别是十六进制字符的表示。扩展字符也是新增加的。</p>
+<p>通常情况下，美国和西欧所用的字符集可以用 char 类型进行编码，增加 wchar_t 的主要目的是为了表示亚洲的语言。</p>
+<p>3. 浮点常量浮点常量由整数部分、小数点、小数部分、一个 e 或 E、一个可选的带符号整型类型的指数和一个可选的表示类型的后缀（即 f、F、l 或 L 之一）组成。整数和小数部分均由数字序列组成。可以没有整数部分或小数部分（但不能两者都没有）</p>
+<p>，还可以没有小数点或者 e 和指数部分（但不能两者都没有）</p>
+<p>。浮点常量的类型由后缀确定，F 或 f 后缀表示它是 float 类型；</p>
+<p>l 或 L 后缀表明它是 long double 类型；没有后缀则表明是 double 类型。</p>
+<p>说明：浮点常量的后缀是新增加的。</p>
+<p>4. 枚举常量声明为枚举符的标识符是 int 类型的常量（参见 A.8.4 节）。</p>    </div>
 </body>
 </html>

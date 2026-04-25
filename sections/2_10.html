@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -113,26 +88,11 @@
 <p>在赋值表达式中，如果表达式左边的变量重复出现在表达式的右边，如：</p>
 <pre><code>i = i+2</code></pre>
 <p>则可以将这种表达式缩写为下列形式：</p>
-<p>i += 2</p>
-<p>其中的运算符+=称为赋值运算符。</p>
-<p>大多数二元运算符（即有左、右两个操作数的运算符，比如+）都有一个相应的赋值运算</p>
-<p>符 op=，其中，op 可以是下面这些运算符之一：</p>
-<p>+</p>
-<p>-</p>
-<p>*</p>
-<p>/</p>
-<p>%</p>
-<pre><code>&lt;&lt; &gt;&gt; &amp;</code></pre>
-<p>^</p>
-<p>|</p>
-<p>如果 expr1 和 expr2 是表达式，那么</p>
-<p>expr1 op= expr2</p>
-<p>等价于：</p>
+<p>i += 2其中的运算符+=称为赋值运算符。</p>
+<p>大多数二元运算符（即有左、右两个操作数的运算符，比如+）都有一个相应的赋值运算符 op=，其中，op 可以是下面这些运算符之一：</p>
+<p>+-*/%&lt;&lt; &gt;&gt; &amp;^|如果 expr1 和 expr2 是表达式，那么expr1 op= expr2等价于：</p>
 <pre><code>expr1 = (expr1) op (expr2)</code></pre>
-<p>它们的区别在于，前一种形式 expr1 只计算一次。注意，在第二种形式中，expr2 两边的圆</p>
-<p>括号是必不可少的，例如，</p>
-<p>x *= y + 1</p>
-<p>的含义是：</p>
+<p>它们的区别在于，前一种形式 expr1 只计算一次。注意，在第二种形式中，expr2 两边的圆括号是必不可少的，例如，x *= y + 1的含义是：</p>
 <pre><code>x = x * (y + 1)</code></pre>
 <p>而不是</p>
 <pre><code>x = x * y + 1</code></pre>
@@ -142,29 +102,18 @@
 {
 <span class="kw">int</span> b;
 <span class="kw">for</span> (b = 0; x != 0; x &gt;&gt;= 1)
-<span class="kw">if</span> (x &amp; 01)</code></pre>
-<p>b++;</p>
-<pre><code><span class="kw">return</span> b;
+<span class="kw">if</span> (x &amp; 01)
+b++;
+<span class="kw">return</span> b;
 }</code></pre>
-<p>这里将 x 声明为无符号类型是为了保证将 x 右移时，无论该程序在什么机器上运行，左边空</p>
-<p>出的位都用 0（而不是符号位）填补。</p>
-<p>除了简洁外，赋值运算符还有一个优点：表示方式与人们的思维习惯比较接近。我们通</p>
-<p>常会说“把 2 加到 i 上”或“把 i 增加 2”，而不会说“取 i 的值，加上 2，再把结果放回到</p>
-<p>i 中”</p>
-<p>，因此，表达式 i += 2 比 i = i + 2 更自然，另外，对于复杂的表达式，例如：</p>
-<p>yyval[yypv[p3+p4] + yypv[p1+p2]] += 2</p>
-<p>赋值运算符使程序代码更易于理解，代码的阅读者不必煞费苦心地去检查两个长表达式</p>
-<p>是否完全一样，也无须为两者为什么不一样而疑惑不解，并且，赋值运算符还有助于编译器</p>
-<p>产生高效代码。</p>
-<p>从上述例子中我们可以看出，赋值语句具有值，且可以用在表达式中。下面是最常见的一个</p>
-<p>例子：</p>
+<p>这里将 x 声明为无符号类型是为了保证将 x 右移时，无论该程序在什么机器上运行，左边空出的位都用 0（而不是符号位）填补。</p>
+<p>除了简洁外，赋值运算符还有一个优点：表示方式与人们的思维习惯比较接近。我们通常会说“把 2 加到 i 上”或“把 i 增加 2”，而不会说“取 i 的值，加上 2，再把结果放回到i 中”，因此，表达式 i += 2 比 i = i + 2 更自然，另外，对于复杂的表达式，例如：</p>
+<p>yyval[yypv[p3+p4] + yypv[p1+p2]] += 2赋值运算符使程序代码更易于理解，代码的阅读者不必煞费苦心地去检查两个长表达式是否完全一样，也无须为两者为什么不一样而疑惑不解，并且，赋值运算符还有助于编译器产生高效代码。</p>
+<p>从上述例子中我们可以看出，赋值语句具有值，且可以用在表达式中。下面是最常见的一个例子：</p>
 <pre><code><span class="kw">while</span> ((c = <span class="fn">getchar</span>()) !=EOF)</code></pre>
 <p>其它赋值运算符（如+=、-=等）也可以用在表达式中，尽管这种用法比较少见。</p>
-<p>在所有的这类表达式中，赋值表达式的类型是它的左操作数的类型，其值是赋值操作完</p>
-<p>成后的值，</p>
+<p>在所有的这类表达式中，赋值表达式的类型是它的左操作数的类型，其值是赋值操作完成后的值，</p>
 <p>练习 2-9</p>
-<p>在求对二的补码时，表达式 x &amp;= (x – 1)可以删除 x 中最右边值为 1 的</p>
-<p>一个二进制位。请解释这样做的道理。用这一方法重写 bitcount 函数，以加快其执行速度。</p>
-    </div>
+<p>在求对二的补码时，表达式 x &amp;= (x – 1)可以删除 x 中最右边值为 1 的一个二进制位。请解释这样做的道理。用这一方法重写 bitcount 函数，以加快其执行速度。</p>    </div>
 </body>
 </html>

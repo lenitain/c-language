@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -111,33 +86,19 @@
     </div>
     <div class="content">
 <p>在 C 语言中我们会经常用到下列结构：</p>
-<pre><code><span class="kw">if</span> (表达式)</code></pre>
+<p>if (表达式)</p>
+<p>语句else if (表达式)</p>
+<p>语句else if (表达式)</p>
+<p>语句else if (表达式)</p>
 <p>语句</p>
-<p>else if (表达式)</p>
-<p>语句</p>
-<p>else if (表达式)</p>
-<p>语句</p>
-<p>else if (表达式)</p>
-<p>语句</p>
-<p>else</p>
-<p>语句</p>
-<p>因此我们在这里单独说明一下。这种 if 语句序列是编写多路判定最常用的方法。其中的各表</p>
-<p>达式将被依次求值，一旦某个表达式结果为真，则执行与之相关的语句，并终止整个语句序</p>
-<p>列的执行。同样，其中各语句既可以是单条语句，也可以是用花括号括住的复合语句。</p>
-<p>最后一个 else 部分用于处理“上述条件均不成立”的情况或默认情况，也就是当上面各</p>
-<p>条件都不满足时的情形。有时候并不需要针对默认情况执行显式的操作，这种情况下，可以</p>
-<p>把该结构末尾的</p>
-<p>else</p>
-<p>语句</p>
-<p>部分省略掉；该部分也可以用来检查错误，以捕获“不可能”的条件。</p>
-<p>这里通过一个折半查找函数说明三路判定程序的用法。该函数用于判定已排序的数组 v</p>
-<p>中是否存在某个特定的值 x。数组 v 的元素必须以升序排列。如果 v 中包含 x，则该函数返回</p>
-<p>x 在 v 中的位置（介于 0～n-1 之间的一个整数）</p>
+<pre><code><span class="kw">else</span></code></pre>
+<p>语句因此我们在这里单独说明一下。这种 if 语句序列是编写多路判定最常用的方法。其中的各表达式将被依次求值，一旦某个表达式结果为真，则执行与之相关的语句，并终止整个语句序列的执行。同样，其中各语句既可以是单条语句，也可以是用花括号括住的复合语句。</p>
+<p>最后一个 else 部分用于处理“上述条件均不成立”的情况或默认情况，也就是当上面各条件都不满足时的情形。有时候并不需要针对默认情况执行显式的操作，这种情况下，可以把该结构末尾的</p>
+<pre><code><span class="kw">else</span></code></pre>
+<p>语句部分省略掉；该部分也可以用来检查错误，以捕获“不可能”的条件。</p>
+<p>这里通过一个折半查找函数说明三路判定程序的用法。该函数用于判定已排序的数组 v中是否存在某个特定的值 x。数组 v 的元素必须以升序排列。如果 v 中包含 x，则该函数返回x 在 v 中的位置（介于 0～n-1 之间的一个整数）</p>
 <p>；否则，该函数返回-1。</p>
-<p>在折半查找时，首先将输入值 x 与数组 v 的中间元素进行比较。如果 x 小于中间元素的</p>
-<p>值，则在该数组的前半部分查找；否则，在该数组的后半部分查找。在这两种情况下，下一</p>
-<p>步都是将 x 与所选部分的中间元素进行比较。这个过程一直进行下去，直到找到指定的值或</p>
-<p>查找范围为空。</p>
+<p>在折半查找时，首先将输入值 x 与数组 v 的中间元素进行比较。如果 x 小于中间元素的值，则在该数组的前半部分查找；否则，在该数组的后半部分查找。在这两种情况下，下一步都是将 x 与所选部分的中间元素进行比较。这个过程一直进行下去，直到找到指定的值或查找范围为空。</p>
 <pre><code><span class="cm">/* binsearch: find x in v[0] &lt;= v[1] &lt;= ... &lt;= v[n-1] */</span>
 <span class="kw">int</span> binsearch(<span class="kw">int</span> x, <span class="kw">int</span> v[], <span class="kw">int</span> n)
 {
@@ -147,22 +108,18 @@ high = n - 1;
 <span class="kw">while</span> (low &lt;= high) {
 mid = (low+high)/2;
 <span class="kw">if</span> (x &lt; v[mid])
-high = mid + 1;</code></pre>
-<p>else if (x &gt; v[mid])</p>
-<pre><code>low = mid + 1;</code></pre>
-<p>else</p>
-<pre><code><span class="cm">/* found match */</span>
+high = mid + 1;
+<span class="kw">else</span> <span class="kw">if</span> (x &gt; v[mid])
+low = mid + 1;
+<span class="kw">else</span>
+<span class="cm">/* found match */</span>
 <span class="kw">return</span> mid;
 }
 <span class="kw">return</span> -1; <span class="cm">/* no match */</span>
 }</code></pre>
-<p>该函数的基本判定是：在每一步判断 x 小于、大于还是等于中间元素 v[mid]。使用</p>
-<p>else-if 结构执行这种判定很自然。</p>
+<p>该函数的基本判定是：在每一步判断 x 小于、大于还是等于中间元素 v[mid]。使用else-if 结构执行这种判定很自然。</p>
 <p>练习 3-1</p>
-<p>在上面有关折半查找的例子中，while 循环语句内共执行了两次测试，其实</p>
-<p>只要一次就足够（代价是将更多的测试在循环外执行）</p>
-<p>。重写该函数，使得在循环内部只执行</p>
-<p>一次测试。比较两种版本函数的运行时间。</p>
-    </div>
+<p>在上面有关折半查找的例子中，while 循环语句内共执行了两次测试，其实只要一次就足够（代价是将更多的测试在循环外执行）</p>
+<p>。重写该函数，使得在循环内部只执行一次测试。比较两种版本函数的运行时间。</p>    </div>
 </body>
 </html>

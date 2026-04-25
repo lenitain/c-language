@@ -3,46 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7.4 改写 minprintf 函数，使它能完成 printf 函数的更多功能。 - C语言教程</title>
+    <title>7.4 7.5. - C语言教程</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,113 +73,44 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
     <div class="section-header">
         <div class="section-number">第 7 章</div>
-        <h1 class="section-title">7.4 改写 minprintf 函数，使它能完成 printf 函数的更多功能。</h1>
+        <h1 class="section-title">7.4 7.5.</h1>
     </div>
     <div class="content">
-<p>格式化输入——scanf 函数</p>
-<p>输入函数 scanf 对应于输出函数 printf，它在与后者相反的方向上提供同样的转换功</p>
-<p>能。具有变长参数表的函数 scanf 的声明形式如下：</p>
+<p>输入函数 scanf 对应于输出函数 printf，它在与后者相反的方向上提供同样的转换功能。具有变长参数表的函数 scanf 的声明形式如下：</p>
 <pre><code><span class="kw">int</span> <span class="fn">scanf</span>(<span class="kw">char</span> *format, ...)</code></pre>
-<p>scanf 函数从标准输入中读取字符序列，按照 format 中的格式说明对字符序列进行解释，</p>
-<p>并把结果保存到其余的参数中。格式参数 format 将在接下来的内容中进行讨论。其它所有</p>
-<p>参数都必须是指针，用于指定经格式转换后的相应输入保存的位置。和上节讲述 printf 一</p>
-<p>样，本节只介绍 scanf 函数最有用的一些特征，而并不完整地介绍。</p>
-<p>当 scanf 函数扫描完其格式串，或者碰到某些输入无法与格式控制说明匹配的情况时，</p>
-<p>该函数将终止，同时，成功匹配并赋值的输入项的个数将作为函数值返回，所以，该函数的</p>
-<p>返回值可以用来确定已匹配的输入项的个数。如果到达文件的结尾，该函数将返回 EOF。注</p>
-<p>意，返回 EOF 与 0 是不同的，0 表示下一个输入字符与格式串中的第一个格式说明不匹配。</p>
+<p>scanf 函数从标准输入中读取字符序列，按照 format 中的格式说明对字符序列进行解释，并把结果保存到其余的参数中。格式参数 format 将在接下来的内容中进行讨论。其它所有参数都必须是指针，用于指定经格式转换后的相应输入保存的位置。和上节讲述 printf 一样，本节只介绍 scanf 函数最有用的一些特征，而并不完整地介绍。</p>
+<p>当 scanf 函数扫描完其格式串，或者碰到某些输入无法与格式控制说明匹配的情况时，该函数将终止，同时，成功匹配并赋值的输入项的个数将作为函数值返回，所以，该函数的返回值可以用来确定已匹配的输入项的个数。如果到达文件的结尾，该函数将返回 EOF。注意，返回 EOF 与 0 是不同的，0 表示下一个输入字符与格式串中的第一个格式说明不匹配。</p>
 <p>下一次调用 scanf 函数将从上一次转换的最后一个字符的下一个字符开始继续搜索。</p>
-<p>另外还有一个输入函数 sscanf，它用于从一个字符串（而不是标准输入）中读取字符序</p>
-<p>列：</p>
+<p>另外还有一个输入函数 sscanf，它用于从一个字符串（而不是标准输入）中读取字符序列：</p>
 <pre><code><span class="kw">int</span> sscanf(<span class="kw">char</span> *string, <span class="kw">char</span> *format, arg1, arg2, ...)</code></pre>
-<p>它按照格式参数 format 中规定的格式扫描字符串 string，并把结果分别保存到 arg1、</p>
-<p>arg2、…这些参数中。这些参数必须是指针。</p>
+<p>它按照格式参数 format 中规定的格式扫描字符串 string，并把结果分别保存到 arg1、arg2、…这些参数中。这些参数必须是指针。</p>
 <p>格式串通常都包含转换说明，用于控制输入的转换。格式串可能包含下列部分：</p>
-<p>•</p>
-<p>•</p>
-<p>•</p>
-<p>空格或制表符，在处理过程中将被忽略。</p>
+<p>•••空格或制表符，在处理过程中将被忽略。</p>
 <p>普通字符（不包括%）</p>
 <p>，用于匹配输入流中下一个非空白符字符。</p>
-<p>转换说明，依次由一个%、一个可选的赋值禁止字符*、一个可选的数值（指定最大</p>
-<p>字段宽度）、一个可选的 h、l 或 L 字符（指定目标对象的宽度）以及一个转换字符</p>
-<p>组成。</p>
-<p>转换说明控制下一个输入字段的转换。一般来说，转换结果存放在相应的参数指向的变</p>
-<p>量中。但是，如果转换说明中有赋值禁止字符*，则跳过该输入字段，不进行赋值。输入字段</p>
-<p>定义为一个不包括空白符的字符串，其边界定义为到下一个空白符或达到指定的字段宽度。</p>
+<p>转换说明，依次由一个%、一个可选的赋值禁止字符*、一个可选的数值（指定最大字段宽度）、一个可选的 h、l 或 L 字符（指定目标对象的宽度）以及一个转换字符组成。</p>
+<p>转换说明控制下一个输入字段的转换。一般来说，转换结果存放在相应的参数指向的变量中。但是，如果转换说明中有赋值禁止字符*，则跳过该输入字段，不进行赋值。输入字段定义为一个不包括空白符的字符串，其边界定义为到下一个空白符或达到指定的字段宽度。</p>
 <p>这表明 scanf 函数将越过行边界读取输入，因为换行符也是空白符。</p>
-<p>（空白符包括空格符、</p>
-<p>横向制表符、换行符、回车符、纵向制表符以及换页符）</p>
+<p>（空白符包括空格符、横向制表符、换行符、回车符、纵向制表符以及换页符）</p>
 <p>。</p>
-<p>转换字符指定对输入字段的解释。对应的参数必须是指针，这也是 C 语言通过值调用语</p>
-<p>义所要求的。表 7-2 中列出了这些转换字符。</p>
-<p>表 7-2 scanf 函数的基本转换说明</p>
-<p>字符</p>
-<p>输入数据；参数类型</p>
-<p>d</p>
-<p>十进制整数；int *类型</p>
-<p>i</p>
-<p>整数；int *类型，可以是八进制（以 0 开头）或十六进制（以 0x 或 0X 开头）</p>
-<p>o</p>
-<p>八进制整数（可以以 0 开头，也可以不以 0 开头）</p>
-<p>；int *类型</p>
-<p>u</p>
-<p>无符号十进制整数；unsigned int *类型</p>
-<p>x</p>
-<p>十六进制整数（可以 0x 或 0X 开头，也可以不以 0x 或 0X 开头）</p>
-<p>；int *类型</p>
-<p>c</p>
-<p>字符；char *类型，将接下来的多个输入字符（默认为 1 个字符）存放到指定位置。该转换规范通常不跳过</p>
-<p>空白符。如果需要读入下一个非空白符，可以使用%1s</p>
-<p>字符串（不加引号）</p>
-<p>；char *类型，指向一个足以存放该字符串（还包括尾部的字符'\0'）的字符数组。字</p>
-<p>s</p>
-<p>符串的末尾将被添加一个结束符'\0'</p>
-<p>e, f, g</p>
-<p>浮点数，它可以包括正负号（可选）、小数点（可选）及指数部分（可选）；float *类型</p>
-<p>%</p>
-<p>字符%；不进行任何赋值操作</p>
-<p>转换说明 d、i、o、u 及 x 的前面可以加上字符 h 或 l。前缀 h 表明参数表的相应参数</p>
-<p>是一个指向 short 类型而非 int 类型的指针，</p>
-<p>前缀 l 表明参数表的相应参数是一个指向 long</p>
-<p>类型的指针。类似地，转换说明 e、f 和 g 的前面也可以加上前缀 l，它表明参数表的相应参</p>
-<p>数是一个指向 double 类型而非 float 类型的指针。</p>
+<p>转换字符指定对输入字段的解释。对应的参数必须是指针，这也是 C 语言通过值调用语义所要求的。表 7-2 中列出了这些转换字符。</p>
+<p>表 7-2 scanf 函数的基本转换说明字符输入数据；参数类型d十进制整数；int *类型i整数；int *类型，可以是八进制（以 0 开头）或十六进制（以 0x 或 0X 开头）</p>
+<p>o八进制整数（可以以 0 开头，也可以不以 0 开头）</p>
+<p>；int *类型u无符号十进制整数；unsigned int *类型x十六进制整数（可以 0x 或 0X 开头，也可以不以 0x 或 0X 开头）</p>
+<p>；int *类型c字符；char *类型，将接下来的多个输入字符（默认为 1 个字符）存放到指定位置。该转换规范通常不跳过空白符。如果需要读入下一个非空白符，可以使用%1s字符串（不加引号）</p>
+<p>；char *类型，指向一个足以存放该字符串（还包括尾部的字符'\0'）的字符数组。字s符串的末尾将被添加一个结束符'\0'</p>
+<p>e, f, g浮点数，它可以包括正负号（可选）、小数点（可选）及指数部分（可选）；float *类型%字符%；不进行任何赋值操作转换说明 d、i、o、u 及 x 的前面可以加上字符 h 或 l。前缀 h 表明参数表的相应参数是一个指向 short 类型而非 int 类型的指针，前缀 l 表明参数表的相应参数是一个指向 long类型的指针。类似地，转换说明 e、f 和 g 的前面也可以加上前缀 l，它表明参数表的相应参数是一个指向 double 类型而非 float 类型的指针。</p>
 <p>来看第一个例子。</p>
-<p>我们通过函数 scanf 执行输入转换来改写第 4 章中的简单计算器程序，</p>
-<p>如下所示：</p>
+<p>我们通过函数 scanf 执行输入转换来改写第 4 章中的简单计算器程序，如下所示：</p>
 <pre><code>#include &lt;stdio.h&gt;
 <span class="fn">main</span>() <span class="cm">/* rudimentary calculator */</span>
 {
@@ -191,41 +121,32 @@ sum = 0;
 <span class="kw">return</span> 0;
 }</code></pre>
 <p>假设我们要读取包含下列日期格式的输入行：</p>
-<p>25 Dec 1988</p>
-<p>相应的 scanf 语句可以这样编写：</p>
+<p>25 Dec 1988相应的 scanf 语句可以这样编写：</p>
 <pre><code><span class="kw">int</span> day, year;
 <span class="kw">char</span> monthname[20];
 <span class="fn">scanf</span>(<span class="str">"%d %s %d"</span>, &amp;day, monthname, &amp;year);</code></pre>
 <p>因为数组名本身就是指针，所以，monthname 的前面没有取地址运算符&amp;。</p>
-<p>字符字面值也可以出现在 scanf 的格式串中，它们必须与输入中相同的字符匹配。因此，</p>
-<p>我们可以使用下列 scanf 语句读入形如 mm/dd/yy 的日期数据：</p>
+<p>字符字面值也可以出现在 scanf 的格式串中，它们必须与输入中相同的字符匹配。因此，我们可以使用下列 scanf 语句读入形如 mm/dd/yy 的日期数据：</p>
 <pre><code><span class="kw">int</span> day, month, year;
 <span class="fn">scanf</span>(<span class="str">"%d/%d/%d"</span>, &amp;month, &amp;day, &amp;year);</code></pre>
-<p>scanf 函数忽略格式串中的空格和制表符。此外，在读取输入值时，它将跳过空白符（空</p>
-<p>格、制表符、换行符等等）。如果要读取格式不固定的输入，最好每次读入一行，然后再用</p>
-<p>sscanf 将合适的格式分离出来读入。例如，假定我们需要读取一些包含日期数据的输入行，</p>
-<p>日期的格式可能是上述任一种形式。我们可以这样编写程序：</p>
+<p>scanf 函数忽略格式串中的空格和制表符。此外，在读取输入值时，它将跳过空白符（空格、制表符、换行符等等）。如果要读取格式不固定的输入，最好每次读入一行，然后再用sscanf 将合适的格式分离出来读入。例如，假定我们需要读取一些包含日期数据的输入行，日期的格式可能是上述任一种形式。我们可以这样编写程序：</p>
 <pre><code><span class="kw">while</span> (getline(line, <span class="kw">sizeof</span>(line)) &gt; 0) {
 <span class="kw">if</span> (sscanf(line, <span class="str">"%d %s %d"</span>, &amp;day, monthname, &amp;year) == 3)
-<span class="fn">printf</span>(<span class="str">"valid: %s\n"</span>, line); <span class="cm">/* 25 Dec 1988 form */</span></code></pre>
-<p>else if (sscanf(line, "%d/%d/%d", &amp;month, &amp;day, &amp;year) == 3)</p>
-<pre><code><span class="fn">printf</span>(<span class="str">"valid: %s\n"</span>, line); <span class="cm">/* mm/dd/yy form */</span></code></pre>
-<p>else</p>
-<pre><code><span class="fn">printf</span>(<span class="str">"invalid: %s\n"</span>, line); <span class="cm">/* invalid form */</span>
+<span class="fn">printf</span>(<span class="str">"valid: %s\n"</span>, line); <span class="cm">/* 25 Dec 1988 form */</span>
+<span class="kw">else</span> <span class="kw">if</span> (sscanf(line, <span class="str">"%d/%d/%d"</span>, &amp;month, &amp;day, &amp;year) == 3)
+<span class="fn">printf</span>(<span class="str">"valid: %s\n"</span>, line); <span class="cm">/* mm/dd/yy form */</span>
+<span class="kw">else</span>
+<span class="fn">printf</span>(<span class="str">"invalid: %s\n"</span>, line); <span class="cm">/* invalid form */</span>
 }</code></pre>
-<p>scanf 函数可以和其它输入函数混合使用。无论调用哪个输入函数，下一个输入函数的</p>
-<p>调用将从 scanf 没有读取的第一个字符处开始读取数据。</p>
-<p>注意，scanf 和 sscanf 函数的所有参数都必须是指针。最常见的错误是将输入语句写</p>
-<p>成下列形式：</p>
+<p>scanf 函数可以和其它输入函数混合使用。无论调用哪个输入函数，下一个输入函数的调用将从 scanf 没有读取的第一个字符处开始读取数据。</p>
+<p>注意，scanf 和 sscanf 函数的所有参数都必须是指针。最常见的错误是将输入语句写成下列形式：</p>
 <pre><code><span class="fn">scanf</span>(<span class="str">"%d"</span>, n);</code></pre>
 <p>正确的形式应该为：</p>
 <pre><code><span class="fn">scanf</span>(<span class="str">"%d"</span>, &amp;n);</code></pre>
-<p>编译器在编译时一般检测不到这类错误。</p>
+<p>编译器在编译时一般检测不到这类错误。</p>
 <p>练习 7-4</p>
 <p>类似于上一节中的函数 minprintf，编写 scanf 函数的一个简化版本。</p>
 <p>练习 7-5</p>
-<p>改写第 4 章中的后缀计算器程序，用 scanf 函数和（或）sscanf 函数实</p>
-<p>现输入以及数的转换。</p>
-    </div>
+<p>改写第 4 章中的后缀计算器程序，用 scanf 函数和（或）sscanf 函数实现输入以及数的转换。</p>    </div>
 </body>
 </html>

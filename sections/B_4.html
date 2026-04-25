@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,52 @@
         <h1 class="section-title">B.4 数学函数：<math.h></h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>数学函数：&lt;math.h&gt;头文件&lt;math.h&gt;中声明了一些数学函数和宏。</p>
+<p>宏 EDOM 和 ERANGE（在头文件&lt;error.h&gt;中声明）是两个非 0 整型常量，用于指示函数的定义域错误和值域错误；HUGE_VAL 是一个 double 类型的正数。当参数位于函数定义的作用域之外时，就会出现定义域错误。在发生定义域错误时，全局变量 errno 的值将被设置为 EDOM，函数的返回值与具体的实现相关。如果函数的结果不能用 double 类型表示，则会发生值域错误。当结果上溢时，函数返回 HUGE_VAL，并带有正确的正负号，errpo 的值将被设置为 ERANGE。当结果下溢时，函数返回 0，而 errno 是否设置为 ERANGE 要视具体的实现而定。</p>
+<p>在下表中，x 和 y 的类型为 double，n 的类型为 int，所有函数的返回值的类型均为double。三角函数的角度用弧度表示。</p>
+<pre><code>sin(x)</code></pre>
+<p>x 的正弦值</p>
+<pre><code>cos(x)</code></pre>
+<p>x 的余弦值</p>
+<pre><code>tan(x)</code></pre>
+<p>x 的正切值</p>
+<pre><code>asin(x)</code></pre>
+<p>sin-1(x)，值域为[-π/2, π/2]，其中 x∈[-1, 1]</p>
+<pre><code>acos(x)</code></pre>
+<p>cos-1(x)，值域为[0, π]，其中 x∈[-1, 1]</p>
+<pre><code>atan(x)</code></pre>
+<p>tan-1(x)，值域为[-π/2, π/2]</p>
+<pre><code>atan2(y,x)</code></pre>
+<p>tan-1(y/x)，值域为[-π, π]</p>
+<pre><code>sinh(x)</code></pre>
+<p>x 的双曲正弦值</p>
+<pre><code>cosh(x)</code></pre>
+<p>x 的双曲余弦值</p>
+<pre><code>tanh(x)</code></pre>
+<p>x 的双曲正切值</p>
+<pre><code>exp(x)</code></pre>
+<p>幂函数 ex</p>
+<pre><code>log(x)</code></pre>
+<p>自然对数 ln(x)，其中 x&gt;0</p>
+<pre><code>log10(x)</code></pre>
+<p>以 10 为底的对数 log10(x)，其中 x&gt;0</p>
+<pre><code>pow(x,y)</code></pre>
+<p>xy。如果 x=0 且 y≤0，或者 x&lt;0 且 y 不是整型数，将产生定义域错误</p>
+<pre><code>sqrt(x)</code></pre>
+<p>x 的平方根，其中 x≥0</p>
+<pre><code>ceil(x)</code></pre>
+<p>不小于 x 的最小整型数，其中 x 的类型为 double</p>
+<pre><code>floor(x)</code></pre>
+<p>不大于 x 的最大整型数，其中 x 的类型为 double</p>
+<pre><code>fabs(x)</code></pre>
+<p>x 的绝对值|x|</p>
+<pre><code>ldexp(x,n)</code></pre>
+<p>计算 x.2n 的值</p>
+<pre><code>frexp(x, <span class="kw">int</span> *ip)</code></pre>
+<p>把 x 分成一个在[1/2, 1]区间内的真分数和一个 2 的幂数。结果将返回真分数部分，并将幂数保存在*exp 中。如果 x 为 0，则这两部分均为 0</p>
+<pre><code>modf(x, <span class="kw">double</span> *ip)</code></pre>
+<p>把 J 分成整数和小数两部分，两部分的正负号均与 x 相同。该函数返回小数部分，整数部分保存在‘ip 中</p>
+<pre><code>fmod(x,y)</code></pre>
+<p>求 JJy 的浮点余数，符号与 j 相同。如果 y 为 0，则结果与具体的实现相关</p>    </div>
 </body>
 </html>

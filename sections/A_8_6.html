@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,58 @@
         <h1 class="section-title">A.8.6 声明符的含义</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>声明符表出现在类型说明符和存储类说明符序列之后。每个声明符声明一个睢一的主标识符，该标识符是直接声明符产生式的第一个候选式。存储类说明符可直接作用于该标识符，但其类型由声明符的形式决定。当声明符的标识符出现在与该声明符形式相同的表达式中时，该声明符将被作为一个断言，其结果将产生一个指定类型的对象。</p>
+<p>如果只考虑声明说明符（参见 A.8.2 节）的类型部分及特定的声明符，则声明可以表示为“T D”的形式，其中 T 代表类型，D 代表声明符。在不同形式的声明中，标识符的类型可用这种形式来表述。</p>
+<p>在声明 T D 中，如果 D 是一个不加任何限定的标识符，则该标识符的类型为 T。</p>
+<p>在声明 T D 中，如果 D 的形式为：</p>
+<p>(D1)</p>
+<p>则 D1 中标识符的类型与 D 的类型相同。圆括号不改变类型，但可改变复杂声明符之间的结合。</p>
+<p>1，指针声明符在声明 T D 中，如果 D 具有下列形式：</p>
+<p>* 类型限定符表 D1且声明 T D1 中的标识符的类型为“类型修饰符 T”，则 D 中标识符的类型为“类型修饰符 类型限定符表指向 T 的指针”。星号*后的限定符作用于指针本身，而不是作用于指针指向的对象。</p>
+<p>例如。考虑下列声明：</p>
+<pre><code><span class="kw">int</span> *ap[];</code></pre>
+<p>其中，ap[]的作用等价于 D1，声明“int ap[]”将把 ap 的类型声明为“int 类型的数组”，类型限定符表为空，且类型修饰符为“……的数组”。因此，该声明实际上将把 ap 声明为“指向 int 类型的指针数组”类型。</p>
+<p>我们来看另外一个例子。下列声明：</p>
+<pre><code><span class="kw">int</span> i, *pi, *<span class="kw">const</span> cpi = &amp;i;
+<span class="kw">const</span> <span class="kw">int</span> ci = 3, *pci;</code></pre>
+<p>声明了一个整型 i 和一个指向整型的指针 pi。不能修改常量指针 cpi 的值，该指针总是指向同一位置，但它所指之处的值可以改变。整型 ci 是常量，也不能修改（可以进行初始化，如本例中所示）</p>
+<p>。pci 的类型是“指向 const int 的指针”，pci 本身可以被修改以指向另一个地方，但它所指之处的值不能通过 pci 赋值来改变，2 数组声明符在声明 T D 中，如果 D 具有下列形式：</p>
+<p>D1[常量表达式 opt]且声明 T D1 中标识符的类型是“类型修饰符 T”，则 D 的标识符类型为“类型修饰符 T类型的数组”。如果存在常量表达式，则该常量表达式必须为整型且值大于 0。若缺少指定数组上界的常量表达式，则该数组类型是不完整类型。</p>
+<p>数组可以由算术类型、指针类型、结构类型或联合类型构造而成，也可以由另一个数组构造而成（生成多维数组）</p>
+<p>。构造数组的类型必须是完整类型，绝对不能是不完整类型的数组或结构。也就是说，对于多维数组来说，只有第一维可以缺省。对于不完整数组类型的对象来说，其类型可以通过对该对象进行另一个完整声明（参见 A.10.2 节）或初始化（参见 A.8.7节）来使其完整。例如：</p>
+<pre><code><span class="kw">float</span> fa[17], *afp[17];</code></pre>
+<p>声明了一个浮点数数组和一个指向浮点数的指针数组，而</p>
+<pre><code><span class="kw">static</span> <span class="kw">int</span> x3d[3][5][7];</code></pre>
+<p>则声明了一个静态的三维整型数组，其大小为 3×5×7。具体来说，x3d 是一个由 3 个项组成的数组，每个项都是由 5 个数组组成的一个数组，5 个数组中的每个数组又都是由 7 个整型数组成的数组。x3d、x3d[i]、x3d[i][j]与 x3d[i][j][k]都可以合法地出现在一个表达式中。前三者是数组类型，最后一个是 int 类型。更准确地说，x3d[i][j]是一个有 7 个整型元素的数组；x3d[i]则是有 5 个元素的数组，而其中的每个元素又是一个具有 7 个整型元素的数组。</p>
+<p>根据数组下标运算的定义，E1[E2]等价于*(E1+E2)。因此，尽管表达式的形式看上去不对称，但下标运算是可交换的运算。根据适用于运算符+和数组的转换规则（参见 A.6.6 节、A.7.1 节与 A.7.7 节）</p>
+<p>，若 E1 是数组且 E2 是整数，则 E1[E2]代表 E1 的第 E2 个成员。</p>
+<p>在本例中，x3d[i][j][k]等价于*(x3d[i][j]+k)。第一个子表达式 x3d[i][j]将按照 A.7.1 节中的规则转换为“指向整型数组的指针”类型，而根据 A.7.7 节中的规则，这里的加法运算需要乘以整型类型的长度。它遵循下列规则：数组按行存储（最后一维下标变动最快）</p>
+<p>，且声明中的第一维下标决定数组所需的存储区大小，但第一维下标在下标计算时无其它作用。</p>
+<p>3 函数声明符在新式的函数声明 T D 中，如果 D 具有下列形式：</p>
+<p>D1(形式参数类型表)</p>
+<p>并且，声明 T D1 中标识符的类型为“类型修饰符 T”，则 D 的标识符类型是“返回 T 类型值且具有‘形式参数类型表’中的参数的‘类型修饰符’类型的函数”。</p>
+<p>形式参数的语法定义为：</p>
+<p>形式参数类型表：</p>
+<p>形式参数表形式参数表, ...</p>
+<p>形式参数表：</p>
+<p>形式参数声明形式参数表, 形式参数声明形式参数声明：</p>
+<p>声明说明符 声明符声明说明符 抽象声明符 opt在这种新式的声明中，形式参数表指定了形式参数的类型。这里有一个特例，按照新式方式声明的无形式参数函数的声明符也有一个形式参数表，该表仅包含关键字 void。如果形式参数表以省略号“, ...”结尾，则该函数可接受的实际参数个数比显式说明的形式参数个数要多。详细信息参见 A.7.3 节。</p>
+<p>如果形式参数类型是数组或函数，按照参数转换规则（参见 A.10.1 节），它们将被转换为指针。形式参数的声明中惟一允许的存储类说明符是 register，并且，除非函数定义的开头包括函数声明符，否则该存储类说明符将被忽略。类似地，如果形式参数声明中的声明符包含标识符，且函数定义的开头没有函数声明符，则该标识符超出了作用域。不涉及标识符的抽象声明符将在 A.8.8 节中讨论。</p>
+<p>在旧式的函数声明 T D 中，如果 D 具有下列形式：</p>
+<p>D1(标识符表 opt)</p>
+<p>并且声明 D1 中的标识符的类型是“类型修饰符 T”，则 D 的标识符类型为“返回 T 类型值且未指定参数的‘类型修饰符’类型的函数”。形式参数（如果有的话）的形式如下：</p>
+<p>标识符表：</p>
+<p>标识符标识符表, 标识符在旧式的声明符中，除非在函数定义的前面使用了声明符，否则，标识符表必须空缺（参见A.10.1 节）</p>
+<p>。声明不提供有关形式参数类型的信息。</p>
+<p>例如，下列声明：</p>
+<pre><code><span class="kw">int</span> f(), *fpi(), (*pfi)();</code></pre>
+<p>声明了一个返回整型值的函数 f、一个返回指向整型的指针的函数 fpi 以及一个指向返回整型的函数的指针 pfi。它们都没有说明形式参数类型，因此都属于旧式的声明。</p>
+<p>在下列新式的声明中：</p>
+<pre><code><span class="kw">int</span> <span class="fn">strcpy</span>(<span class="kw">char</span> *dest, <span class="kw">const</span> <span class="kw">char</span> *source), rand(<span class="kw">void</span>);</code></pre>
+<p>strcpy 是一个返回 int 类型的函数，它有两个实际参数，第一个实际参数是一个字符指针，第一个实际参数星一个指向常量字符的指针。其中的形式参数名字可以起到注释说明的作用。</p>
+<p>第二个函数 rand 不带参数，且返回类型为 int。</p>
+<p>说明：到目前为止，带形式参数原型的函数声明符是 ANSI 标准中引入的最重要的一个语言变化。它们优于第 1 版中的“旧式”声明符，因为它们提供了函数调用时的错误检查和参数强制转换，但引入的同时也带来了很多混乱和麻烦，而且还必须兼客这两种形式。为了保持兼容，就不得不在语法上进行一些处理，即采用 void 作为新式的无形式参数函数的显式标记。</p>
+<p>采用省略号“, ...”表示函数变长参数表的做法也是 ANSI 标准中新引入的，并且，结合标准头文件&lt;stdarg.h&gt;中的一些宏，共同将这个机制正式化了。该机制在第 1 版中是官方上禁止的，但可非正式地使用。</p>
+<p>这些表示法起源于 C++。</p>    </div>
 </body>
 </html>

@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,38 +85,26 @@
         <h1 class="section-title">8.4 随机访问——lseek</h1>
     </div>
     <div class="content">
-<p>输入／输出通常是顺序进行的：每次调用 read 和 write 进行读写的位置紧跟在前一次</p>
-<p>操作的位置之后。但是，有时候需要以任意顺序访问文件，系统调用 lseek 可以在文件中任</p>
-<p>意移动位置而不实际读写任何数据：</p>
+<p>输入／输出通常是顺序进行的：每次调用 read 和 write 进行读写的位置紧跟在前一次操作的位置之后。但是，有时候需要以任意顺序访问文件，系统调用 lseek 可以在文件中任意移动位置而不实际读写任何数据：</p>
 <pre><code><span class="kw">long</span> lseek(<span class="kw">int</span> fd, <span class="kw">long</span> offset, <span class="kw">int</span> origin);</code></pre>
-<p>将文件描述符为 fd 的文件的当前位置设置为 offset，其中，offset 是相对于 orgin 指定</p>
-<p>的位置而言的。随后进行的读写操作将从此位置开始，origin 的值可以为 0、1 或 2，分别</p>
-<p>用于指定 offset 从文件开始、从当前位置或从文件结束处开始算起。例如，为了向一个文</p>
-<p>件的尾部添加内容（在 UNIX shell 程序中使用重定向符&gt;&gt;或在系统调用 fopen 中使用参数</p>
-<p>“a”</p>
-<p>）</p>
+<p>将文件描述符为 fd 的文件的当前位置设置为 offset，其中，offset 是相对于 orgin 指定的位置而言的。随后进行的读写操作将从此位置开始，origin 的值可以为 0、1 或 2，分别用于指定 offset 从文件开始、从当前位置或从文件结束处开始算起。例如，为了向一个文件的尾部添加内容（在 UNIX shell 程序中使用重定向符&gt;&gt;或在系统调用 fopen 中使用参数“a”）</p>
 <p>，则在写操作之前必须使用下列系统调用找到文件的末尾：</p>
 <pre><code>lseek(fd, 0L, 2);</code></pre>
 <p>若要返回文件的开始处（即反绕）</p>
 <p>，则可以使用下列调用：</p>
 <pre><code>lseek(fd, 0L, 0);</code></pre>
-<p>请注意，参数 0L 也可写为(long)0，或仅仅写为 0，但是系统调用 lseek 的声明必须保持</p>
-<p>一致。</p>
-<p>使用 lseek 系统调用时，可以将文件视为一个大数组，其代价是访问速度会慢一些。例</p>
-<p>如，下面的函数将从文件的任意位置读入任意数目的字节，它返回读入的字节数，若发生错</p>
-<p>误，则返回-1。</p>
+<p>请注意，参数 0L 也可写为(long)0，或仅仅写为 0，但是系统调用 lseek 的声明必须保持一致。</p>
+<p>使用 lseek 系统调用时，可以将文件视为一个大数组，其代价是访问速度会慢一些。例如，下面的函数将从文件的任意位置读入任意数目的字节，它返回读入的字节数，若发生错误，则返回-1。</p>
 <pre><code>#include <span class="str">"syscalls.h"</span>
 <span class="cm">/*get: read n bytes from position pos */</span>
 <span class="kw">int</span> get(<span class="kw">int</span> fd, <span class="kw">long</span> pos, <span class="kw">char</span> *buf, <span class="kw">int</span> n)
 {
 <span class="kw">if</span> (lseek(fd, pos, 0) &gt;= 0) <span class="cm">/* get to pos */</span>
-<span class="kw">return</span> read(fd, buf, n);</code></pre>
-<p>else</p>
-<pre><code><span class="kw">return</span> -1;
+<span class="kw">return</span> read(fd, buf, n);
+<span class="kw">else</span>
+<span class="kw">return</span> -1;
 }</code></pre>
 <p>lseek 系统调用返回一个 long 类型的值，此值表示文件的新位置，若发生错误，则返回-1。</p>
-<p>标准库函数 fseek 与系统调用 lseek 类似，所不同的是，前者的第一个参数是 FILE *类型，</p>
-<p>且在发生错误时返回一个非 0 值。</p>
-    </div>
+<p>标准库函数 fseek 与系统调用 lseek 类似，所不同的是，前者的第一个参数是 FILE *类型，且在发生错误时返回一个非 0 值。</p>    </div>
 </body>
 </html>

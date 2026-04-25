@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,8 +85,36 @@
         <h1 class="section-title">4.11.3 条件包含</h1>
     </div>
     <div class="content">
-<p>第5章</p>
-<p>指针与数组 ....................................................................................................................96</p>
-    </div>
+<p>还可以使用条件语句对预处理本身进行控制，这种条件语句的值是在预处理执行的过程中进行计算。这种方式为在编译过程中根据计算所得的条件值选择性地包含不同代码提供了一种手段。</p>
+<pre><code>#<span class="kw">if</span> 语句对其中的常量整型表达式（其中不能包含 <span class="kw">sizeof</span>、类型转换运算符或 <span class="kw">enum</span> 常</code></pre>
+<p>量）进行求值，若该表达式的值不等于 0，则包含其后的各行，直到遇到#endif、#elif 或</p>
+<pre><code>#<span class="kw">else</span> 语句为止（预处理器语句#elif 类似于 <span class="kw">else</span> <span class="kw">if</span>）。在#<span class="kw">if</span> 语句中可以使用表达式</code></pre>
+<p>defined(名字)，该表达式的值遵循下列规则：当名字已经定义时，其值为 1；否则，其值为 0。</p>
+<p>例如，为了保证 hdr.h 文件的内容只被包含一次，可以将该文件的内容包含在下列形式的条件语句中：</p>
+<pre><code>#<span class="kw">if</span> !defined(HDR)
+#define HDR
+<span class="cm">/* hdr.h 文件的内容放在这里 */</span>
+#endif</code></pre>
+<p>第一次包含头文件 hdr.h 时，将定义名字 HDR；此后再次包含该头文件时，会发现该名字已经定义，这样将直接跳转到#endif 处。类似的方式也可以用来避免多次重复包含同一文件。</p>
+<p>如果多个头文件能够一致地使用这种方式，那么，每个头文件都可以将它所依赖的任何头文件包含进来，用户不必考虑和处理头文件之间的各种依赖关系。</p>
+<p>下面的这段预处理代码首先测试系统变量 SYSTEM，然后根据该变量的值确定包含哪个版本的头文件：</p>
+<pre><code>#<span class="kw">if</span> SYSTEM == SYSV
+#define HDR <span class="str">"sysv.h"</span>
+#elif SYSTEM == BSD
+#define HDR <span class="str">"bsd.h"</span>
+#elif SYSTEM == MSDOS
+#define HDR <span class="str">"msdos.h"</span>
+#<span class="kw">else</span>
+#define HDR <span class="str">"<span class="kw">default</span>.h"</span>
+#endif
+#include HDR</code></pre>
+<p>C 语言专门定义了两个预处理语句#ifdef 与#ifndef，它们用来测试某个名字是否已经定义。上面有关#if 的第一个例子可以改写为下列形式：</p>
+<pre><code>#ifndef HDR
+#define EDR
+<span class="cm">/* hdr.h 文件的内容放在这里 */</span>
+#endif</code></pre>
+<p>第5章 指针与数组指针是一种保存变量地址的变量。在 C 语言中，指针的使用非常广泛，原因之一是，指针常常是表达某个计算的惟一途径，另一个原因是，同其它方法比较起来，使用指针通常可以生成更高效、更紧凑的代码。指针与数组之间的关系十分密切，我们将在本章中讨论它们之间的关系，并探讨如何利用这种关系。</p>
+<p>指针和 goto 语句一样，会导致程序难以理解。如果使用者粗心，指针很容易就指向了错误的地方。但是，如果谨慎地使用指针，便可以利用它写出简单、清晰的程序。在本章中我们将尽力说明这一点。</p>
+<p>ANSI C 的一个最重要的变化是，它明确地制定了操纵指针的规则。事实上，这些规则已经被很多优秀的程序设计人员和编译器所采纳。此外，ANSI C 使用类型 void *（指向 void的指针）代替 char *作为通用指针的类型。</p>    </div>
 </body>
 </html>

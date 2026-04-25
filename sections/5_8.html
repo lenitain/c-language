@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,18 @@
         <h1 class="section-title">5.8 指针数组的初始化</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>考虑这样一个问题：编写一个函数 month_name(n)，它返回一个指向第 n 个月名字的字符串的指针。这是内部 static 类型数组的一种理想的应用。month_name 函数中包含一个私有的字符串数组，当它被调用时，返回一个指向正确元素的指针。本节将说明如何初始化该名字数组。</p>
+<p>指针数组的初始化语法和前面所讲的其它类型对象的初始化语法类似：</p>
+<pre><code><span class="cm">/* month_name: <span class="kw">return</span> name of n-th month */</span>
+<span class="kw">char</span> *month_name(<span class="kw">int</span> n)
+{
+<span class="kw">static</span> <span class="kw">char</span> *name[] = {
+<span class="str">"Illegal month"</span>,
+<span class="str">"January"</span>, <span class="str">"February"</span>, <span class="str">"March"</span>,
+<span class="str">"April"</span>, <span class="str">"May"</span>, <span class="str">"June"</span>,
+<span class="str">"July"</span>, <span class="str">"August"</span>, <span class="str">"September"</span>,
+<span class="str">"October"</span>, <span class="str">"November"</span>, <span class="str">"December"</span>
+};</code></pre>
+<p>其中，name 的声明与排序例子中 lineptr 的声明相同，是一个一维数组，数组的元素为字符指针。name 数组的初始化通过一个字符串列表实现，列表中的每个字符串赋值给数组相应位置的元素。第 i 个字符串的所有字符存储在存储器中的某个位置，指向它的指针存储在name[i]中。由于上述声明中没有指明 name 的长度，因此，编译器编译时将对初值个数进行统计，并将这一准确数字填入数组的长度。</p>    </div>
 </body>
 </html>

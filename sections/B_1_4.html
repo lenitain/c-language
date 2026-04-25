@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,27 @@
         <h1 class="section-title">B.1.4 字符输入／输出函数</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<pre><code><span class="kw">int</span> fgetc(FILE *stream)</code></pre>
+<p>fqetc 函数返回 stream 流的下一个字符，返回类型为 unsigned char（被转换为 int类型）。如果到达文件末尾或发生错误，则返回 EOF。</p>
+<pre><code><span class="kw">char</span> *fgets(<span class="kw">char</span> *s, <span class="kw">int</span> n, FILE *stream)</code></pre>
+<p>fgets 函数最多将下 n-1 个字符读入到数组 s 中。当遇到换行符时，把换行符读入到数组 s 中，读取过程终止。数组 s 以'\0'结尾。fgets 函数返回数组 s。如果到达文件的末尾或发生错误，则返回 NULL。</p>
+<pre><code><span class="kw">int</span> fputc(<span class="kw">int</span> c, FILE *stream)</code></pre>
+<p>fputc 函数把字符 c（转换为 unsigned char 类型）输出到流 stream 中。它返回写入的字符，若出错则返回 EOF。</p>
+<pre><code><span class="kw">int</span> fputs(<span class="kw">const</span> <span class="kw">char</span> *s, FILE *stream)</code></pre>
+<p>fputs 函数把字符串 s（不包含字符'\n'）输出到流 Btream 中；它返回一个非负值，若出错则返回 EOF。</p>
+<pre><code><span class="kw">int</span> <span class="fn">getc</span>(FILE *stream)</code></pre>
+<p>getc 函数等价于 fgetc，所不同的是，当 getc 函数定义为宏时，它可能多次计算stream 的值。</p>
+<pre><code><span class="kw">int</span> <span class="fn">getchar</span>(<span class="kw">void</span>)</code></pre>
+<p>getchar 函数等价于 getc(stdin)。</p>
+<pre><code><span class="kw">char</span> *gets(<span class="kw">char</span> *s)</code></pre>
+<p>gets 函数把下一个输入行读入到数组 s 中，并把末尾的换行符替换为字符'\0'。它返回数组 s，如果到达文件的末尾或发生错误，则返回 NULL。</p>
+<pre><code><span class="kw">int</span> <span class="fn">putc</span>(<span class="kw">int</span> c, FILE *stream)</code></pre>
+<p>putc 函数等价于 fputc，所不同的是，当 putc 函数定义为宏时，它可能多次计算stream 的值。</p>
+<pre><code><span class="kw">int</span> <span class="fn">putchar</span>(<span class="kw">int</span> c)
+<span class="fn">putchar</span>(c)函数等价于 <span class="fn">putc</span>(c, stdout)。
+<span class="kw">int</span> puts(<span class="kw">const</span> <span class="kw">char</span> *s)</code></pre>
+<p>puts 函数把字符串 s 和一个换行符输出到 stdout 中。如果发生错误，则返回 EOF；否则返回一个非负值。</p>
+<pre><code><span class="kw">int</span> ungetc(<span class="kw">int</span> c, FILE *stream)</code></pre>
+<p>ungetc 函数把 c（转换为 unsigned char 类型）写回到流 stream 中，下次对该流进行读操作时，将返回该字符。对每个流只能写回一个字符，且此字符不能是 EOF。ungetc函数返回被写回的字符，如果发生错误，则返回 EOF。</p>    </div>
 </body>
 </html>

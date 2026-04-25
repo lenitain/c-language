@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -117,46 +92,28 @@
 {
 <span class="kw">long</span> nc;
 nc = 0;
-<span class="kw">while</span> (<span class="fn">getchar</span>() != EOF)</code></pre>
-<p>++nc;</p>
-<pre><code><span class="fn">printf</span>(<span class="str">"%ld\n"</span>, nc);
+<span class="kw">while</span> (<span class="fn">getchar</span>() != EOF)
+++nc;
+<span class="fn">printf</span>(<span class="str">"%ld\n"</span>, nc);
 }</code></pre>
 <p>其中，语句</p>
-<p>++nc;</p>
-<p>引入了一个新的运算符++，其功能是执行加 1 操作。可以用语句 nc = nc + 1 代替它，但</p>
-<p>语句++nc 更精炼一些，且通常效率也更高。与该运算符相应的是自减运算符--。++与--这</p>
-<p>两个运算符既可以作为前缀运算符（如++nc），也可以作为后缀运算符（如 nc++）。我们在</p>
-<p>第 2 章中将看到，这两种形式在表达式中具有不同的值，但++nc 与 nc++都使 nc 的值增加 1。</p>
+<pre><code>++nc;</code></pre>
+<p>引入了一个新的运算符++，其功能是执行加 1 操作。可以用语句 nc = nc + 1 代替它，但语句++nc 更精炼一些，且通常效率也更高。与该运算符相应的是自减运算符--。++与--这两个运算符既可以作为前缀运算符（如++nc），也可以作为后缀运算符（如 nc++）。我们在第 2 章中将看到，这两种形式在表达式中具有不同的值，但++nc 与 nc++都使 nc 的值增加 1。</p>
 <p>目前，我们只使用前缀形式。</p>
-<p>该字符计数程序使用 long 类型的变量存放计数值，而没有使用 int 类型的变量。long</p>
-<p>整型数（长整型）至少要占用 32 位存储单元。在某些机器上 int 与 long 类型的长度相同，</p>
-<p>但在一些机器上，int 类型的值可能只有 16 位存储单元的长度（最大值为 32767）</p>
-<p>，这样，相</p>
-<p>当小的输入都可能使 int 类型的计数变量溢出。转换说明%ld 告诉 printf 函数其对应的参</p>
-<p>数是 long 整型。</p>
-<p>使用 double（双精度浮点数）类型可以处理更大的数字。我们在这里不使用 while 循</p>
-<p>环语句，而用 for 循环语句来展示编写此循环的另一种方法：</p>
+<p>该字符计数程序使用 long 类型的变量存放计数值，而没有使用 int 类型的变量。long整型数（长整型）至少要占用 32 位存储单元。在某些机器上 int 与 long 类型的长度相同，但在一些机器上，int 类型的值可能只有 16 位存储单元的长度（最大值为 32767）</p>
+<p>，这样，相当小的输入都可能使 int 类型的计数变量溢出。转换说明%ld 告诉 printf 函数其对应的参数是 long 整型。</p>
+<p>使用 double（双精度浮点数）类型可以处理更大的数字。我们在这里不使用 while 循环语句，而用 for 循环语句来展示编写此循环的另一种方法：</p>
 <pre><code>#include &lt;stdio.h&gt;
 <span class="cm">/* count characters in input; 2nd version */</span>
 <span class="fn">main</span>()
 {
 <span class="kw">double</span> nc;
-<span class="kw">for</span> (nc = 0; gechar() != EOF; ++nc)</code></pre>
-<p>;</p>
-<pre><code><span class="fn">printf</span>(<span class="str">"%.0f\n"</span>, nc);
+<span class="kw">for</span> (nc = 0; gechar() != EOF; ++nc)
+;
+<span class="fn">printf</span>(<span class="str">"%.0f\n"</span>, nc);
 }</code></pre>
-<p>对于 float 与 double 类型。printf 函数都使用%f 进行说明。%.0f 强制不打印小数点和</p>
-<p>小数部分，因此小数部分的位数为 0。</p>
-<p>在该程序段中，for 循环语句的循环体是空的，这是因为所有工作都在测试（条件）部</p>
-<p>分与增加步长部分完成了。但 C 语言的语法规则要求 for 循环语句必须有一个循环体，因此</p>
-<p>用单独的分号代替。单独的分号称为空语句，它正好能满足 for 语句的这一要求。把它单独</p>
-<p>放在一行是为了更加醒目。</p>
-<p>在结束讨论字符计数程序之前，我们考虑以下情况：如果输入中不包含字符，那么，在</p>
-<p>第一次调用 getchar 函数的叫候，while 语句或 for 语句中的条件测试从一开始就为假，</p>
-<p>程序的执行结果将为 0，这也是正确的结果。这一点很重要。whi1e 语句与 for 语句的优点</p>
-<p>之一就是在执行循环体之前就对条件进行测试，如果条件不满足，则不执行循环体，这就可</p>
-<p>能出现循环体一次都不执行的情况。在出现 0 长度的输入时，程序的处理应该灵活一些，在</p>
-<p>出现边界条件时，while 语句与 for 语句有助于确保程序执行合理的操作。</p>
-    </div>
+<p>对于 float 与 double 类型。printf 函数都使用%f 进行说明。%.0f 强制不打印小数点和小数部分，因此小数部分的位数为 0。</p>
+<p>在该程序段中，for 循环语句的循环体是空的，这是因为所有工作都在测试（条件）部分与增加步长部分完成了。但 C 语言的语法规则要求 for 循环语句必须有一个循环体，因此用单独的分号代替。单独的分号称为空语句，它正好能满足 for 语句的这一要求。把它单独放在一行是为了更加醒目。</p>
+<p>在结束讨论字符计数程序之前，我们考虑以下情况：如果输入中不包含字符，那么，在第一次调用 getchar 函数的叫候，while 语句或 for 语句中的条件测试从一开始就为假，程序的执行结果将为 0，这也是正确的结果。这一点很重要。whi1e 语句与 for 语句的优点之一就是在执行循环体之前就对条件进行测试，如果条件不满足，则不执行循环体，这就可能出现循环体一次都不执行的情况。在出现 0 长度的输入时，程序的处理应该灵活一些，在出现边界条件时，while 语句与 for 语句有助于确保程序执行合理的操作。</p>    </div>
 </body>
 </html>

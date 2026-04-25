@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,66 @@
         <h1 class="section-title">5.2 指针与函数参数</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>由于 C 语言是以传值的方式将参数值传递给被调用函数。因此，被调用函数不能直接修改主调函数中变最的值。例如，排序函数可能会使用一个名为 swap 的函数来交换两个次序颠倒的元素。但是，如果将 swap 函数定义为下列形式：</p>
+<pre><code><span class="kw">void</span> swap(<span class="kw">int</span> x, <span class="kw">int</span> y) <span class="cm">/* WRONG */</span>
+{
+<span class="kw">int</span> temp;
+temp = x;
+x = y;
+y = temp;
+}</code></pre>
+<p>则下列语句无法达到该目的。</p>
+<pre><code>swap(a, b);</code></pre>
+<p>这是因为，由于参数传递采用传值方式，因此上述的 swap 函数不会影响到调用它的例程中的参数 a 和 b 的值。该函数仅仅交换了 a 和 b 的副本的值。</p>
+<p>那么，如何实现我们的目标呢，可以使主调程序将指向所要交换的变量的指针传递给被调用函数，即：</p>
+<pre><code>swap(&amp;a, &amp;b);</code></pre>
+<p>由于一元运算符&amp;用来取变量的地址，这样&amp;a 就是一个指向变量 a 的指针。swap 函数的所有参数都声明为指针，并且通过这些指针来间接访问它们指向的操作数。</p>
+<pre><code><span class="kw">void</span> swap(<span class="kw">int</span> *px, <span class="kw">int</span> *py) <span class="cm">/* interchange *px and *py */</span>
+{
+<span class="kw">int</span> temp;
+temp = *px;
+*px = *py;
+*py = temp;
+}</code></pre>
+<p>我们通过图 5-2 进行说明。</p>
+<p>图 5-2指针参数使得被调用函数能够访问和修改主调函数中对象的值。我们来看这样一个例子：</p>
+<p>函数 getint 接受自由格式的输入，并执行转换，将输入的字符流分解成整数，且每次调用得到一个整数。getint 需要返回转换后得到的整数，并且，在到达输入结尾时要返回文件结束标记。这些值必须通过不同的方式返回。EOF（文件结束标记）可以用任何值表示，当然也可用一个输入的整数表示。</p>
+<p>可以这样设计该函数：将标识是否到达文件结尾的状态作为 getint 函数的返回值，同时，使用一个指针参数存储转换后得到的整数并传回给主调函数。函数 scanf 的实现就采用了这种方法，具体细节请参见 7.4 节。</p>
+<p>下面的循环语句调用 getint 函数给一个整型数组赋值：</p>
+<pre><code><span class="kw">int</span> n, array[SIZE], getint(<span class="kw">int</span> *);
+<span class="kw">for</span> (n = 0; n &lt; SIZE &amp;&amp; getint(&amp;array[n]) != EOF; n++)</code></pre>
+<p>每次调用 getint 时，输入流中的下一个整数将被赋值给数组元素 array[n]，同时，n 的值将增加 1。请注意，这里必须将 array[n]的地址传递给函数 getint，否则函数 getint将无法把转换得到的整数传回给调用者。</p>
+<p>该版本的 getint 函数在到达文件结尾时返回 EOF，当下一个输入不是数字时返回 0，当输入中包含一个有意义的数字时返回一个正值。</p>
+<pre><code>#include &lt;ctype.h&gt;
+<span class="kw">int</span> getch(<span class="kw">void</span>);
+<span class="kw">void</span> ungetch(<span class="kw">int</span>);
+<span class="cm">/* getint: get next integer from input into *pn */</span>
+<span class="kw">int</span> getint(<span class="kw">int</span> *pn)
+{
+<span class="kw">int</span> c, sign;
+<span class="kw">while</span> (isspace(c = getch()))
+;
+<span class="cm">/* skip white space */</span>
+<span class="kw">if</span> (!isdigit(c) &amp;&amp; c != EOF &amp;&amp; c != '+' &amp;&amp; c != '-') {
+ungetch(c); <span class="cm">/* it is not a number */</span>
+<span class="kw">return</span> 0;
+}
+sign = (c == '-') ? -1 : 1;
+<span class="kw">if</span> (c == '+' || c == '-')
+c = getch();
+<span class="kw">for</span> (*pn = 0; isdigit(c), c = getch())
+*pn = 10 * *pn + (c - '0');
+*pn *= sign;
+<span class="kw">if</span> (c != EOF)
+ungetch(c);
+<span class="kw">return</span> c;
+}</code></pre>
+<p>在 getint 函数中，*pn 始终作为一个普通的整型变量使用。</p>
+<p>其中还使用了 getch 和 ungetch两个函数（参见 4.3 节），借助这两个函数，函数 getint 必须读入的一个多余字符就可以重新写回到输入中。</p>
+<p>练习 5-1</p>
+<p>在上面的例子中，如果符号+或-的后面紧跟的不是数字，getint 函数将把符号视为数字 0 的有效表达方式。修改该函数，将这种形式的+或-符号重新写回到输入流中。</p>
+<p>练习 5-2</p>
+<p>模仿函数 getint 的实现方法，编写一个读取浮点数的函数 getfloat。</p>
+<p>getfloat 函数的返回值应该是什么类型？</p>    </div>
 </body>
 </html>

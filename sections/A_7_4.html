@@ -9,40 +9,39 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            color: #333;
             max-width: 850px;
             margin: 0 auto;
             padding: 40px 20px;
-            background: #fafafa;
+            background: #232A2E;
+            color: #D3C6AA;
         }
         .section-header {
-            border-left: 5px solid #00599A;
+            border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
         }
         .section-number {
             font-size: 13px;
-            color: #00599A;
+            color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
         .section-title {
             font-size: 30px;
-            color: #1a1a1a;
+            color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
         }
         .content {
             font-size: 16px;
-            background: white;
+            background: #2D353B;
             padding: 36px;
             border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
         }
         .content p {
             margin-bottom: 14px;
-            color: #D3C6AA;
         }
         .content pre {
             background: #343F44;
@@ -74,34 +73,10 @@
         }
         .content h3 {
             font-size: 17px;
-            color: #D3C6AA;
             margin: 22px 0 10px 0;
         }
         ul, ol { margin: 12px 0 12px 24px; }
         li { margin-bottom: 8px; }
-        .note {
-            background: #2D353B;
-            border-left: 4px solid #A7C080;
-            padding: 14px 18px;
-            margin: 18px 0;
-            border-radius: 0 8px 8px 0;
-        }
-        body {
-            background: #232A2E;
-        }
-        .content {
-            background: #2D353B;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .section-header {
-            border-left-color: #A7C080;
-        }
-        .section-number {
-            color: #A7C080;
-        }
-        .section-title {
-            color: #D3C6AA;
-        }
     </style>
 </head>
 <body>
@@ -110,7 +85,20 @@
         <h1 class="section-title">A.7.4 一元运算符</h1>
     </div>
     <div class="content">
-<p></p>
-    </div>
+<p>带一元运算符的表达式遵循从右到左的结合性。</p>
+<p>一元表达式：</p>
+<p>后缀表达式++一元表达式--一元表达式一元运算符 强制类型转换表达式sizeoff 一元表达式sizeof(类型名)</p>
+<p>一元运算符：one of&amp; * + - ~ !1 前缀自增运算符与前缀自减运算符在一元表达式的前面添加运算符++或--后得到的表达式是一个一元表达式。操作数将被加 1（++）或减 1（--），表达式的值是经过加 1、减 1 以后的值。操作数必须是一个左值。</p>
+<p>有关操作数的限制和运算细节的详细信息，参见加法类运算符（参见 A.7.7 节）和赋值类运算符（参见 A.7.17 节）</p>
+<p>。其结果不是左值。</p>
+<p>2 地址运算符一元运算符&amp;用于取操作数的地址。该操作数必须是一个左值（不指向位字段、不指向声明为 register 类型的对象）</p>
+<p>，或者为函数类型。结果值是一个指针，指向左值指向的对象或函数。如果操作数的类型为 T，则结果的类型为指向 T 类型的指针。</p>
+<p>3 间接寻址运算符一元运算符*表示间接寻址，它返回其操作数指向的对象或函数。如果它的操作数是一个指针且指向的对象是算术、结构、联合或指针类型，则它是一个左值。如果表达式的类型为“指向 T 类型的指针”，则结果类型为 T。</p>
+<p>4 一元加运算符一元运算符+的操作数必须是算术类型，其结果是操作数的值。如果操作数是整型，则将进行整型提升，结果类型是经过提升后的操作数的类型。</p>
+<p>说明：一元运算符+是 ANSI 标准新增加的，增加该运算符是为了与一元运算符-对应。</p>
+<p>5 一元减运算符一元运算符-的操作数必须是算术类型，结果为操作数的负值。如果操作数是整型，则将进行整型提升。带符号数的负值的计算方法为：将提升后得到的类型能够表示的最大值减去提升后的操作数的值，然后加 1；但 0 的负值仍为 0。结果类型为提升后的操作数的类型。</p>
+<p>6 二进制反码运算符一元运算符~的操作数必须是整型，结果为操作数的二进制反码。在运算过程中需要对操作数进行整型提升。如果操作数为无符号类型，则结果为提升后的类型能够表示的最大值减去操作数的值而得到的结果值。如果操作数为带符号类型，则结果的计算方式为：将提升后的操作数转换为相应的无符号类型，使用运算符~计算反码，再将结果转换为带符号类型。结果的类型为提升后的操作数的类型。</p>
+<p>7 逻辑非运算符运算符!的操作数必须是算术类型或者指针。如果操作数等于 0，则结果为 1，否则结果为 0。结果类型为 int。</p>
+<p>8 sizeof 运算符sizeof 运算符计算存储与其操作数同类型的对象所需的字节数。操作数可以为一个未求值的表达式，也可以为一个用括号括起来的类型名。将 sizeof 应用于 char 类型时，其结果值为 1；将它应用于数组时，其值为数组中字节的总数。应用于结构或联合时，结果为对象的字节数，包括对象中包含的数组所需要的任何填充空间：有 n 个元素的数组的长度是一个数组元素长度的 n 倍。此运算符不能用于函数类型和不完整类型的操作数，也不能用于位字段。结果是一个无符号整型常量，具体的类型由实现定义。在标准头文件&lt;stddef.h&gt;（参见附录 B）中，这一类型被定义为 size_t 类型。</p>    </div>
 </body>
 </html>
