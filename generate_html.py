@@ -384,45 +384,136 @@ def detect_blocks(lines):
 # HTML Generation
 # ---------------------------------------------------------------------------
 
-CSS = '''        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
+HTML = '''<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{section_num} {section_title} - C语言教程</title>
+    <style>
+        * {{ margin: 0; padding: 0; box-sizing: border-box; }}
+        body {{
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
             line-height: 1.9;
-            max-width: 850px;
-            margin: 0 auto;
-            padding: 40px 20px;
             background: #232A2E;
             color: #D3C6AA;
-        }
-        .section-header {
+        }}
+        .sidebar {{
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: #1C2126;
+            border-right: 1px solid #3A4147;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 10;
+            padding-bottom: 40px;
+        }}
+        .sidebar-header {{
+            padding: 20px 16px 12px 16px;
+            font-size: 15px;
+            font-weight: 700;
+            color: #A7C080;
+            border-bottom: 1px solid #2D353B;
+            position: sticky;
+            top: 0;
+            background: #1C2126;
+            z-index: 2;
+        }}
+        .sidebar .chapter {{
+            border-bottom: 1px solid #262C31;
+        }}
+        .sidebar .chapter-header {{
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #D3C6AA;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.15s;
+        }}
+        .sidebar .chapter-header:hover {{
+            background: #262C31;
+        }}
+        .sidebar .chapter-header .arrow {{
+            display: inline-block;
+            width: 14px;
+            font-size: 10px;
+            color: #7A8478;
+            transition: transform 0.2s;
+            margin-right: 6px;
+        }}
+        .sidebar .chapter.collapsed .chapter-header .arrow {{
+            transform: rotate(-90deg);
+        }}
+        .sidebar .section-links {{
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }}
+        .sidebar .chapter.collapsed .section-links {{
+            max-height: 0 !important;
+        }}
+        .sidebar .section-link {{
+            display: block;
+            padding: 5px 16px 5px 30px;
+            font-size: 12.5px;
+            color: #7A8478;
+            text-decoration: none;
+            border-left: 2px solid transparent;
+            transition: all 0.12s;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }}
+        .sidebar .section-link:hover {{
+            color: #D3C6AA;
+            background: #262C31;
+            border-left-color: #4F585E;
+        }}
+        .sidebar .section-link.active {{
+            color: #A7C080;
+            background: #232A2E;
+            border-left-color: #A7C080;
+            font-weight: 600;
+        }}
+        .main {{
+            margin-left: 260px;
+            padding: 40px;
+            max-width: 900px;
+        }}
+        .section-header {{
             border-left: 5px solid #A7C080;
             padding-left: 18px;
             margin-bottom: 36px;
-        }
-        .section-number {
+        }}
+        .section-number {{
             font-size: 13px;
             color: #A7C080;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-        }
-        .section-title {
+        }}
+        .section-title {{
             font-size: 30px;
             color: #D3C6AA;
             font-weight: 700;
             margin-top: 8px;
-        }
-        .content {
+        }}
+        .content {{
             font-size: 16px;
             background: #2D353B;
             padding: 36px;
             border-radius: 12px;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
-        }
-        .content p {
+        }}
+        .content p {{
             margin-bottom: 14px;
-        }
-        .content pre {
+        }}
+        .content pre {{
             background: #343F44;
             color: #D3C6AA;
             padding: 20px;
@@ -433,29 +524,77 @@ CSS = '''        * { margin: 0; padding: 0; box-sizing: border-box; }
             font-size: 14px;
             line-height: 1.6;
             border: 1px solid #4F585E;
-        }
-        .content pre code {
+        }}
+        .content pre code {{
             background: transparent;
             color: inherit;
             padding: 0;
-        }
-        .content .kw { color: #83C092; font-weight: 500; }
-        .content .fn { color: #DBBC7F; }
-        .content .str { color: #E69875; }
-        .content .cm { color: #7A8478; font-style: italic; }
-        .content h2 {
+        }}
+        .content .kw {{ color: #83C092; font-weight: 500; }}
+        .content .fn {{ color: #DBBC7F; }}
+        .content .str {{ color: #E69875; }}
+        .content .cm {{ color: #7A8478; font-style: italic; }}
+        .content h2 {{
             font-size: 20px;
             color: #A7C080;
             margin: 28px 0 14px 0;
             border-bottom: 2px solid #4F585E;
             padding-bottom: 10px;
-        }
-        .content h3 {
+        }}
+        .content h3 {{
             font-size: 17px;
             margin: 22px 0 10px 0;
-        }
-        ul, ol { margin: 12px 0 12px 24px; }
-        li { margin-bottom: 8px; }'''
+        }}
+        ul, ol {{ margin: 12px 0 12px 24px; }}
+        li {{ margin-bottom: 8px; }}
+        @media (max-width: 800px) {{
+            .sidebar {{ display: none; }}
+            .main {{ margin-left: 0; }}
+        }}
+    </style>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="sidebar-header">C 程序设计语言 — 目录</div>
+        {sidebar_html}
+    </nav>
+    <main class="main">
+        <div class="section-header">
+            <div class="section-number">第 {chapter_display} 章</div>
+            <h1 class="section-title">{section_num} {section_title}</h1>
+        </div>
+        <div class="content">
+            {content_body}
+        </div>
+    </main>
+    <script>
+        (function() {{
+            var chapters = document.querySelectorAll('.chapter');
+            chapters.forEach(function(ch) {{
+                var links = ch.querySelector('.section-links');
+                if (links) {{
+                    links.style.maxHeight = links.scrollHeight + 'px';
+                }}
+                var header = ch.querySelector('.chapter-header');
+                header.addEventListener('click', function() {{
+                    ch.classList.toggle('collapsed');
+                    if (links) {{
+                        if (ch.classList.contains('collapsed')) {{
+                            links.style.maxHeight = '0px';
+                        }} else {{
+                            links.style.maxHeight = links.scrollHeight + 'px';
+                        }}
+                    }}
+                }});
+            }});
+            var active = document.querySelector('.section-link.active');
+            if (active) {{
+                active.scrollIntoView({{ block: 'center' }});
+            }}
+        }})();
+    </script>
+</body>
+</html>'''
 
 
 def escape_html(text):
@@ -535,37 +674,94 @@ def render_blocks(blocks):
     return '\n'.join(parts)
 
 
-def generate_html(section):
+def build_section_tree(sections):
+    """Build a tree: {chapter_key: {title, sections: [(num, title, filename), ...]}}"""
+    tree = {}
+    chapter_names = {str(i): f'第{i}章' for i in range(1, 9)}
+    chapter_names.update({'A': '附录A', 'B': '附录B'})
+
+    for sec in sections:
+        parts = sec['number'].split('.')
+        ch = parts[0]
+        if ch not in tree:
+            section_list = sections
+            ch_sections = [s for s in section_list if s['number'].split('.')[0] == ch]
+            tree[ch] = {
+                'title': chapter_names.get(ch, ch),
+                'sections': ch_sections,
+            }
+    return tree
+
+
+def build_sidebar_html(tree, current_num, toc_titles):
+    """Build sidebar navigation HTML."""
+    parts = []
+    # Sort chapters: 1-8, then A, B
+    chapter_order = [str(i) for i in range(1, 9)] + ['A', 'B']
+
+    for ch in chapter_order:
+        if ch not in tree:
+            continue
+        chapter = tree[ch]
+        title = chapter['title']
+        sections = sorted(chapter['sections'], key=lambda s: _sort_key(s['number']))
+
+        # Determine if this chapter contains current section
+        current_ch = current_num.split('.')[0]
+        is_active_chapter = (ch == current_ch)
+        collapsed = '' if is_active_chapter else ' collapsed'
+
+        parts.append(f'<div class="chapter{collapsed}">')
+        parts.append(
+            f'<div class="chapter-header">'
+            f'<span class="arrow">&#9660;</span>{escape_html(title)}'
+            f'</div>'
+        )
+
+        # Compute max-height for the section links container
+        link_height = len(sections) * 28
+        parts.append(f'<div class="section-links" style="max-height: {link_height}px;">')
+
+        for sec in sections:
+            filename = sec['number'].replace('.', '_') + '.html'
+            active_class = ' active' if sec['number'] == current_num else ''
+            label = f'{sec["number"]} {sec["title"]}'
+            parts.append(
+                f'<a class="section-link{active_class}" href="{filename}">'
+                f'{escape_html(label)}'
+                f'</a>'
+            )
+
+        parts.append('</div>')  # section-links
+        parts.append('</div>')  # chapter
+
+    return '\n'.join(parts)
+
+
+def _sort_key(num):
+    """Sort section numbers naturally."""
+    parts = num.split('.')
+    return tuple(int(p) if p.isdigit() else ord(p[0]) * 1000 + int(p[1:]) if len(p) > 1 else ord(p[0]) for p in parts)
+
+
+def generate_html(section, section_tree, toc_titles):
     parts = section['number'].split('.')
     chapter_display = parts[0]
 
-    html = f'''<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{section['number']} {section['title']} - C语言教程</title>
-    <style>
-{CSS}
-    </style>
-</head>
-<body>
-    <div class="section-header">
-        <div class="section-number">第 {chapter_display} 章</div>
-        <h1 class="section-title">{section['number']} {section['title']}</h1>
-    </div>
-    <div class="content">
-'''
+    sidebar_html = build_sidebar_html(section_tree, section['number'], toc_titles)
 
     content = clean_content(section['content'])
-    lines = content  # Already a list from clean_content
+    lines = content
     blocks = detect_blocks(lines)
     body = render_blocks(blocks)
 
-    html += body
-    html += '''    </div>
-</body>
-</html>'''
+    html = HTML.format(
+        section_num=section['number'],
+        section_title=escape_html(section['title']),
+        chapter_display=chapter_display,
+        sidebar_html=sidebar_html,
+        content_body=body,
+    )
     return html
 
 
@@ -576,9 +772,10 @@ def generate_html(section):
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     sections = parse_tutorial(INPUT_FILE)
+    tree = build_section_tree(sections)
 
     for sec in sections:
-        html = generate_html(sec)
+        html = generate_html(sec, tree, {})
         safe_num = sec['number'].replace('.', '_')
         filename = f'{OUTPUT_DIR}/{safe_num}.html'
         with open(filename, 'w', encoding='utf-8') as f:
