@@ -61,15 +61,15 @@
             transition: transform 0.2s;
             margin-right: 6px;
         }
-        .sidebar .chapter.collapsed .chapter-header .arrow {
+        .sidebar .chapter-header .arrow.rotated {
             transform: rotate(-90deg);
         }
         .sidebar .section-links {
             overflow: hidden;
             transition: max-height 0.3s ease;
         }
-        .sidebar .chapter.collapsed .section-links {
-            max-height: 0 !important;
+        .sidebar .section-links.hidden {
+            max-height: 0;
         }
         .sidebar .section-link {
             display: block;
@@ -172,7 +172,7 @@
         <div class="sidebar-header">C 程序设计语言 — 目录</div>
         <div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>第1章</div>
-<div class="section-links" style="max-height: 392px;">
+<div class="section-links">
 <a class="section-link" href="1_1.html">1.1 入门</a>
 <a class="section-link" href="1_2.html">1.2 变量与算术表达式</a>
 <a class="section-link" href="1_3.html">1.3 for 语句</a>
@@ -189,9 +189,9 @@
 <a class="section-link" href="1_10.html">1.10 外部变量与作用域</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>第2章</div>
-<div class="section-links" style="max-height: 336px;">
+<div class="section-links">
 <a class="section-link" href="2_1.html">2.1 变量名</a>
 <a class="section-link" href="2_2.html">2.2 数据类型及长度</a>
 <a class="section-link" href="2_3.html">2.3 常量</a>
@@ -206,9 +206,9 @@
 <a class="section-link" href="2_12.html">2.12 运算符优先级与求值次序</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>第3章</div>
-<div class="section-links" style="max-height: 224px;">
+<div class="section-links">
 <a class="section-link" href="3_1.html">3.1 语句与程序块</a>
 <a class="section-link" href="3_2.html">3.2 if-else 语句</a>
 <a class="section-link" href="3_3.html">3.3 else-if 语旬</a>
@@ -219,9 +219,9 @@
 <a class="section-link" href="3_8.html">3.8 goto 语句与标号</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>第4章</div>
-<div class="section-links" style="max-height: 392px;">
+<div class="section-links">
 <a class="section-link" href="4_1.html">4.1 函数的基本知识</a>
 <a class="section-link" href="4_2.html">4.2 返回非整型值的函数</a>
 <a class="section-link" href="4_3.html">4.3 外部变量</a>
@@ -238,9 +238,9 @@
 <a class="section-link" href="4_11_3.html">4.11.3 条件包含</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>第5章</div>
-<div class="section-links" style="max-height: 336px;">
+<div class="section-links">
 <a class="section-link" href="5_1.html">5.1 指针与地址</a>
 <a class="section-link" href="5_2.html">5.2 指针与函数参数</a>
 <a class="section-link" href="5_3.html">5.3 指针与数组</a>
@@ -255,9 +255,9 @@
 <a class="section-link" href="5_12.html">5.12 复杂声明</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>第6章</div>
-<div class="section-links" style="max-height: 252px;">
+<div class="section-links">
 <a class="section-link" href="6_1.html">6.1 结构的基本知识</a>
 <a class="section-link" href="6_2.html">6.2 结构与函数</a>
 <a class="section-link" href="6_3.html">6.3 结构数组</a>
@@ -269,9 +269,9 @@
 <a class="section-link" href="6_9.html">6.9 位字段</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>第7章</div>
-<div class="section-links" style="max-height: 420px;">
+<div class="section-links">
 <a class="section-link" href="7_1.html">7.1 7.2.</a>
 <a class="section-link" href="7_2.html">7.2 7.3.</a>
 <a class="section-link" href="7_3.html">7.3 7.4.</a>
@@ -289,9 +289,9 @@
 <a class="section-link" href="7_8_7.html">7.8.7 随机数发生器函数</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>第8章</div>
-<div class="section-links" style="max-height: 196px;">
+<div class="section-links">
 <a class="section-link" href="8_1.html">8.1 文件描述符</a>
 <a class="section-link" href="8_2.html">8.2 低级 I/O——read 和 write</a>
 <a class="section-link" href="8_3.html">8.3 open、creat、close 和 unlink</a>
@@ -301,9 +301,9 @@
 <a class="section-link" href="8_7.html">8.7 实例——存储分配程序</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>附录A</div>
-<div class="section-links" style="max-height: 1400px;">
+<div class="section-links">
 <a class="section-link" href="A_2.html">A.2 词法规则</a>
 <a class="section-link" href="A_2_1.html">A.2.1 记号</a>
 <a class="section-link" href="A_2_2.html">A.2.2 注释</a>
@@ -356,9 +356,9 @@
 <a class="section-link" href="A_9_6.html">A.9.6 跳转语句</a>
 </div>
 </div>
-<div class="chapter collapsed">
+<div class="chapter">
 <div class="chapter-header"><span class="arrow">&#9660;</span>附录B</div>
-<div class="section-links" style="max-height: 448px;">
+<div class="section-links">
 <a class="section-link" href="B_1.html">B.1 输入与输出：&lt;stdio.h&gt;</a>
 <a class="section-link" href="B_1_1.html">B.1.1 文件操作</a>
 <a class="section-link" href="B_1_2.html">B.1.2 格式化输出</a>
@@ -439,18 +439,23 @@ c = <span class="fn">getchar</span>();
             var chapters = document.querySelectorAll('.chapter');
             chapters.forEach(function(ch) {
                 var links = ch.querySelector('.section-links');
-                if (links) {
+                var arrow = ch.querySelector('.arrow');
+                if (!links) return;
+                var hasActive = links.querySelector('.section-link.active');
+                if (!hasActive) {
+                    links.style.maxHeight = '0px';
+                    if (arrow) arrow.classList.add('rotated');
+                } else {
                     links.style.maxHeight = links.scrollHeight + 'px';
                 }
                 var header = ch.querySelector('.chapter-header');
                 header.addEventListener('click', function() {
-                    ch.classList.toggle('collapsed');
-                    if (links) {
-                        if (ch.classList.contains('collapsed')) {
-                            links.style.maxHeight = '0px';
-                        } else {
-                            links.style.maxHeight = links.scrollHeight + 'px';
-                        }
+                    if (links.style.maxHeight === '0px') {
+                        links.style.maxHeight = links.scrollHeight + 'px';
+                        if (arrow) arrow.classList.remove('rotated');
+                    } else {
+                        links.style.maxHeight = '0px';
+                        if (arrow) arrow.classList.add('rotated');
                     }
                 });
             });

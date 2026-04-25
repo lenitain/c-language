@@ -447,15 +447,15 @@ HTML = '''<!DOCTYPE html>
             transition: transform 0.2s;
             margin-right: 6px;
         }}
-        .sidebar .chapter.collapsed .chapter-header .arrow {{
+        .sidebar .chapter-header .arrow.rotated {{
             transform: rotate(-90deg);
         }}
         .sidebar .section-links {{
             overflow: hidden;
             transition: max-height 0.3s ease;
         }}
-        .sidebar .chapter.collapsed .section-links {{
-            max-height: 0 !important;
+        .sidebar .section-links.hidden {{
+            max-height: 0;
         }}
         .sidebar .section-link {{
             display: block;
@@ -572,18 +572,23 @@ HTML = '''<!DOCTYPE html>
             var chapters = document.querySelectorAll('.chapter');
             chapters.forEach(function(ch) {{
                 var links = ch.querySelector('.section-links');
-                if (links) {{
+                var arrow = ch.querySelector('.arrow');
+                if (!links) return;
+                var hasActive = links.querySelector('.section-link.active');
+                if (!hasActive) {{
+                    links.style.maxHeight = '0px';
+                    if (arrow) arrow.classList.add('rotated');
+                }} else {{
                     links.style.maxHeight = links.scrollHeight + 'px';
                 }}
                 var header = ch.querySelector('.chapter-header');
                 header.addEventListener('click', function() {{
-                    ch.classList.toggle('collapsed');
-                    if (links) {{
-                        if (ch.classList.contains('collapsed')) {{
-                            links.style.maxHeight = '0px';
-                        }} else {{
-                            links.style.maxHeight = links.scrollHeight + 'px';
-                        }}
+                    if (links.style.maxHeight === '0px') {{
+                        links.style.maxHeight = links.scrollHeight + 'px';
+                        if (arrow) arrow.classList.remove('rotated');
+                    }} else {{
+                        links.style.maxHeight = '0px';
+                        if (arrow) arrow.classList.add('rotated');
                     }}
                 }});
             }});
@@ -709,18 +714,15 @@ def build_sidebar_html(tree, current_num, toc_titles):
         # Determine if this chapter contains current section
         current_ch = current_num.split('.')[0]
         is_active_chapter = (ch == current_ch)
-        collapsed = '' if is_active_chapter else ' collapsed'
 
-        parts.append(f'<div class="chapter{collapsed}">')
+        parts.append(f'<div class="chapter">')
         parts.append(
             f'<div class="chapter-header">'
             f'<span class="arrow">&#9660;</span>{escape_html(title)}'
             f'</div>'
         )
 
-        # Compute max-height for the section links container
-        link_height = len(sections) * 28
-        parts.append(f'<div class="section-links" style="max-height: {link_height}px;">')
+        parts.append(f'<div class="section-links">')
 
         for sec in sections:
             filename = sec['number'].replace('.', '_') + '.html'
