@@ -110,7 +110,96 @@
         <h1 class="section-title">6.6 表查找</h1>
     </div>
     <div class="content">
-<p></p>
+<p>为了对结构的更多方面进行深入的讨论，我们来编写一个表查找程序包的核心部分代码。</p>
+<p>这段代码很典型，可以在宏处理器或编译器的符号表管理例程中找到。例如，考虑#define</p>
+<p>语句。当遇到类似于</p>
+<pre><code>#define</code></pre>
+<p>IN 1</p>
+<p>之类的程序行时，就需要把名字 IN 和替换文本 1 存入到某个表中。此后，当名字 IN 出现在</p>
+<p>某些语句中时，如：</p>
+<pre><code>statet = IN;</code></pre>
+<p>就必须用 1 来替换 IN。</p>
+<p>以下两个函数用来处理名字和替换文本。install(s, t)函数将名字 s 和替换文本 t</p>
+<p>记录到某个表中，其中 s 和 t 仅仅是字符串。lookup(s)函数在表中查找 s，若找到，则返</p>
+<p>回指向该处的指针；若没找到，则返回 NULL。</p>
+<p>该算法采用的是散列查找方法——将输入的名字转换为一个小的非负整数，该整数随后</p>
+<p>将作为一个指针数组的下标。数组的每个元素指向某个链表的表头，链表中的各个块用于描</p>
+<p>述具有该散列值的名字。如果没有名字散列到该值，则数组元素的值为 NULL（参见图 6-4）。</p>
+<p>图 6-4</p>
+<p>链表中的每个块都是一个结构，它包含一个指向名字的指针、一个指向替换文本的指针</p>
+<p>以及一个指向该链表后继块的指针。如果指向链表后继块的指针为 NULL，则表明链表结束。</p>
+<pre><code><span class="kw">struct</span> nlist {
+<span class="cm">/* table entry: */</span>
+<span class="kw">struct</span> nlist *next; <span class="cm">/* next entry in chain */</span></code></pre>
+<p>char *name;</p>
+<pre><code><span class="cm">/* defined name */</span></code></pre>
+<p>char *defn;</p>
+<pre><code><span class="cm">/* replacement text */</span>
+};</code></pre>
+<p>相应的指针数组定义如下：</p>
+<pre><code>#define HASHSIZE 101</code></pre>
+<p>static struct nlist *hashtab[HASHSIZE]; /* pointer table */</p>
+<p>散列函数 hash 在 lookup 和 install 函数中都被用到，它通过一个 for 循环进行计</p>
+<p>算，每次循环中，它将上一次循环中计算得到的结果值经过变换（即乘以 31）后得到的新值</p>
+<p>同字符串中当前字符的值相加(*s + 31 * hashval)，然后将该结果值同数组长度执行取</p>
+<p>模操作，其结果即是该函数的返回值。这并不是最好的散列函数，但比较简短有效。</p>
+<pre><code><span class="cm">/* hash: form hash value <span class="kw">for</span> string s */</span></code></pre>
+<p>unsigned hash(char *s)</p>
+<pre><code>{</code></pre>
+<p>unsigned hashval;</p>
+<pre><code><span class="kw">for</span> (hashval = 0; *s != '\0'; s++)
+hashval = *s + 31 * hashval;
+<span class="kw">return</span> hashval % HASHSIZE;
+}</code></pre>
+<p>由于在散列计算时采用的是无符号算术运算，因此保证了散列值非负。</p>
+<p>散列过程生成了在数组 hashtab 中执行查找的起始下标。如果该字符串可以被查找到，</p>
+<p>则它一定位于该起始下标指向的链表的某个块中。具体查找过程由 lookup 函数实现。如果</p>
+<p>lookup 函数发现表项已存在，则返回指向该表项的指针，否则返回 NULL。</p>
+<pre><code><span class="cm">/* lookup: look <span class="kw">for</span> s in hashtab */</span>
+<span class="kw">struct</span> nlist *lookup(<span class="kw">char</span> *s)
+{
+<span class="kw">struct</span> nlist *np;
+<span class="kw">for</span> (np = hashtab[hash(s)]; np != NULL; np = np-&gt;next)
+<span class="kw">if</span> (<span class="fn">strcmp</span>(s, np-&gt;name) == 0)
+<span class="kw">return</span> np;
+<span class="cm">/* found */</span>
+<span class="kw">return</span> NULL;
+<span class="cm">/* not found */</span>
+}</code></pre>
+<p>lookup 函数中的 for 循环是遍历一个链表的标准方法，如下所示：</p>
+<pre><code><span class="kw">for</span> (ptr = head; ptr != NULL; ptr = ptr-&gt;next)</code></pre>
+<p>...</p>
+<p>install 函数借助 lookup 函数判断待加入的名字是否已经存在。如果已存在，则用新</p>
+<p>的定义取而代之；否则，创建一个新表项。如无足够空间创建新表项，则 install 函数返回</p>
+<p>NULL。</p>
+<pre><code><span class="kw">struct</span> nlist *lookup(<span class="kw">char</span> *);</code></pre>
+<p>char *strdup(char *);</p>
+<pre><code><span class="cm">/* install: put (name, defn) in hashtab */</span>
+<span class="kw">struct</span> nlist *install(<span class="kw">char</span> *name, <span class="kw">char</span> *defn)
+{
+<span class="kw">struct</span> nlist *np;</code></pre>
+<p>unsigned hashval;</p>
+<pre><code><span class="kw">if</span> ((np = lookup(name)) == NULL) { <span class="cm">/* not found */</span>
+np = (<span class="kw">struct</span> nlist *) <span class="fn">malloc</span>(<span class="kw">sizeof</span>(*np));
+<span class="kw">if</span> (np == NULL || (np-&gt;name = strdup(name)) == NULL)
+<span class="kw">return</span> NULL;
+hashval = hash(name);</code></pre>
+<p>np-&gt;next = hashtab[hashval];</p>
+<p>hashtab[hashval] = np;</p>
+<pre><code>} <span class="kw">else</span>
+<span class="cm">/* already there */</span></code></pre>
+<p>free((void *) np-&gt;defn); /*free previous defn */</p>
+<pre><code><span class="kw">if</span> ((np-&gt;defn = strdup(defn)) == NULL)
+<span class="kw">return</span> NULL;
+<span class="kw">return</span> np;
+}</code></pre>
+<p>练习 6-5</p>
+<p>及其定义。</p>
+<p>编写函数 undef，它将从由 lookup 和 install 维护的表中删除一个变量</p>
+<p>练习 6-6</p>
+<p>以本节介绍的函数为基础，编写一个适合 C 语言程序使用的#define 处理</p>
+<p>器的简单版本（即无参数的情况）</p>
+<p>。你会发现 getch 和 ungetch 函数非常有用。</p>
     </div>
 </body>
 </html>

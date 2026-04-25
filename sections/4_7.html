@@ -110,7 +110,25 @@
         <h1 class="section-title">4.7 寄存器变量</h1>
     </div>
     <div class="content">
-<p></p>
+<p>register 声明告诉编译器，它所声明的变量在程序中使用频率较高。其思想是，将</p>
+<p>register 变量放在机器的寄存器中，这样可以使程序更小、执行速度更快。但编译器可以</p>
+<p>忽略此选项。</p>
+<p>register 声明的形式如下所示：</p>
+<p>register int x;</p>
+<p>register char c;</p>
+<p>register 声明只适用于自动变量以及函数的形式参数。下面是后一种情况的例子：</p>
+<pre><code>f(<span class="kw">register</span> <span class="kw">unsigned</span> m, <span class="kw">register</span> <span class="kw">long</span> n)
+{</code></pre>
+<p>register int i;</p>
+<p>...</p>
+<pre><code>}</code></pre>
+<p>实际使用时，底层硬件环境的实际情况对寄存器变量的使用会有一些限制。每个函数中</p>
+<p>只有很少的变量可以保存在寄存器中，且只允许某些类型的变量。但是，过量的寄存器声明</p>
+<p>并没有什么害处，这是因为编译器可以忽略过量的或不支持的寄存器变量声明。另外，无论</p>
+<p>寄存器变量实际上是不是存放在寄存器中，它的地址都是不能访问的（有关这一点更详细的</p>
+<p>信息，我们将在第 5 章中讨论）</p>
+<p>。在不同的机器中，对寄存器变量的数目和类型的具体限制也</p>
+<p>是不同的。</p>
     </div>
 </body>
 </html>

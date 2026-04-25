@@ -110,7 +110,36 @@
         <h1 class="section-title">2.4 声明</h1>
     </div>
     <div class="content">
-<p></p>
+<p>所有变量都必须先声明后使用，尽管某些变量可以通过上下文隐式地声明。一个声明指</p>
+<p>定一种变量类型，后面所带的变量表可以包含一个或多个该类型的变量。例如：</p>
+<pre><code><span class="kw">int</span> lower, upper, step;
+<span class="kw">char</span> c, 1ine[1000];</code></pre>
+<p>一个声明语句中的多个变量可以拆开在多个声明语句中声明。上面的两个声明语句也可以等</p>
+<p>价地写成下列形式：</p>
+<pre><code><span class="kw">int</span> lower;
+<span class="kw">int</span> upper;
+<span class="kw">int</span> step;
+<span class="kw">char</span> c;</code></pre>
+<p>cbar line[1000];</p>
+<p>按照这种形式书写代码需要占用较多的空间，但便于向各声明语句中添加注释，也便于以后</p>
+<p>修改。</p>
+<p>还可以在声明的同时对变量进行初始化。在声明中，如果变量名的后面紧跟一个等号以</p>
+<p>及一个表达式，该表达式就充当对变量进行初始化的初始化表达式。例如：</p>
+<pre><code><span class="kw">char</span> esc = '\\';
+<span class="kw">int</span> i = 0;
+<span class="kw">int</span> limit = MAXLINE + 1;
+<span class="kw">float</span> eps = 1.0e-5;</code></pre>
+<p>如果变量不是自动变量，则只能进行一次初始化操作，从概念上讲，应该是在程序开始</p>
+<p>执行之前进行，并且初始化表达式必须为常量表达式。每次进入函数或程序块时，显式初始</p>
+<p>化的自动变量都将被初始化一次，其初始化表达式可以是任何表达式。默认情况下，外部变</p>
+<p>量与静态变量将被初始化为 0。未经显式初始化的自动变量的值为未定义值（即无效值）。</p>
+<p>任何变量的声明都可以使用 const 限定符限定。该限定符指定变量的值不能被修改。对</p>
+<p>数组而言，const 限定符指定数组所有元素的值都不能被修改：</p>
+<p>const double e = 2.71828182845905;</p>
+<p>const char msg[] = "warning: ";</p>
+<p>const 限定符也可配合数组参数使用，它表明函数不能修改数组元素的值：</p>
+<pre><code><span class="kw">int</span> <span class="fn">strlen</span>(<span class="kw">const</span> <span class="kw">char</span>[]);</code></pre>
+<p>如果试图修改 const 限定符限定的值，其结果取决于具体的实现。</p>
     </div>
 </body>
 </html>

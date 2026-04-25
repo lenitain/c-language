@@ -110,7 +110,13 @@
         <h1 class="section-title">7.8.4 命令执行函数</h1>
     </div>
     <div class="content">
-<p></p>
+<p>函数 system(char* s)执行包含在字符申 s 中的命令，然后继续执行当前程序。s 的</p>
+<p>内容在很大程度上与所用的操作系统有关。下面来看一个 UNIX 操作系统环境的小例子。语</p>
+<p>句</p>
+<p>system("date");</p>
+<p>将执行程序 date，它在标准输出上打印当天的日期和时间。system 函数返回一个整型的状</p>
+<p>态值，其值来自于执行的命令，并同具体系统有关。在 UNIX 系统中，返回的状态是 exit 的</p>
+<p>返回值。</p>
     </div>
 </body>
 </html>

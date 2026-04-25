@@ -110,8 +110,56 @@
         <h1 class="section-title">3.2 if-else 语句</h1>
     </div>
     <div class="content">
-<p>3.3.</p>
-<p>else-if 语旬 .................................................................................................................65</p>
+<p>if-else 语句用于条件判定，其语法如下所示：</p>
+<p>if {表达式}</p>
+<p>语句 1</p>
+<p>else</p>
+<p>语句 2</p>
+<p>其中 else 部分是可选的。该语句执行时，先计算表达式的值，如果其值为真（即表达式的值</p>
+<p>为非 0），则执行语句 1；如果其值为假（即表达式的值为 0）</p>
+<p>，并且该语句包含 else 部分，</p>
+<p>则执行语句 2。</p>
+<p>由于 if 语句只是简单测试表达式的数值，因此可以对某些代码的编写进行简化。最明显</p>
+<p>的例子是用如下写法</p>
+<pre><code><span class="kw">if</span> (表达式)</code></pre>
+<p>来代替</p>
+<pre><code><span class="kw">if</span> (表达式 !0)</code></pre>
+<p>某些情况下这种形式是自然清晰的，但也有些情况下可能会含义不清。</p>
+<p>因为 if-else 语句的 else 部分是可选的，所以在嵌套的 if 语句中省略它的 else 部</p>
+<p>分将导致歧义。解决的方法是将每个 else 与最近的前一个没有 else 配对的 if 进行匹配。</p>
+<p>例如，在下列语句中：</p>
+<pre><code><span class="kw">if</span> (n &gt; 0)
+<span class="kw">if</span> (a &gt; b)
+z = a;</code></pre>
+<p>else</p>
+<pre><code>z = b;</code></pre>
+<p>else 部分与内层的 if 匹配，我们通过程序的缩进结构也可以看出来。如果这不符合我们的</p>
+<p>意图，则必须使用花括号强制实现正确的匹配关系：</p>
+<pre><code><span class="kw">if</span> (n &gt; 0) {
+<span class="kw">if</span> (a &gt; b)
+z = a;
+}</code></pre>
+<p>else</p>
+<pre><code>z = b;</code></pre>
+<p>歧义性在下面这种情况下尤为有害：</p>
+<pre><code><span class="kw">if</span> (n &gt; 0)
+<span class="kw">for</span> (i = 0; i &lt; n; i++)
+<span class="kw">if</span> (s[i] &gt; 0) {
+<span class="fn">printf</span>(<span class="str">"..."</span>);
+<span class="kw">return</span> i;
+}</code></pre>
+<p>else</p>
+<pre><code><span class="cm">/* WRONG */</span>
+<span class="fn">printf</span>(<span class="str">"error -- n is negative\n"</span>);</code></pre>
+<p>程序的缩进结构明确地表明了设计意图，但编译器无法获得这一信息，它会将 else 部分与内</p>
+<p>层的 if 配对。这种错误很难发现，因此我们建议在有 if 语句嵌套的情况下使用花括号。</p>
+<p>顺便提醒读者注意，在语句</p>
+<pre><code><span class="kw">if</span> (a &gt; b)
+z = a;</code></pre>
+<p>else</p>
+<pre><code>z = b;</code></pre>
+<p>中，z = a 后有一个分号。这是因为，从语法上讲，跟在 if 后面的应该是一条语句，而像“z=a;”</p>
+<p>这类的表达式语句总是以分号结束的。</p>
     </div>
 </body>
 </html>

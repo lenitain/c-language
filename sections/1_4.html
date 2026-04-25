@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>1.4 符号常量 - C语言教程</title>
+    <title>1.4 修改温度转换程序，要求以逆序（即按照从 300 度到 0 度的顺序）打印温 - C语言教程</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -107,10 +107,35 @@
 <body>
     <div class="section-header">
         <div class="section-number">第 1 章</div>
-        <h1 class="section-title">1.4 符号常量</h1>
+        <h1 class="section-title">1.4 修改温度转换程序，要求以逆序（即按照从 300 度到 0 度的顺序）打印温</h1>
     </div>
     <div class="content">
-<p></p>
+<p>符号常量</p>
+<p>在结束讨论温度转换程序前，我们再来看一下符号常量。在程序中使用 300、20 等类似</p>
+<p>的“幻数”并不是一个好习惯，它们几乎无法向以后阅读该程序的人提供什么信息，而且使</p>
+<p>程序的修改变得更加困难。处理这种幻数的一种方法是赋予它们有意义的名字。#define 指</p>
+<p>令可以把符号名（或称为符号常量）定义为一个特定的字符串：</p>
+<pre><code>#define 名字 替换文本</code></pre>
+<p>在该定义之后，程序中出现的所有在#define 中定义的名字（既没有用引号引起来，也不是</p>
+<p>其它名字的一部分）都将用相应的替换文本替换。其中，名字与普通变量名的形式相同：它</p>
+<p>们都是以字母打头的字母和数字序列；替换文本可以是任何字符序列，而不仅限于数字。</p>
+<pre><code>#include &lt;stdio.h&gt;
+#define LOWER 0
+#define UPPER 300
+#define STEP 20
+<span class="cm">/* lower limit of table */</span>
+<span class="cm">/* upper limit */</span>
+<span class="cm">/* step size */</span>
+<span class="cm">/* print Fahrenheit-Celsius table */</span>
+<span class="fn">main</span>()
+{
+<span class="kw">int</span> fahr;
+<span class="kw">for</span> (fahr = LOWER; fahr &lt;= UPPER; fahr = fahr + STEP)
+<span class="fn">printf</span>(<span class="str">"%3d %6.1f\n"</span>, fahr, (5.0/9.0)*(fahr-32));
+}</code></pre>
+<p>其中，LOWER、UPPER 与 STEP 都是符号常量，而非变量，因此不需要出现在声明中。符号</p>
+<p>常量名通常用大写字母拼写，这样可以很容易与用小写字母拼写的变量名相区别。注意，</p>
+<pre><code>#define 指令行的末尾没有分号。</code></pre>
     </div>
 </body>
 </html>

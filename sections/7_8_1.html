@@ -110,7 +110,17 @@
         <h1 class="section-title">7.8.1 字符串操作函数</h1>
     </div>
     <div class="content">
-<p></p>
+<p>前面已经提到过字符串函数 strlen、strcpy、strcat 和 strcmp，它们都在头文件</p>
+<pre><code>&lt;string.h&gt;中定义。在下面的各个函数中，s 与 t 为 <span class="kw">char</span> *类型，c 与 n 为 <span class="kw">int</span> 类型。
+strcat(s, t)
+strncat(s, t, n)
+<span class="fn">strcmp</span>(s, t)
+strncmp(s, t, n)
+<span class="fn">strcpy</span>(s, t)
+strncpy(s, t, n)
+<span class="fn">strlen</span>(s)
+strchr(s, c)
+strrchr(s, c)</code></pre>
     </div>
 </body>
 </html>

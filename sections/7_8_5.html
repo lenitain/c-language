@@ -110,7 +110,29 @@
         <h1 class="section-title">7.8.5 存储管理函数</h1>
     </div>
     <div class="content">
-<p></p>
+<p>函数 malloc 和 calloc 用于动态地分配存储块。函数 malloc 的声明如下：</p>
+<p>void *malloc(size_t n)</p>
+<p>当分配成功时，它返回一个指针，设指针指向 n 字节长度的未初始化的存储空间，否则返回</p>
+<p>NULL。函数 calloc 的声明为</p>
+<p>void *calloc(size_t n, size_t size)</p>
+<p>当分配成功时，它返回一个指针，该指针指向的空闲空间足以容纳由 n 个指定长度的对象组</p>
+<p>成的数组，否则返回 NULL。该存储空间被初始化为 0。</p>
+<p>根据请求的对象类型，malloc 或 calloc 函数返回的指针满足正确的对齐要求。下面的</p>
+<p>例子进行了类型转换：</p>
+<p>int *ip;</p>
+<pre><code>ip = (<span class="kw">int</span> *) calloc(n, <span class="kw">sizeof</span>(<span class="kw">int</span>));
+<span class="fn">free</span>(p)函数释放 p 指向的存储空间，其中，p 是此前通过调用 <span class="fn">malloc</span> 或 calloc 函</code></pre>
+<p>数得到的指针。存储空间的释放顺序没有什么限制，但是，如果释放一个不是通过调用 malloc</p>
+<p>或 calloc 函数得到的指针所指向的存储空间，将是一个很严重的错误。</p>
+<p>使用已经释放的存储空间同样是错误的。下面所示的代码是一个很典型的错误代码段，</p>
+<p>它通过一个循环释放列表中的项目：</p>
+<pre><code><span class="kw">for</span> (p = head; p != NULL; p = p-&gt;next) <span class="cm">/* WRONG */</span>
+<span class="fn">free</span>(p);</code></pre>
+<p>正确的处理方法是，在释放项目之前先将一切必要的信息保存起来，如下所示：</p>
+<pre><code><span class="kw">for</span> (p = head; p != NULL; p = q) {
+q = p-&gt;next;
+<span class="fn">free</span>(p);
+}</code></pre>
     </div>
 </body>
 </html>

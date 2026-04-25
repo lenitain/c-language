@@ -110,7 +110,103 @@
         <h1 class="section-title">6.2 结构与函数</h1>
     </div>
     <div class="content">
-<p></p>
+<p>结构的合法操作只有几种：作为一个整体复制和赋值，通过&amp;运算符取地址，访问其成员。</p>
+<p>其中，复制和赋值包括向函数传递参数以及从函数返回值。结构之间不可以进行比较。可以</p>
+<p>用一个常量成员值列表初始化结构，自动结构也可以通过赋值进行初始化。</p>
+<p>为了更进一步地理解结构，我们编写几个对点和矩形进行操作的函数。至少可以通过 3</p>
+<p>种可能的方法传递结构：一是分别传递各个结构成员，二是传递整个结构，三是传递指向结</p>
+<p>构的指针。这 3 种方法各有利弊。</p>
+<p>首先来看一下函数 makepoint，它带有两个整型参数，并返回一个 point 类型的结构：</p>
+<pre><code><span class="cm">/* makepoint: make a point from x and y components */</span>
+<span class="kw">struct</span> point makepoint(<span class="kw">int</span> x, <span class="kw">int</span> y)
+{
+<span class="kw">struct</span> point temp;</code></pre>
+<p>temp.x = x;</p>
+<p>temp.y = y;</p>
+<pre><code><span class="kw">return</span> temp;
+}</code></pre>
+<p>注意，参数名和结构成员同名不会引起冲突。事实上，使用重名可以强调两者之间的关系。</p>
+<p>现在可以使用 makepoint 函数动态地初始化任意结构，也可以向函数提供结构类型的参</p>
+<p>数。例如：</p>
+<pre><code><span class="kw">struct</span> rect screen;
+<span class="kw">struct</span> point middle;
+<span class="kw">struct</span> point makepoint(<span class="kw">int</span>, <span class="kw">int</span>);</code></pre>
+<p>screen.pt1 = makepoint(0,0);</p>
+<p>screen.pt2 = makepoint(XMAX, YMAX);</p>
+<pre><code>middle = makepoint((screen.pt1.x + screen.pt2.x)/2,</code></pre>
+<p>(screen.pt1.y + screen.pt2.y)/2);</p>
+<p>接下来需要编写一系列的函数对点执行算术运算。例如：</p>
+<pre><code><span class="cm">/* addpoints: add two points */</span>
+<span class="kw">struct</span> addpoint(<span class="kw">struct</span> point p1, <span class="kw">struct</span> point p2)
+{</code></pre>
+<p>p1.x += p2.x;</p>
+<p>p1.y += p2.y;</p>
+<pre><code><span class="kw">return</span> p1;
+}</code></pre>
+<p>其中，函数的参数和返回值都是结构类型。之所以直接将相加所得的结果赋值给 p1，而没有</p>
+<p>使用显式的临时变量存储，是为了强调结构类型的参数和其它类型的参数一样，都是通过值</p>
+<p>传递的。</p>
+<p>下面来看另外一个例子。函数 prinrect 判断一个点是否在给定的矩形内部。我们采用</p>
+<p>这样一个约定：矩形包括其左侧边和底边，但不包括顶边和右侧边。</p>
+<pre><code><span class="cm">/* ptinrect: <span class="kw">return</span> 1 <span class="kw">if</span> p in r, 0 <span class="kw">if</span> not */</span>
+<span class="kw">int</span> ptinrect(<span class="kw">struct</span> point p, <span class="kw">struct</span> rect r)
+{
+<span class="kw">return</span> p.x &gt;= r.pt1.x &amp;&amp; p.x &lt; r.pt2.x</code></pre>
+<p>&amp;&amp; p.y &gt;= r.pt1.y &amp;&amp; p.y &lt; r.pt2.y;</p>
+<pre><code>}</code></pre>
+<p>这里假设矩形是用标准形式表示的，其中 pt1 的坐标小于 pt2 的坐标。下列函数将返回一个</p>
+<p>规范形式的矩形：</p>
+<pre><code>#define min(a, b) ((a) &lt; (b) ? (a) : (b))
+#define max(a, b) ((a) &gt; (b) ? (a) : (b))
+<span class="cm">/* canonrect: canonicalize coordinates of rectangle */</span>
+<span class="kw">struct</span> rect canonrect(<span class="kw">struct</span> rect r)
+{
+<span class="kw">struct</span> rect temp;</code></pre>
+<p>temp.pt1.x = min(r.pt1.x, r.pt2.x);</p>
+<p>temp.pt1.y = min(r.pt1.y, r.pt2.y);</p>
+<p>temp.pt2.x = max(r.pt1.x, r.pt2.x);</p>
+<p>temp.pt2.y = max(r.pt1.y, r.pt2.y);</p>
+<pre><code><span class="kw">return</span> temp;
+}</code></pre>
+<p>如果传递给函数的结构很大，使用指针方式的效率通常比复制整个结构的效率要高。结</p>
+<p>构指针类似于普通变量指针。声明</p>
+<pre><code><span class="kw">struct</span> point *pp;</code></pre>
+<p>将 pp 定义为一个指向 struct point 类型对象的指针。如果 pp 指向一个 point 结构，那</p>
+<p>么*pp 即为该结构，而(*pp).x 和(*pp).y 则是结构成员。可以按照下例中的方式使用 pp：</p>
+<pre><code><span class="kw">struct</span> point origin, *pp;
+pp = &amp;origin;
+<span class="fn">printf</span>(<span class="str">"origin is (%d,%d)\n"</span>, (*pp).x, (*pp).y);</code></pre>
+<p>其中，(*pp).x 中的圆括号是必需的，因为结构成员运算符“.”的优先级比“*”的优先级</p>
+<p>高。表达式*pp.x 的含义等价于*(pp.x)，因为 x 不是指针，所以该表达式是非法的。</p>
+<p>结构指针的使用频度非常高，为了使用方便，C 语言提供了另一种简写方式。假定 p 是</p>
+<p>一个指向结构的指针，可以用</p>
+<p>p-&gt;结构成员</p>
+<p>这种形式引用相应的结构成员。这样，就可以用下面的形式改写上面的一行代码：</p>
+<pre><code><span class="fn">printf</span>(<span class="str">"origin is (%d,%d)\n"</span>, pp-&gt;x, pp-&gt;y);</code></pre>
+<p>运算符.和-&gt;都是从左至右结合的，所以，对于下面的声明：</p>
+<pre><code><span class="kw">struct</span> rect r, *rp = &amp;r;</code></pre>
+<p>以下 4 个表达式是等价的：</p>
+<p>r.pt1.x</p>
+<p>rp-&gt;pt1.x</p>
+<p>(r.pt1).x</p>
+<p>(rp-&gt;pt1).x</p>
+<p>在所有运算符中，下面 4 个运算符的优先级最高：结构运算符“.”和“-&gt;”</p>
+<p>、用于函数</p>
+<p>调用的“()”以及用于下标的“[]”，因此，它们同操作数之间的结合也最紧密。例如，对于</p>
+<p>结构声明</p>
+<p>struct {</p>
+<pre><code><span class="kw">int</span> len;</code></pre>
+<p>char *str;</p>
+<pre><code>} *p;</code></pre>
+<p>表达式</p>
+<p>++p-&gt;len</p>
+<p>将增加 len 的值，而不是增加 p 的值，这是田为，其中的隐含括号关系是++(p-&gt;len)。可</p>
+<p>以使用括号改变结合次序。例如：(++p)-&gt;len 将先执行 p 的加 1 操作，再对 len 执行操作；</p>
+<p>而(p++)-&gt;len 则先对 len 执行操作，然后再将 p 加 1（该表达式中的括号可以省略）。</p>
+<p>同样的道理，*p-&gt;str 读取的是指针 str 所指向的对象的值；*p-&gt;str++先读取指针</p>
+<p>str 指向的对象的值，然后再将 str 加 1（与*s++相同）</p>
+<p>；(*p-&gt;str）++将指针 str 指向</p>
+<p>的对象的值加 1；*p++-&gt;str 先读取指针 str 指向的对象的值，然后再将 p 加 1。</p>
     </div>
 </body>
 </html>

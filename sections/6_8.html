@@ -110,7 +110,63 @@
         <h1 class="section-title">6.8 联合</h1>
     </div>
     <div class="content">
-<p></p>
+<p>联合是可以（在不同时刻）保存不同类型和长度的对象的变量，编译器负责跟踪对象的</p>
+<p>长度和对齐要求。联合提供了一种方式，以在单块存储区中管理不同类型的数据，而不需要</p>
+<p>在程序中嵌入任何同机器有关的信息。它类似于 Pascal 语言中的变体记录。</p>
+<p>我们来看一个例子（可以在编译器的符号表管理程序中找到该例子）</p>
+<p>。假设一个常量可能</p>
+<p>是 int、f1oat 或字符指针。特定类型的常量值必须保存在合适类型的变量中，然而，如果</p>
+<p>该常量的不同类型占据相同大小的存储空间，且保存在同一个地方的话，表管理将最方便。</p>
+<p>这就是联合的目的——一个变量可以合法地保存多种数据类型中任何一种类型的对象。其语</p>
+<p>法基于结构，如下所示：</p>
+<p>union u_tag {</p>
+<pre><code><span class="kw">int</span> ival;
+<span class="kw">float</span> fval;</code></pre>
+<p>char *sval;</p>
+<pre><code>} u;</code></pre>
+<p>变量 u 必须足够大，以保存这 3 种类型中最大的一种，具体长度同具体的实现有关。这</p>
+<p>些类型中的任何一种类型的对象都可赋值给 u，且可使用在随后的表达式中，但必须保证是一</p>
+<p>致的：读取的类型必须是最近一次存入的类型。程序员负责跟踪当前保存在联合中的类型。</p>
+<p>如果保存的类型与读取的类型不一致，其结果取决于具体的实现。</p>
+<p>可以通过下列语法访问联合中的成员：</p>
+<p>联合名.成员</p>
+<p>或</p>
+<p>联合指针-&gt;成员</p>
+<p>它与访问结构的方式相同。如果用变量 utype 跟踪保存在 u 中的当前数据类型，则可以像下</p>
+<p>面这样使用联合：</p>
+<pre><code><span class="kw">if</span> (utype == INT)
+<span class="fn">printf</span>(<span class="str">"%d\n"</span>, u.ival);
+<span class="kw">if</span> (utype == FLOAT)
+<span class="fn">printf</span>(<span class="str">"%f\n"</span>, u.fval);
+<span class="kw">if</span> (utype == STRING)
+<span class="fn">printf</span>(<span class="str">"%s\n"</span>, u.sval);</code></pre>
+<p>else</p>
+<pre><code><span class="fn">printf</span>(<span class="str">"bad type %d in utype\n"</span>, utype);</code></pre>
+<p>联合可以使用在结构和数组中，反之亦可。访问结构中的联合（或反之）的某一成员的</p>
+<p>表示法与嵌套结构相同。例如，假定有下列的结构数组定义：</p>
+<p>struct {</p>
+<p>char *name;</p>
+<pre><code><span class="kw">int</span> flags;
+<span class="kw">int</span> utype;</code></pre>
+<p>union {</p>
+<pre><code><span class="kw">int</span> ival;
+<span class="kw">float</span> fval;</code></pre>
+<p>char *sval;</p>
+<pre><code>} u;
+} symtab[NSYM];</code></pre>
+<p>可以通过下列语句引用其成员 ival：</p>
+<p>symtab[i].u.ival</p>
+<p>也可以通过下列语句之一引用字符串 sval 的第一个字符：</p>
+<p>*symtab[i].u.sval</p>
+<p>symtab[i].u.sval[0]</p>
+<p>实际上，联合就是一个结构，它的所有成员相对于基地址的偏移量都为 0，此结构空间要</p>
+<p>大到足够容纳最“宽”的成员，并且，其对齐方式要适合于联合中所有类型的成员。对联合</p>
+<p>允许的操作与对结构允许的操作相同：作为一个整体单元进行赋值、复制、取地址及访问其</p>
+<p>中一个成员。</p>
+<p>联合只能用其第一个成员类型的值进行初始化，因此，上述联合 u 只能用整数值进行初</p>
+<p>始化。</p>
+<p>第 8 章的存储分配程序将说明如何使用联合来强制一个变量在特定类型的存储边界上对</p>
+<p>齐。</p>
     </div>
 </body>
 </html>
