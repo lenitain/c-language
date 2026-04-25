@@ -7,8 +7,9 @@ with syntax-highlighted code blocks and merged paragraphs.
 import re
 import os
 
-OUTPUT_DIR = '/home/pilot/.cloned/d1ee2/sections'
-INPUT_FILE = '/home/pilot/.cloned/d1ee2/c_tutorial.txt'
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+OUTPUT_DIR = os.path.join(SCRIPT_DIR, 'sections')
+INPUT_FILE = os.path.join(SCRIPT_DIR, 'c_tutorial.txt')
 
 # ---------------------------------------------------------------------------
 # Helpers
