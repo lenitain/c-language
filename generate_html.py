@@ -8,26 +8,39 @@ def parse_tutorial(input_file):
     content = re.sub(r'\n\d+\n---\n', '\n', content)
 
     sections = []
-    section_pattern = re.compile(r'^(\d+(?:\.\d+)*)\.\s*(.+?)\s*$', re.MULTILINE)
+    section_pattern = re.compile(r'^([A-Z]\.\d+(?:\.\d+)*)\s*\n(.+?)$|^(\d+(?:\.\d+)*)\.\s*(.+?)\s*$', re.MULTILINE)
     matches = list(section_pattern.finditer(content))
 
     for i, match in enumerate(matches):
-        section_num = match.group(1)
-        section_title = match.group(2).strip()
+        if match.group(1) is not None:
+            section_num = match.group(1)
+            section_title = match.group(2).strip() if match.group(2) else ''
+        else:
+            section_num = match.group(3)
+            section_title = match.group(4).strip() if match.group(4) else ''
+
         start_pos = match.end()
         end_pos = matches[i+1].start() if i+1 < len(matches) else len(content)
         section_content = content[start_pos:end_pos].strip()
 
+        if not section_title:
+            next_line_match = re.match(r'^\s*(.+?)\s*$', content[start_pos:start_pos+200], re.MULTILINE)
+            if next_line_match:
+                section_title = next_line_match.group(1).strip()
+                start_pos = start_pos + next_line_match.end()
+                section_content = content[start_pos:end_pos].strip()
+
         section_title = re.sub(r'\s*\.\.{5,}\s*\d*\s*$', '', section_title)
 
         parts = section_num.split('.')
-        # Accept chapter sections (1.1, 2.3) and subsections (1.5.1, 1.5.2, 4.11.1, 4.11.2)
         if len(parts) >= 2 and len(parts) <= 3:
-            sections.append({
-                'number': section_num,
-                'title': section_title,
-                'content': section_content
-            })
+            existing = next((s for s in sections if s['number'] == section_num), None)
+            if existing is None:
+                sections.append({
+                    'number': section_num,
+                    'title': section_title,
+                    'content': section_content
+                })
 
     return sections
 

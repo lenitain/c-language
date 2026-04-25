@@ -110,76 +110,7 @@
         <h1 class="section-title">2.8 自增运算符与自减运算符</h1>
     </div>
     <div class="content">
-<p>C 语言提供了两个用于变量递增与递减的特殊运算符。自增运算符++使其操作数递增 1，</p>
-<p>自减运算符使其操作数递减 1。我们经常使用++运算符递增变量的值，如下所示：</p>
-<pre><code><span class="kw">if</span> (c = '\n')</code></pre>
-<p>++nl;</p>
-<p>++与--这两个运算符特殊的地方主要表现在：它们既可以用作前缀运算符（用在变量前</p>
-<p>面，如++n）</p>
-<p>。也可以用作后缀运算符（用在变量后面，如 n++）。在这两种情况下，其效果都</p>
-<p>是将变量 n 的值加 1。但是，它们之间有一点不同。表达式++n 先将 n 的值递增 1，然后再使</p>
-<p>用变量 n 的值，而表达式 n++则是先使用变量 n 的值，然后再将 n 的值递增 1。也就是说，</p>
-<p>对于使用变量 n 的值的上下文来说，++n 和 n++的效果是不同的。如果 n 的值为 5，那么</p>
-<pre><code>x = n++;</code></pre>
-<p>执行后的结果是将 x 的值置为 5，而</p>
-<pre><code>x = ++n;</code></pre>
-<p>将 x 的值置为 6。这两条语句执行完成后，变量 n 的值都是 6。自增与自减运算符只能作用于</p>
-<p>变量，类似于表达式(i+j)++是非法的。</p>
-<p>在不需要使用任何具体值且仅需要递增变量的情况下，前缀方式和后缀方式的效果相同。</p>
-<p>例如：</p>
-<pre><code><span class="kw">if</span> (c == '\n')</code></pre>
-<p>nl++;</p>
-<p>但在某些情况下需要酌情考虑。例如，考虑下面的函数 squeeze(s, c)，它删除字符串 s</p>
-<p>中出现的所有字符 c：</p>
-<pre><code><span class="cm">/* squeeze: delete all c from s */</span>
-<span class="kw">void</span> squeeze(<span class="kw">char</span> s[], <span class="kw">int</span> c)
-{
-<span class="kw">int</span> i, j;
-<span class="kw">for</span> (i = j = 0; s[i] != '\0'; i++)
-<span class="kw">if</span> (s[i] != c)</code></pre>
-<p>s[j++] = s[i];</p>
-<p>s[j] = '\0';</p>
-<pre><code>}</code></pre>
-<p>每当出现一个不是 c 的字符时，该函数把它拷贝到数组中下标为 j 的位置，随后才将 j 的值</p>
-<p>增加 1，以准备处理下一个字符。其中的 if 语句完全等价于下列语句：</p>
-<pre><code><span class="kw">if</span> (s[i] != c) {</code></pre>
-<p>s[j] = s[i];</p>
-<p>j++;</p>
-<pre><code>}</code></pre>
-<p>我们在第 1 章中编写的函数 getline 是类似结构的另外一个例子。我们可以将该函数中</p>
-<p>的 if 语句：</p>
-<pre><code><span class="kw">if</span> (c == '\n') {</code></pre>
-<p>s[i] = c;</p>
-<p>++i;</p>
-<pre><code>}</code></pre>
-<p>用下面这种更简洁的形式代替：</p>
-<pre><code><span class="kw">if</span> (c == '\n')</code></pre>
-<p>s[i++] = c;</p>
-<p>我们再来看第三个例子。考虑标准函数 strcat(s, t)，它将字符串 t 连接到字符串 s</p>
-<p>的尾部。函数 strcat 假定字符串 s 中有足够的空间保存这两个字符串连接的结果。下面编</p>
-<p>写的这个函数没有任何返回值（标准库中的该函数返回一个指向新字符串的指针）</p>
-<p>：</p>
-<pre><code><span class="cm">/* strcat: concatenate t to end of s; s must be big enough */</span>
-<span class="kw">void</span> strcat(<span class="kw">char</span> s[], <span class="kw">char</span> t[])
-{
-<span class="kw">int</span> i, j;
-i = j = 0;
-<span class="kw">while</span> (s[i] != '\0') <span class="cm">/* find end of s */</span></code></pre>
-<p>i++;</p>
-<pre><code><span class="kw">while</span> ((s[i++] = t[j++]) != '\0') <span class="cm">/* copy t */</span></code></pre>
-<p>;</p>
-<pre><code>}</code></pre>
-<p>在将 t 中的字符逐个拷贝到 s 的尾部时，变量 i 和 j 使用的都是后缀运算符++，从而保证在</p>
-<p>循环过程中 i 与 j 均指向下一个位置。</p>
-<p>练习 2-4</p>
-<p>都删除。</p>
-<pre><code>squeeze(s1, s2)，将字符串 s1 中任何与字符串 s2 中字符匹配的字符</code></pre>
-<p>练习 2-5</p>
-<p>编写函数 any(s1, s2)，将字符串 s2 中的任一字符在字符串 s1 中第一次</p>
-<p>出现的位置作为结果返回。如果 s1 中不包含 s2 中的字符，则返回-1。</p>
-<p>（标准库函数 strpbrk</p>
-<p>具有同样的功能，但它返回的是指向该位置的指针。</p>
-<p>）</p>
+<p></p>
     </div>
 </body>
 </html>

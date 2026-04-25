@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>7.7 行输入和行输出 - C语言教程</title>
+    <title>7.7 7.8. - C语言教程</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -107,65 +107,18 @@
 <body>
     <div class="section-header">
         <div class="section-number">第 7 章</div>
-        <h1 class="section-title">7.7 行输入和行输出</h1>
+        <h1 class="section-title">7.7 7.8.</h1>
     </div>
     <div class="content">
-<p>标准库提供了一个输入函数 fgets，它和前面几章中用到的函数 getline 类似。</p>
-<p>char *fgets(char *line, int maxline, FILE *fp)</p>
-<p>fgets 函数从 fp 指向的文件中读取下一个输入行（包括换行符），并将它存放在字符数组</p>
-<p>line 中，它最多可读取 maxline-1 个字符。读取的行将以'\0'结尾保存到数组中。通常情</p>
-<p>况下，fgets 返回 line，但如果遇到了文件结尾或发生了错误，则返回 NULL（我们编写的</p>
-<p>getline 函数返回行的长度，这个值更有用，当它为 0 时意味着已经到达了文件的结尾）。</p>
-<p>输出函数 fputs 将一个字符串（不需要包含换行符）写入到一个文件中：</p>
-<pre><code><span class="kw">int</span> fputs(<span class="kw">char</span> *line, FILE *fp)</code></pre>
-<p>如果发生错误，该函数将返回 EOF，否则返回一个非负值。</p>
-<p>库函数 gets 和 puts 的功能与 fgets 和 fputs 函数类似，</p>
-<p>但它们是对 stdin 和 stdout</p>
-<p>进行操作。有一点我们需要注意，gets 函数在读取字符串时将删除结尾的换行符（'\n'），</p>
-<p>而 puts 函数在写入字符串时将在结尾添加一个换行符。</p>
-<p>下面的代码是标准库中 fgets 和 fputs 函数的代码，从中可以看出，这两个函数并没</p>
-<p>有什么特别的地方。代码如下所示：</p>
-<pre><code><span class="cm">/* fgets: get at most n chars from iop */</span></code></pre>
-<p>char *fgets(char *s, int n, FILE *iop)</p>
-<pre><code>{</code></pre>
-<p>register int c;</p>
-<p>register char *cs;</p>
-<pre><code>cs = s;
-<span class="kw">while</span> (--n &gt; 0 &amp;&amp; (c = <span class="fn">getc</span>(iop)) != EOF)
-<span class="kw">if</span> ((*cs++ = c) == '\n')</code></pre>
-<p>break;</p>
-<p>*cs = '\0';</p>
-<pre><code><span class="kw">return</span> (c == EOF &amp;&amp; cs == s) ? NULL : s;
-}
-<span class="cm">/* fputs: put string s on file iop */</span>
-<span class="kw">int</span> fputs(<span class="kw">char</span> *s, FILE *iop)
-{
-<span class="kw">int</span> c;
-<span class="kw">while</span> (c = *s++)
-<span class="fn">putc</span>(c, iop);
-<span class="kw">return</span> <span class="fn">ferror</span>(iop) ? EOF : 0;
-}</code></pre>
-<p>ANSI 标准规定，ferror 在发生错误时返回非 0 值，而 fputs 在发生错误时返回 EOF，</p>
-<p>其它情况返回一个非负值。</p>
-<p>使用 fgets 函数很容易实现 getline 函数：</p>
-<pre><code><span class="cm">/* getline: read a line, <span class="kw">return</span> length */</span>
-<span class="kw">int</span> getline(<span class="kw">char</span> *line, <span class="kw">int</span> max)
-{
-<span class="kw">if</span> (fgets(line, max, stdin) == NULL)
-<span class="kw">return</span> 0;</code></pre>
-<p>else</p>
-<pre><code><span class="kw">return</span> <span class="fn">strlen</span>(line);
-}</code></pre>
-<p>练习 7-6</p>
-<p>编写一个程序，比较两个文件并打印它们第一个不相同的行。</p>
-<p>练习 7-7</p>
-<p>修改第 5 章的模式查找程序，使它从一个命名文件的集合中读取输入（有文</p>
-<p>件名参数时）</p>
-<p>，如果没有文件名参数，则从标准输入中读取输入。当发现一个匹配行时，是否</p>
-<p>应该将相应的文件名打印出来？</p>
-<p>练习 7-8</p>
-<p>编写一个程序，以打印一个文件集合，每个文件从新的一页开始打印，并且</p>
-<p>打印每个文件相应的标题和页数。</p>
+<p>输入与输出 ..................................................................................................................147</p>
+<p>标准输入／输出.......................................................................................................147</p>
+<p>格式化输出——printf 函数.....................................................................................148</p>
+<p>变长参数表 ..............................................................................................................150</p>
+<p>格式化输入——scanf 函数 .....................................................................................151</p>
+<p>文件访问 ..................................................................................................................154</p>
+<p>错误处理——stderr 和 exit......................................................................................156</p>
+<p>行输入和行输出.......................................................................................................157</p>
+<p>其它函数 ..................................................................................................................159</p>
     </div>
 </body>
 </html>

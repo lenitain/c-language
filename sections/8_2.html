@@ -110,66 +110,7 @@
         <h1 class="section-title">8.2 低级 I/O——read 和 write</h1>
     </div>
     <div class="content">
-<p>输入与输出是通过 read 和 write 系统调用实现的。</p>
-<p>在 C 语言程序中，可以通过函数 read</p>
-<p>和 write 访问这两个系统调用。这两个函数中，第一个参数是文件描述符，第二个参数是程</p>
-<p>序中存放读或写的数据的字符数组，第三个参数是要传输的字节数。</p>
-<pre><code><span class="kw">int</span> n_read = read(<span class="kw">int</span> fd, <span class="kw">char</span> *buf, <span class="kw">int</span> n);
-<span class="kw">int</span> n_written = write(<span class="kw">int</span> fd, <span class="kw">char</span> *buf, <span class="kw">int</span> n);</code></pre>
-<p>每个调用返回实际传输的字节数。在读文件时，函数的返回值可能会小于请求的字节数。如</p>
-<p>果返回值为 0，则表示已到达文件的结尾；如果返回值为-1，则表示发生了某种错误。在写文</p>
-<p>件时，返回值是实际写入的字节数。如果返回值与请求写入的字节数不相等，则说明发生了</p>
-<p>错误。</p>
-<p>在一次调用中，读出或写入的数据的字节数可以为任意大小。最常用的值为 1，即每次读</p>
-<p>出或写入 1 个字符（无缓冲）</p>
-<p>，或是类似于 1024～4096 这样的与外围设备的物理块大小相应</p>
-<p>的值。用更大的值调用该函数可以获得更高的效率，因为系统调用的次数减少了。</p>
-<p>结合以上的讨论，我们可以编写一个简单的程序，将输入复制到输出，这与第 1 章中的</p>
-<p>复制程序在功能上相同。程序可以将任意输入复制到任意输出，因为输入／输出可以重定向</p>
-<p>到任何文件或设备。</p>
-<pre><code>#include <span class="str">"syscalls.h"</span>
-<span class="fn">main</span>() <span class="cm">/* copy input to output */</span>
-{
-<span class="kw">char</span> buf[BUFSIZ];
-<span class="kw">int</span> n;
-<span class="kw">while</span> ((n = read(0, buf, BUFSIZ)) &gt; 0)</code></pre>
-<p>write(1, buf, n);</p>
-<pre><code><span class="kw">return</span> 0;
-}</code></pre>
-<p>我们已经将系统调用的函数原型集中放在一个头文件 syscalls.h 中，因此，本章中的</p>
-<p>程序都将包含该头文件。不过，该文件的名字不是标准的。</p>
-<p>参数 BUFSIZ 也已经在 syscalls.h 头文件中定义。对于所使用的操作系统来说，该值</p>
-<p>是一个较合适的数值。如果文件大小不是 BUFSIZ 的倍数，则对 read 的某次调用会返回一</p>
-<p>个较小的字节数，write 再按这个字节数写，此后再调用 read 将返回 0。</p>
-<p>为了更好地掌握有关概念，下面来说明如何用 read 和 write 构造类似于 getchar、</p>
-<p>putchar 等的高级函数。例如，以下是 getchar 函数的一个版本，它通过每次从标准输入</p>
-<p>读入一个字符来实现无缓冲输入。</p>
-<pre><code>#include <span class="str">"syscalls.h"</span>
-<span class="cm">/* <span class="fn">getchar</span>: unbuffered single character input */</span>
-<span class="kw">int</span> <span class="fn">getchar</span>(<span class="kw">void</span>)
-{
-<span class="kw">char</span> c;
-<span class="kw">return</span> (read(0, &amp;c, 1) == 1) ? (<span class="kw">unsigned</span> <span class="kw">char</span>) c : EOF;
-}</code></pre>
-<p>其中，c 必须是一个 char 类型的变量，因为 read 函数需要一个字符指针类型的参数（&amp;c）。</p>
-<p>在返回语句中将 c 转换为 unsigned char 类型可以消除符号扩展问题。</p>
-<p>getchar 的第二个版本一次读入一组字符，但每次只输出一个字符。</p>
-<pre><code>#include <span class="str">"syscalls.h"</span>
-<span class="cm">/* <span class="fn">getchar</span>: simple buffered version */</span>
-<span class="kw">int</span> <span class="fn">getchar</span>(<span class="kw">void</span>)
-{</code></pre>
-<p>static char buf[BUFSIZ];</p>
-<p>static char *bufp = buf;</p>
-<p>static int n = 0;</p>
-<pre><code><span class="kw">if</span> (n == 0) { <span class="cm">/* buffer is empty */</span>
-n = read(0, buf, <span class="kw">sizeof</span> buf);
-bufp = buf;
-}
-<span class="kw">return</span> (--n &gt;= 0) ? (<span class="kw">unsigned</span> <span class="kw">char</span>) *bufp++ : EOF;
-}</code></pre>
-<p>如果要在包含头文件&lt;stdio.h&gt;的情况下编译这些版本的 getchar 函数，就有必要用</p>
-<p>#undef 预处理指令取消名字 getchar 的宏定义，因为在头文件中，getchar 是以宏方式</p>
-<p>实现的。</p>
+<p></p>
     </div>
 </body>
 </html>
