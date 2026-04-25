@@ -21,11 +21,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Generate HTML
-        run: |
-          pip install -q Pillow
-          python generate_html.py
-
       - name: Verify sections exist
         run: ls sections/*.html | head -5
 
