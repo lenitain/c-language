@@ -93,6 +93,7 @@
 <p>此后，每次执行宏 va_arg 都将产生一个与下一个未命名的参数具有相同类型和数值的值，它同时还修改 ap，以使得下一次执行 va_arg 时返回下一个参数：</p>
 <pre><code>type va_arg(va_list ap, type);</code></pre>
 <p>在所有的参数处理完毕之后，且在退出函数 f 之前，必须调用宏 va_end 一次，如下所示：</p>
-<pre><code><span class="kw">void</span> va_end(va_list ap);</code></pre>    </div>
+<pre><code><span class="kw">void</span> va_end(va_list ap);</code></pre>
+<p>非局部跳转：&lt;setjmp.h&gt;头文件&lt;setjmp.h&gt;中的声明提供了一种不同于通常的函数调用和返回顺序的方式，特</p>    </div>
 </body>
 </html>

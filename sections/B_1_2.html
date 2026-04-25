@@ -126,6 +126,8 @@ n
 <span class="kw">int</span> vsprintf(<span class="kw">char</span> *s, <span class="kw">const</span> <span class="kw">char</span> *format, va_list arg)</code></pre>
 <p>vprintf、vfprintf、vsprintf 这 3 个函数分别与对应的 printf 函数等价，但它们用 arg 代替了可变参数表。arg 由宏 va_start 初始化，也可能由 va_arg 调用初始化。</p>
 <p>详细信息参见 B.7 节中对&lt;stdarg.h&gt;头文件的讨论。</p>
-<p>格式化输入</p>    </div>
+<p>格式化输入scanf 函数处理格式化输入转换。</p>
+<pre><code><span class="kw">int</span> fscanf(FILE *stream, <span class="kw">const</span> <span class="kw">char</span> *format, ...)</code></pre>
+<p>fscanf 函数根据格式串 format 从流 stream 中读取输入，并把转换后的值赋值给后续各个参数，其中的每个参数都必须是一个指针。当格式串 format 用完时，函数返回。如果到达文件的末尾或在转换输入前出错，该函数返回 EOF；否则，返回实际被转换并赋值的输入项的数目。</p>    </div>
 </body>
 </html>

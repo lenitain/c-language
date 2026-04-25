@@ -173,6 +173,7 @@ def parse_tutorial(input_file):
                     continue
 
         # Determine title and content start
+        orphan_text = ''  # Text between section number and title (likely exercise from prev section)
         if section_num in matched_same_line:
             title = matched_same_line[section_num][1]
             content_start_lidx = line_idx + 1
@@ -180,6 +181,8 @@ def parse_tutorial(input_file):
             title = ''
             content_start_lidx = line_idx + 1
             skipped = 0
+            orphan_lines = []
+            title_found = False
             for j in range(line_idx + 1, min(line_idx + 8, total_lines)):
                 if not lines[j].strip():
                     skipped += 1
@@ -189,16 +192,22 @@ def parse_tutorial(input_file):
                 if is_title_like(candidate):
                     title = candidate
                     content_start_lidx = j + 1
+                    title_found = True
                     break
+                # Non-title-like text before title = orphan exercise text
+                if not title_found:
+                    orphan_lines.append(candidate)
                 if skipped >= 2:
                     break
+            if orphan_lines:
+                orphan_text = '\n'.join(orphan_lines)
 
         # Use TOC title when available (more reliable than content extraction)
         toc_title = toc_titles.get(section_num, '')
         if toc_title:
             title = toc_title
         elif not title:
-            title = toc_title  # both empty
+            title = toc_title
 
         content_start_char = sum(len(l) + 1 for l in lines[:content_start_lidx])
         if idx + 1 < len(matched_indices):
@@ -212,7 +221,16 @@ def parse_tutorial(input_file):
             'number': section_num,
             'title': title,
             'content': section_content,
+            'orphan': orphan_text,  # Exercise text that belongs to previous section
         })
+
+    # Post-process: attach orphan text to previous section
+    for idx in range(1, len(sections)):
+        if sections[idx].get('orphan'):
+            sections[idx - 1]['content'] += '\n\n' + sections[idx]['orphan']
+            del sections[idx]['orphan']
+    for sec in sections:
+        sec.pop('orphan', None)
 
     return sections
 

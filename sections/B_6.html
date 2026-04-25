@@ -91,6 +91,7 @@
 <pre><code>assert(expression)</code></pre>
 <p>时，表达式的值为 0，则 assert 宏将在 stderr 中打印一条消息，比如：</p>
 <p>Assertion failed: 表连式, file 源文件名, line 行号打印消息后，该宏将调用 abort 终止程序的执行。其中的源文件名和行号来自于预处理器宏__FILE__及__LINE__。</p>
-<p>如果定义了宏 NDEBUG，同时又包含了头文件&lt;assert.h&gt;，则 assert 宏将被忽略。</p>    </div>
+<p>如果定义了宏 NDEBUG，同时又包含了头文件&lt;assert.h&gt;，则 assert 宏将被忽略。</p>
+<p>可变参数表：&lt;stdarg.h&gt;头文件&lt;stdarg.h&gt;提供了遍历未知数目和类型的函数参数表的功能。</p>    </div>
 </body>
 </html>

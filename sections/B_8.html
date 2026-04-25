@@ -94,6 +94,7 @@
 <span class="kw">else</span>
 <span class="cm">/* get here by calling longjmp */</span>
 <span class="kw">void</span> longjmp(jmp_buf env, <span class="kw">int</span> val)</code></pre>
-<p>longjmp 通过最近一次调用 setjmp 时保存到 env 中的信息恢复状态，同时，程序重新恢复执行，其状态等同于 setjmp 宏调用刚刚执行完并返回非 0 值 val。包含 setjmp 宏调用的函数的执行必须还没有终止。除下列情况外，可访问对象的值同调用 longjmp 时的值相同：在调用 setjmp 宏后，如果调用 setjmp 宏的函数中的非 volatile 自动变量改变了，则它们将变成未定义状态。</p>    </div>
+<p>longjmp 通过最近一次调用 setjmp 时保存到 env 中的信息恢复状态，同时，程序重新恢复执行，其状态等同于 setjmp 宏调用刚刚执行完并返回非 0 值 val。包含 setjmp 宏调用的函数的执行必须还没有终止。除下列情况外，可访问对象的值同调用 longjmp 时的值相同：在调用 setjmp 宏后，如果调用 setjmp 宏的函数中的非 volatile 自动变量改变了，则它们将变成未定义状态。</p>
+<p>信号：&lt;signal.h&gt;头文件&lt;signal.h&gt;提供了一些处理程序运行期间引发的各种异常条件的功能，比如来</p>    </div>
 </body>
 </html>
